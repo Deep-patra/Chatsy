@@ -1,25 +1,25 @@
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 
 interface IBottomOverlayProps {
-  show: boolean;
-  close: boolean;
-  children: JSX.Element;
+  show: boolean
+  close: boolean
+  children: JSX.Element
 }
 
 export default function BottomOverlay(props: IBottomOverlayProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null)
 
   const grow = {
     height: 300,
-    display: "block",
+    display: 'block',
   }
 
   const shrink = {
     height: 0,
     transitionEnd: {
-      display: "none"
-    }
+      display: 'none',
+    },
   }
 
   return (
@@ -36,5 +36,5 @@ export default function BottomOverlay(props: IBottomOverlayProps) {
         </>
       ) : null}
     </>
-  );
+  )
 }

@@ -5,16 +5,16 @@ import {
   AiOutlineLock,
   AiOutlineEye,
   AiOutlineEyeInvisible,
-} from "react-icons/ai";
+} from 'react-icons/ai'
 import Input from '../input'
 
 interface ILoginFormProps {
-  loginWithEmailPassword: (email: string, password: string) => void;
+  loginWithEmailPassword: (email: string, password: string) => void
 }
 
 export default function LoginFrom(props: ILoginFormProps) {
-  const [email, changeEmail] = useState<string>("")
-  const [password, changePassword] = useState<string>("")
+  const [email, changeEmail] = useState<string>('')
+  const [password, changePassword] = useState<string>('')
   const [showPass, changePassVisiblity] = useState<boolean>(false)
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +32,7 @@ export default function LoginFrom(props: ILoginFormProps) {
   }
 
   const handleSubmit = (event: any) => {
-    if (email !== "" && password !== "") {
+    if (email !== '' && password !== '') {
       props.loginWithEmailPassword(email, password)
     }
   }
@@ -44,23 +44,27 @@ export default function LoginFrom(props: ILoginFormProps) {
         placeholder="Email"
         onChange={handleEmailChange}
         autoComplete="true"
-        primaryIcon={<MdOutlineAlternateEmail className="text-2xl text-white1" />}
+        primaryIcon={
+          <MdOutlineAlternateEmail className="text-2xl text-white1" />
+        }
       />
 
       <Input
-        type={showPass ? "text" : "password"}
+        type={showPass ? 'text' : 'password'}
         placeholder="Password"
         onChange={handlePasswordChange}
         autoComplete="true"
-        primaryIcon={<AiOutlineLock className="text-2xl text-white1"/>}
+        primaryIcon={<AiOutlineLock className="text-2xl text-white1" />}
         secondaryIcon={
-          showPass ?
-          <AiOutlineEyeInvisible className="text-2xl text-white2" />
-          : <AiOutlineEye className="text-2xl text-white2" />
+          showPass ? (
+            <AiOutlineEyeInvisible className="text-2xl text-white2" />
+          ) : (
+            <AiOutlineEye className="text-2xl text-white2" />
+          )
         }
         secondaryBut={{
-          type: "button",
-          "aria-label": "Toggle password visibility",
+          type: 'button',
+          'aria-label': 'Toggle password visibility',
           onClick: handlePassVisiblity,
         }}
       />

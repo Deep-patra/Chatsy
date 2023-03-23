@@ -16,15 +16,17 @@ const Loading = () => {
   )
 }
 
-export default function UserProvider({ children }: { children: React.ReactNode }) {
+export default function UserProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const { user, setContact, setUser, changeUser } = useGetUser()
-  
+
   return (
     <Auth.Provider value={{ user, setContact, setUser, changeUser }}>
-      <Header/>
-      <Suspense fallback={<Loading/>}>
-        {children}
-      </Suspense>
+      <Header />
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </Auth.Provider>
   )
 }

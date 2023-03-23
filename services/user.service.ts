@@ -8,19 +8,18 @@ import {
   type DocumentSnapshot,
   type DocumentData,
   type Unsubscribe,
-} from "firebase/firestore";
-import { db } from "./db";
+} from 'firebase/firestore'
+import { db } from './db'
 import ContactService from '@/services/contact.service'
 
 interface ICreateParams {
-  displayName: string;
-  uuid: string;
-  email: string;
-  photoURL: string;
+  displayName: string
+  uuid: string
+  email: string
+  photoURL: string
 }
 
 class User {
-
   /**
    * @desc Returns true, if the User document exists
    * @param {string} uid Unique Id of the user
@@ -31,7 +30,6 @@ class User {
     if (userDoc.exists()) return true
     return false
   }
-
 
   /**
    * @desc Create a new User document
@@ -48,13 +46,12 @@ class User {
     email,
     photoURL,
   }: ICreateParams): Promise<DocumentData | null> {
-    
     // check if the user already exists
-    const userDoc = await getDoc(doc(db, "user", uuid))
+    const userDoc = await getDoc(doc(db, 'user', uuid))
 
     if (userDoc.exists()) return userDoc.data()
 
-    const docRef = doc(db, "user", uuid);
+    const docRef = doc(db, 'user', uuid)
 
     await setDoc(docRef, {
       name: displayName,
@@ -62,7 +59,7 @@ class User {
       email,
       photoURL,
       contacts: [],
-    });
+    })
 
     const _doc = await getDoc(doc(db, 'user', uuid))
 
@@ -77,12 +74,12 @@ class User {
    * @returns {Promise<any | null>}
    */
   static async read(uuid: string): Promise<any | null> {
-    const docRef = doc(db, "user", uuid);
-    const docSnap = await getDoc(docRef);
+    const docRef = doc(db, 'user', uuid)
+    const docSnap = await getDoc(docRef)
 
-    if (!docSnap.exists()) return null;
+    if (!docSnap.exists()) return null
 
-    return docSnap.data();
+    return docSnap.data()
   }
 
   /**
@@ -97,17 +94,17 @@ class User {
     uuid: string,
     { name, photoURL }: { name?: string; photoURL?: string }
   ): Promise<void> {
-    const update: { name?: string; photoURL?: string } = {};
+    const update: { name?: string; photoURL?: string } = {}
 
-    if (name) update.name = name;
-    if (photoURL) update.photoURL = photoURL;
+    if (name) update.name = name
+    if (photoURL) update.photoURL = photoURL
 
-    const docRef = doc(db, "user", uuid);
+    const docRef = doc(db, 'user', uuid)
     await updateDoc(docRef, {
       ...update,
-    });
+    })
 
-    return;
+    return
   }
 
   /**
@@ -119,7 +116,9 @@ class User {
     await ContactService.delete(uid, contactIds)
 
     const promises: Promise<void>[] = []
-    contactIds.forEach((id) => { promises.push(ContactService.delete(id, [uid])) })
+    contactIds.forEach((id) => {
+      promises.push(ContactService.delete(id, [uid]))
+    })
 
     await Promise.all(promises)
 
@@ -135,14 +134,14 @@ class User {
     uuid: string,
     cb: (snapshot: DocumentSnapshot<DocumentData>) => void
   ): Unsubscribe {
-    const userDoc = doc(db, "user", uuid);
+    const userDoc = doc(db, 'user', uuid)
 
     const unsubscribe = onSnapshot(userDoc, (snapshot) => {
-      cb(snapshot);
-    });
+      cb(snapshot)
+    })
 
-    return unsubscribe;
+    return unsubscribe
   }
 }
 
-export default User;
+export default User

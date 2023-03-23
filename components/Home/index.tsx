@@ -1,42 +1,42 @@
-"use client";
-import { useContext, useState, useEffect } from "react";
-import Sidebar from "../Sidebar";
-import Contact from "./contacts";
-import ChatBox from "../ChatBox";
-import Auth, { IContact } from "@/context/auth.context";
-import Chat, { type IChat, type IMessage } from "@/context/chat.context";
-import { useGetChats } from "@/hooks/getChats";
-import { useListenUser } from "@/hooks/listenUserDoc";
+'use client'
+import { useContext, useState, useEffect } from 'react'
+import Sidebar from '../Sidebar'
+import Contact from './contacts'
+import ChatBox from '../ChatBox'
+import Auth, { IContact } from '@/context/auth.context'
+import Chat, { type IChat, type IMessage } from '@/context/chat.context'
+import { useGetChats } from '@/hooks/getChats'
+import { useListenUser } from '@/hooks/listenUserDoc'
 
 export default function Home() {
-  const [contacts, changeContacts] = useState<IContact[]>([]);
-  const [openedContacts, changeOpenedContacts] = useState<IContact[]>([]);
-  const [activeContact, _changeActiveContact] = useState<IContact | null>(null);
+  const [contacts, changeContacts] = useState<IContact[]>([])
+  const [openedContacts, changeOpenedContacts] = useState<IContact[]>([])
+  const [activeContact, _changeActiveContact] = useState<IContact | null>(null)
 
-  const { user } = useContext(Auth);
-  const [chats, updateChats, changeChats] = useGetChats();
+  const { user } = useContext(Auth)
+  const [chats, updateChats, changeChats] = useGetChats()
 
   // listen to user document changes
-  useListenUser();
+  useListenUser()
 
   const handleOpenChat = (uid: string) => {
-    const selectedContact = contacts.find((value) => value.uid === uid);
+    const selectedContact = contacts.find((value) => value.uid === uid)
 
     if (selectedContact) {
       if (!openedContacts.find((value) => value.uid === uid))
-        changeOpenedContacts([...openedContacts, selectedContact]);
+        changeOpenedContacts([...openedContacts, selectedContact])
 
-        _changeActiveContact(selectedContact);
+      _changeActiveContact(selectedContact)
     }
-  };
+  }
 
   const changeActiveContact = (contact: IContact | null) => {
-    _changeActiveContact(contact);
-  };
+    _changeActiveContact(contact)
+  }
 
   useEffect(() => {
-    user && changeContacts(user.contacts);
-  }, [user]);
+    user && changeContacts(user.contacts)
+  }, [user])
 
   return (
     <Chat.Provider value={{ chats, updateChats, changeChats }}>
@@ -55,5 +55,5 @@ export default function Home() {
         />
       </div>
     </Chat.Provider>
-  );
+  )
 }

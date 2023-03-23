@@ -1,37 +1,39 @@
-import classnames from "classnames";
-import { IContact } from "@/context/auth.context";
-import { Reorder } from "framer-motion";
-import { RxCross2 } from "react-icons/rx";
+import classnames from 'classnames'
+import { IContact } from '@/context/auth.context'
+import { Reorder } from 'framer-motion'
+import { RxCross2 } from 'react-icons/rx'
 
 interface ITabsProps {
-  activeUser: IContact | null;
-  users: IContact[];
-  setUsers: (orderedUsers: any[]) => void;
-  changeActiveUser: (contact: IContact | null) => void;
+  activeUser: IContact | null
+  users: IContact[]
+  setUsers: (orderedUsers: any[]) => void
+  changeActiveUser: (contact: IContact | null) => void
 }
 
 interface ITabItemProps<T> {
-  contact: T;
-  active: boolean;
-  changeActiveUser: (contact: IContact) => void;
-  removeItem: (contact: T) => void;
+  contact: T
+  active: boolean
+  changeActiveUser: (contact: IContact) => void
+  removeItem: (contact: T) => void
 }
 
 function TabItem(props: ITabItemProps<IContact>) {
-  const { contact, removeItem } = props;
+  const { contact, removeItem } = props
 
   return (
     <div
       className={classnames(
-        "flex flex-row items-center rounded-md p-1 px-2 gap-3 cursor-grab",
-        props.active ? "bg-black3" : "bg-black2"
+        'flex flex-row items-center rounded-md p-1 px-2 gap-3 cursor-grab',
+        props.active ? 'bg-black3' : 'bg-black2'
       )}
     >
       <button
         type="button"
         aria-label="name"
         className="flex flex-row items-center"
-        onClick={() => { props.changeActiveUser(contact) }}
+        onClick={() => {
+          props.changeActiveUser(contact)
+        }}
       >
         <span className="text-white1 inline-block max-w-10 whitespace-nowrap text-ellipsis overflow-hidden">
           {contact.name}
@@ -43,26 +45,26 @@ function TabItem(props: ITabItemProps<IContact>) {
         aria-label="Tab close button"
         className="p-1 rounded-md hover:bg-gray1 text-gray1 hover:text-white1"
         onClick={() => {
-          removeItem(contact);
+          removeItem(contact)
         }}
       >
         <RxCross2 className="w-4 h-4 text-inherit" />
       </button>
     </div>
-  );
+  )
 }
 
 export default function Tabs(props: ITabsProps) {
-  const { activeUser, setUsers } = props;
+  const { activeUser, setUsers } = props
 
   const removeUser = (contact: IContact) => {
     const new_users = props.users.filter((user) => {
-      if (user.uid === contact.uid) return;
-      return user;
-    });
+      if (user.uid === contact.uid) return
+      return user
+    })
 
-    setUsers(new_users);
-  };
+    setUsers(new_users)
+  }
 
   return (
     <div
@@ -89,5 +91,5 @@ export default function Tabs(props: ITabsProps) {
         </Reorder.Group>
       )}
     </div>
-  );
+  )
 }

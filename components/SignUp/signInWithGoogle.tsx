@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
 import { motion } from 'framer-motion'
 import { BsGoogle } from 'react-icons/bs'
 
 interface ISignInWithGoogleProps {
-  handleClick: () => void;
+  handleClick: () => void
 }
 
 export default function SignInWithGoogle(props: ISignInWithGoogleProps) {

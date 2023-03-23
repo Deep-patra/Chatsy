@@ -1,3 +1,3 @@
-self.addEventListener("install", (e) => {
-  console.log("[Service worker] Install")
+self.addEventListener('install', (e) => {
+  console.log('[Service worker] Install')
 })

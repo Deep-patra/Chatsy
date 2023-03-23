@@ -1,38 +1,44 @@
-import { useState, useRef, useEffect, type ChangeEvent, type MouseEventHandler } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  type ChangeEvent,
+  type MouseEventHandler,
+} from 'react'
 import { motion } from 'framer-motion'
-import { FiEdit } from "react-icons/fi";
+import { FiEdit } from 'react-icons/fi'
 import Loader from '@/components/loader'
 import UserService from '@/services/user.service'
 
 interface IChangeNameProps {
-  uid: string;
-  name: string | null | undefined;
-  email: string | null | undefined;
+  uid: string
+  name: string | null | undefined
+  email: string | null | undefined
 }
 
 export default function ChangeName(props: IChangeNameProps) {
-  const { uid, name, email } = props;
+  const { uid, name, email } = props
 
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [loading, changeLoading] = useState<boolean>(false)
-  const [value, changeValue] = useState<string>(name || "");
-  const [edit, toggleEdit] = useState<boolean>(false);
-  const [showError, changeError] = useState<boolean>(false);
+  const [value, changeValue] = useState<string>(name || '')
+  const [edit, toggleEdit] = useState<boolean>(false)
+  const [showError, changeError] = useState<boolean>(false)
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation()
-    toggleEdit(true);
+    toggleEdit(true)
 
     if (inputRef.current) {
       const input = inputRef.current
       input.focus()
     }
-  };
+  }
 
   const handleSave = () => {
-    if (value.trim() !== "") {
-      // loading 
+    if (value.trim() !== '') {
+      // loading
       changeLoading(true)
       UserService.update(uid, { name: value })
         .catch(console.error)
@@ -43,16 +49,21 @@ export default function ChangeName(props: IChangeNameProps) {
     }
   }
 
-  const handleCancel = () => { changeValue(name || ""); toggleEdit(false) }
+  const handleCancel = () => {
+    changeValue(name || '')
+    toggleEdit(false)
+  }
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
+    const target = event.target
     changeValue(target.value)
-  };
+  }
 
   useEffect(() => {
-    if (value.trim() === "") changeError(true)
-    else { showError && changeError(false) }
+    if (value.trim() === '') changeError(true)
+    else {
+      showError && changeError(false)
+    }
   }, [value])
 
   return (
@@ -81,13 +92,13 @@ export default function ChangeName(props: IChangeNameProps) {
                   className="p-1 px-2 rounded-md border border-solid border-green text-green disabled:text-white3 disabled:border-white3 disabled:bg-white3 disabled:cursor-not-allowed hover:bg-green hover:text-white1"
                   onClick={handleSave}
                 >
-                  {
-                    loading ? (
-                      <div className="w-7 h-7 relative">
-                        <Loader color="white" />
-                      </div>
-                    ) : "Save"
-                  }
+                  {loading ? (
+                    <div className="w-7 h-7 relative">
+                      <Loader color="white" />
+                    </div>
+                  ) : (
+                    'Save'
+                  )}
                 </motion.button>
 
                 <motion.button
@@ -120,10 +131,13 @@ export default function ChangeName(props: IChangeNameProps) {
         )}
       </div>
 
-      <div className="flex flex-row items-center gap-3 rounded-lg border border-solid border-white2 p-2 px-3" style={{ cursor: "not-allowed" }}>
+      <div
+        className="flex flex-row items-center gap-3 rounded-lg border border-solid border-white2 p-2 px-3"
+        style={{ cursor: 'not-allowed' }}
+      >
         <span className="text-xl text-white2 cursor-not-allowed">Email</span>
         <span className="text-lg text-white3 cursor-not-allowed">{email}</span>
       </div>
     </div>
-  );
+  )
 }

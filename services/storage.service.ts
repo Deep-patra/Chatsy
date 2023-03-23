@@ -3,7 +3,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 
 class Storage {
   static async storeImage(image: File): Promise<string | null> {
-    const arr = image.name.split(".")
+    const arr = image.name.split('.')
     const uuid = window.crypto.randomUUID()
 
     const new_fileName = `images/${uuid}.${arr[arr.length - 1]}`
@@ -13,7 +13,7 @@ class Storage {
     const url = await getDownloadURL(snapshot.ref)
 
     return url
-  } 
+  }
 }
 
 export default Storage
