@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 
 function InternetIcon() {
   return (
@@ -94,34 +94,34 @@ l180 -182 -171 -173 c-117 -117 -178 -186 -192 -217 -48 -106 -3 -238 99 -290
         />
       </g>
     </svg>
-  );
+  )
 }
 
 export default function NoInternet() {
-  const [show, toggle] = useState<boolean>(false);
-  const router = useRouter();
+  const [show, toggle] = useState<boolean>(false)
+  const router = useRouter()
 
   const handleRetry = () => {
-    if (navigator.onLine) router.push("/home");
-  };
+    if (navigator.onLine) router.push('/home')
+  }
 
   useEffect(() => {
     const offlineHandler = () => {
-      toggle(true);
-    };
+      toggle(true)
+    }
 
     const onlineHandler = () => {
-      toggle(false);
-    };
+      toggle(false)
+    }
 
-    window.addEventListener("offline", offlineHandler);
-    window.addEventListener("online", onlineHandler);
+    window.addEventListener('offline', offlineHandler)
+    window.addEventListener('online', onlineHandler)
 
     return () => {
-      window.removeEventListener("online", onlineHandler);
-      window.removeEventListener("offline", offlineHandler);
-    };
-  });
+      window.removeEventListener('online', onlineHandler)
+      window.removeEventListener('offline', offlineHandler)
+    }
+  })
 
   return (
     <>
@@ -151,5 +151,5 @@ export default function NoInternet() {
         </div>
       ) : null}
     </>
-  );
+  )
 }

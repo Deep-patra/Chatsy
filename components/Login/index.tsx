@@ -1,14 +1,18 @@
-"use client"
+'use client'
 
 import getApp from '@/firebase'
-import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth'
 import LoginForm from './form'
 import Seperator from './seperator'
 import SignInWithGoogle from './logInWithGoogle'
 import DontHaveAccount from './dontHaveAccount'
 
 export default function Login() {
-
   const handleEmailLogin = (email: string, password: string) => {
     if (email && password) {
       const app = getApp()
@@ -16,7 +20,7 @@ export default function Login() {
 
       signInWithEmailAndPassword(auth, email, password)
         .then((credential) => {
-          console.log("LOGIN CREDENTIAL", credential)
+          console.log('LOGIN CREDENTIAL', credential)
         })
         .catch(console.error)
     }
@@ -32,18 +36,17 @@ export default function Login() {
 
     signInWithPopup(auth, provider)
       .then((credential) => {
-        console.log("GOOGLE credential", credential)
+        console.log('GOOGLE credential', credential)
       })
       .catch(console.error)
   }
 
-
   return (
     <div className="form-container flex flex-col gap-5 p-4">
       <LoginForm loginWithEmailPassword={handleEmailLogin} />
-      <Seperator/>
+      <Seperator />
       <SignInWithGoogle handleClick={googleLogin} />
-      <DontHaveAccount/>
+      <DontHaveAccount />
     </div>
   )
 }

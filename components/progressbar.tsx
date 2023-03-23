@@ -5,7 +5,6 @@ interface IProgressBarProps {
 }
 
 export default function ProgressBar(props: IProgressBarProps) {
-
   if (!props.show) return null
 
   return (
@@ -13,16 +12,15 @@ export default function ProgressBar(props: IProgressBarProps) {
       <motion.div
         className="w-[60vw] h-full bg-white1"
         animate={{
-          x: ["-60vw", "160vw"]
+          x: ['-60vw', '160vw'],
         }}
         transition={{
           duration: 1,
-          ease: "easeInOut",
+          ease: 'easeInOut',
           repeat: Infinity,
           repeatDelay: 0.5,
         }}
-      >  
-      </motion.div>
+      ></motion.div>
     </div>
   )
 }

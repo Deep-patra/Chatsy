@@ -1,16 +1,16 @@
-'use client';
+'use client'
 
 import { useEffect } from 'react'
-import Auth from "@/context/auth.context";
-import HomeComp from "@/components/Home";
+import Auth from '@/context/auth.context'
+import HomeComp from '@/components/Home'
 
 export const metadata = {
-  title: "Home | Chatsy",
+  title: 'Home | Chatsy',
 }
 
 export default function Home() {
   useEffect(() => {
-    if ("serviceWorker"in navigator) {
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
     }
   }, [])
@@ -18,5 +18,5 @@ export default function Home() {
     <>
       <Auth.Consumer>{({ user }) => <>{user && <HomeComp />}</>}</Auth.Consumer>
     </>
-  );
+  )
 }

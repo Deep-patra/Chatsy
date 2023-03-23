@@ -1,9 +1,8 @@
-
-import Link from "next/link";
-import styles from "./page.module.css";
+import Link from 'next/link'
+import styles from './page.module.css'
 
 export const metadata = {
-  title: "Chatsy",
+  title: 'Chatsy',
 }
 
 export default function Home() {
@@ -33,5 +32,5 @@ export default function Home() {
         </div>
       </div>
     </main>
-  );
+  )
 }

@@ -1,8 +1,8 @@
 'use client'
 
 interface IGlobalErrorProps {
-  error: Error;
-  reset: () => void;
+  error: Error
+  reset: () => void
 }
 
 export default function GloablError(props: IGlobalErrorProps) {

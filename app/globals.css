@@ -30,7 +30,7 @@ body {
   background-color: var(--dark-background);
 
   display: grid;
-  grid-template-rows: 50px calc( 100vh - 50px );
+  grid-template-rows: 50px calc(100vh - 50px);
 }
 
 .dark body {
@@ -43,7 +43,9 @@ body {
   height: 8px;
 }
 
-input, textarea, button {
+input,
+textarea,
+button {
   appearance: none;
   border: none;
   outline: none;
@@ -71,5 +73,4 @@ input:focus {
 }
 
 @media screen and (max-width: 600px) {
-
 }

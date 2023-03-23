@@ -1,6 +1,8 @@
 import { useState, useEffect, type RefObject } from 'react'
 
-const useOutClick = (...args: RefObject<HTMLElement>[]): [boolean, (result: boolean) => void] => {
+const useOutClick = (
+  ...args: RefObject<HTMLElement>[]
+): [boolean, (result: boolean) => void] => {
   const [open, toggle] = useState<boolean>(false)
 
   const toggleMenu = (result: boolean) => {
@@ -16,7 +18,7 @@ const useOutClick = (...args: RefObject<HTMLElement>[]): [boolean, (result: bool
 
     return result
   }
-  
+
   useEffect(() => {
     const handler = (event: Event) => {
       if (checkIfTarget(event.target as HTMLElement)) {
@@ -24,10 +26,10 @@ const useOutClick = (...args: RefObject<HTMLElement>[]): [boolean, (result: bool
       }
     }
 
-    window.addEventListener("click", handler, false)
+    window.addEventListener('click', handler, false)
 
     return () => {
-      window.removeEventListener("click", handler, false)
+      window.removeEventListener('click', handler, false)
     }
   }, [])
 

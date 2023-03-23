@@ -1,23 +1,23 @@
-"use client";
+'use client'
 
-import { useContext } from "react";
-import { useRouter } from "next/navigation";
-import { FiSettings } from "react-icons/fi";
-import { IoIosArrowBack } from "react-icons/io";
-import Loader from "@/components/loader";
-import Auth from "@/context/auth.context";
-import ChangePfp from "./changePfp";
-import ChangeName from "./changeName";
-import EditContacts from "./editContacts";
-import { useListenUser } from "@/hooks/listenUserDoc";
+import { useContext } from 'react'
+import { useRouter } from 'next/navigation'
+import { FiSettings } from 'react-icons/fi'
+import { IoIosArrowBack } from 'react-icons/io'
+import Loader from '@/components/loader'
+import Auth from '@/context/auth.context'
+import ChangePfp from './changePfp'
+import ChangeName from './changeName'
+import EditContacts from './editContacts'
+import { useListenUser } from '@/hooks/listenUserDoc'
 
 export default function Settings() {
-  const router = useRouter();
-  const { user } = useContext(Auth);
+  const router = useRouter()
+  const { user } = useContext(Auth)
 
   const handleBack = () => {
-    router.push("/home");
-  };
+    router.push('/home')
+  }
 
   // listen to the user changes
   useListenUser()
@@ -29,7 +29,7 @@ export default function Settings() {
           <Loader color="white" />
         </div>
       </div>
-    );
+    )
 
   return (
     <main className="w-full flex flex-col p-2 md:p-5">
@@ -59,5 +59,5 @@ export default function Settings() {
         </div>
       </div>
     </main>
-  );
+  )
 }

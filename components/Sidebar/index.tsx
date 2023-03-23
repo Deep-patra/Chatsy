@@ -1,29 +1,27 @@
-import { useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import useOutClick from "@/hooks/outClick";
+import { useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import useOutClick from '@/hooks/outClick'
 
 interface ISidebarProps {
-  children: JSX.Element;
+  children: JSX.Element
 }
 
 export default function Sidebar(props: ISidebarProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null)
 
-  const [open, toggle] = useOutClick(overlayRef);
+  const [open, toggle] = useOutClick(overlayRef)
 
   useEffect(() => {
-    const handleToggleMenu = () => { toggle(true) }
+    const handleToggleMenu = () => {
+      toggle(true)
+    }
 
-    document.body.addEventListener(
-      "OPEN_MENU",
-      handleToggleMenu,
-      false
-    );
+    document.body.addEventListener('OPEN_MENU', handleToggleMenu, false)
 
     return () => {
-      document.body.removeEventListener("OPEN_MENU", handleToggleMenu, false)
+      document.body.removeEventListener('OPEN_MENU', handleToggleMenu, false)
     }
-  }, []);
+  }, [])
 
   return (
     <>
@@ -42,9 +40,9 @@ export default function Sidebar(props: ISidebarProps) {
             className="fixed z-10 top-0 left-0 block h-screen md:hidden w-screen bg-[rgba(0, 0, 0, 0.2)] backdrop-blur-sm"
           >
             <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: "0" }}
-              exit={{ x: "-100%" }}
+              initial={{ x: '-100%' }}
+              animate={{ x: '0' }}
+              exit={{ x: '-100%' }}
               className="w-[80vw] px-5 bg-black2 absolute top-0 left-0 my-2 h-[98%] rounded-tr-xl rounded-br-xl p-1 overflow-hidden shadow-md"
             >
               {props.children}
@@ -53,5 +51,5 @@ export default function Sidebar(props: ISidebarProps) {
         )}
       </AnimatePresence>
     </>
-  );
+  )
 }

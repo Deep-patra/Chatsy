@@ -1,16 +1,14 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { RiMenu4Fill } from "react-icons/ri";
-import Menu from "../menu";
-import Auth from "@/context/auth.context";
+import Image from 'next/image'
+import { RiMenu4Fill } from 'react-icons/ri'
+import Menu from '../menu'
+import Auth from '@/context/auth.context'
 
 export default function Header() {
-
   const handleMenuClick = (event: any) => {
-    document.body.dispatchEvent(new CustomEvent("OPEN_MENU"));
-  };
-
+    document.body.dispatchEvent(new CustomEvent('OPEN_MENU'))
+  }
 
   return (
     <Auth.Consumer>
@@ -43,5 +41,5 @@ export default function Header() {
         </header>
       )}
     </Auth.Consumer>
-  );
+  )
 }

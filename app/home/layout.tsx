@@ -1,11 +1,7 @@
 export const metadata = {
-  title: "Home",
+  title: 'Home',
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      {children}
-    </>
-  )
+  return <>{children}</>
 }

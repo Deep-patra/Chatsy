@@ -1,43 +1,41 @@
-"use client";
+'use client'
 
-import { MouseEvent, useState, type ChangeEvent } from "react";
+import { MouseEvent, useState, type ChangeEvent } from 'react'
 import classNames from 'classnames'
-import { MdOutlineAlternateEmail } from "react-icons/md";
+import { MdOutlineAlternateEmail } from 'react-icons/md'
 import { motion } from 'framer-motion'
 import {
   AiOutlineLock,
   AiOutlineEye,
   AiOutlineEyeInvisible,
-} from "react-icons/ai";
-import Input from "../input";
-
+} from 'react-icons/ai'
+import Input from '../input'
 
 interface ISignupFormProps {
   signUpWithEmailPassword: (email: string, password: string) => void
 }
 
-
 export default function SignupForm(props: ISignupFormProps) {
-  const [email, changeEmail] = useState<string>("");
-  const [password, changePassword] = useState<string>("");
-  const [showPass, changePassVisibility] = useState<boolean>(false);
+  const [email, changeEmail] = useState<string>('')
+  const [password, changePassword] = useState<string>('')
+  const [showPass, changePassVisibility] = useState<boolean>(false)
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
-    changeEmail(target.value);
-  };
+    const target = event.target
+    changeEmail(target.value)
+  }
 
   const handlePassChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
-    changePassword(target.value);
-  };
+    const target = event.target
+    changePassword(target.value)
+  }
 
   const handlePassVisibility = (event: MouseEvent) => {
-    changePassVisibility(!showPass);
-  };
+    changePassVisibility(!showPass)
+  }
 
   const handleSubmit = () => {
-    if (email !== "" && password !== "") {
+    if (email !== '' && password !== '') {
       props.signUpWithEmailPassword(email, password)
     }
   }
@@ -56,7 +54,7 @@ export default function SignupForm(props: ISignupFormProps) {
       />
 
       <Input
-        type={showPass ? "text" : "password"}
+        type={showPass ? 'text' : 'password'}
         placeholder="Password"
         value={password}
         onChange={handlePassChange}
@@ -64,13 +62,21 @@ export default function SignupForm(props: ISignupFormProps) {
         primaryIcon={<AiOutlineLock className="text-white2 text-lg" />}
         secondaryIcon={
           <>
-            <AiOutlineEye className={classNames( "text-lg text-white2", { hidden: showPass })} />
-            <AiOutlineEyeInvisible className={classNames( "text-lg text-white2", { hidden: !showPass })} />
+            <AiOutlineEye
+              className={classNames('text-lg text-white2', {
+                hidden: showPass,
+              })}
+            />
+            <AiOutlineEyeInvisible
+              className={classNames('text-lg text-white2', {
+                hidden: !showPass,
+              })}
+            />
           </>
         }
         secondaryBut={{
-          type: "button",
-          "aria-label": "toggle password visibility",
+          type: 'button',
+          'aria-label': 'toggle password visibility',
           onClick: handlePassVisibility,
         }}
       />
@@ -88,5 +94,5 @@ export default function SignupForm(props: ISignupFormProps) {
         </motion.button>
       </div>
     </form>
-  );
+  )
 }

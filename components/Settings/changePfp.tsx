@@ -1,56 +1,56 @@
-import { useState, useRef, type ChangeEvent } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import UserService from "@/services/user.service";
-import StorageService from "@/services/storage.service";
-import Loader from "@/components/loader";
+import { useState, useRef, type ChangeEvent } from 'react'
+import Image from 'next/image'
+import { motion } from 'framer-motion'
+import UserService from '@/services/user.service'
+import StorageService from '@/services/storage.service'
+import Loader from '@/components/loader'
 
 interface IChangePfp {
-  uid: string;
-  photoURL?: string | null;
+  uid: string
+  photoURL?: string | null
 }
 
 export default function ChangePfp(props: IChangePfp) {
   const { uid, photoURL } = props
 
-  const [newImage, changeImage] = useState<File | null>(null);
-  const [loading, changeLoading] = useState<boolean>(false);
+  const [newImage, changeImage] = useState<File | null>(null)
+  const [loading, changeLoading] = useState<boolean>(false)
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const handleChangePicture = () => {
-    inputRef.current && inputRef.current.click();
-  };
+    inputRef.current && inputRef.current.click()
+  }
 
   const handleSave = async () => {
     if (newImage) {
-      changeLoading(true);
+      changeLoading(true)
 
       const image_url = await StorageService.storeImage(newImage).catch(
         console.error
-      );
+      )
 
       if (image_url) {
         UserService.update(uid, { photoURL: image_url })
           .catch(console.error)
           .finally(() => {
-            changeLoading(false); // change the loading to false
-            changeImage(null); // reset the state
-          });
+            changeLoading(false) // change the loading to false
+            changeImage(null) // reset the state
+          })
       } else {
         changeLoading(false)
         changeImage(null)
       }
     }
-  };
+  }
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
+    const target = event.target
 
     if (target.files) {
-      if (target.files[0]) changeImage(target.files[0]);
+      if (target.files[0]) changeImage(target.files[0])
     }
-  };
+  }
 
   return (
     <div className="flex flex-col p-2 gap-5">
@@ -65,9 +65,7 @@ export default function ChangePfp(props: IChangePfp) {
       <div className="relative rounded-full w-[200px] h-[200px] overflow-hidden">
         <Image
           src={
-            newImage
-              ? URL.createObjectURL(newImage)
-              : photoURL || "/user.png"
+            newImage ? URL.createObjectURL(newImage) : photoURL || '/user.png'
           }
           alt="User"
           fill
@@ -98,10 +96,10 @@ export default function ChangePfp(props: IChangePfp) {
               <Loader color="green" />
             </div>
           ) : (
-            "Save"
+            'Save'
           )}
         </motion.button>
       </div>
     </div>
-  );
+  )
 }
