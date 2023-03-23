@@ -31,7 +31,7 @@ export default function ChangePfp(props: IChangePfp) {
       );
 
       if (image_url) {
-        UserService.update(props.uid, { photoURL: image_url })
+        UserService.update(uid, { photoURL: image_url })
           .catch(console.error)
           .finally(() => {
             changeLoading(false); // change the loading to false
