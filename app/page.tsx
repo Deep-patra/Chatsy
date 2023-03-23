@@ -1,10 +1,6 @@
 import Link from 'next/link'
 import styles from './page.module.css'
 
-export const metadata = {
-  title: 'Chatsy',
-}
-
 export default function Home() {
   return (
     <main className="p-2 w-full h-full flex flex-col items-center justify-center">
