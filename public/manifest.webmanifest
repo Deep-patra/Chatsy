@@ -1,0 +1,21 @@
+{
+  "name": "Chatsy",
+  "description": "A Simple, Reliable and Secure messaging application.",
+  "short_name": "Chatsy",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg"
+    }
+  ],
+  "start_url": "/",
+  "display": "fullscreen",
+  "theme_color": "#28282B",
+  "background_color": "#121212"
+}
