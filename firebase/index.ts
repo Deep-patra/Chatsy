@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app'
+import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
@@ -11,8 +11,12 @@ const firebaseConfig = {
   measurementId: 'G-XHXX67MTB8',
 }
 
-const getApp = () => {
+const getApp = (): FirebaseApp => {
   return initializeApp(firebaseConfig)
+}
+
+export const initialzeAnalytics = (app: FirebaseApp) => {
+  return getAnalytics(app)
 }
 
 export default getApp
