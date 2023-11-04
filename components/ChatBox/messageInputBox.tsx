@@ -104,7 +104,6 @@ function MessageInput(props: IMessageInputProps) {
 
   const handleSend = (event: MouseEvent<HTMLButtonElement>) => {
     if (text === '' && files.length === 0) return
-
     ;(event.target as HTMLButtonElement).disabled = true
 
     const { activeContact } = props
@@ -115,7 +114,6 @@ function MessageInput(props: IMessageInputProps) {
         text,
         files
       )
-
     ;(event.target as HTMLButtonElement).disabled = false
 
     // reset the fields
