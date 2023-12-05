@@ -1,5 +1,11 @@
 import { useState, useEffect, type RefObject } from 'react'
 
+/**
+ * Hook to detect the click event outside the component
+ * @param {RefObject<HTMLElement>[]} ...args - An array of element references the click will exclude
+ *
+ * @returns {[boolean, (boolean) => void]} - A pair containing state and callback to change the open state
+ * */
 const useOutClick = (
   ...args: RefObject<HTMLElement>[]
 ): [boolean, (result: boolean) => void] => {
@@ -9,11 +15,13 @@ const useOutClick = (
     toggle(result)
   }
 
-  const checkIfTarget = (target: HTMLElement): boolean => {
+  const checkIfTarget = (event: Event): boolean => {
     let result = false
 
+    const path = event.composedPath()
+
     args.forEach((value) => {
-      if (value.current === target) result = true
+      if (path.includes(value.current as EventTarget)) result = true
     })
 
     return result
@@ -21,7 +29,7 @@ const useOutClick = (
 
   useEffect(() => {
     const handler = (event: Event) => {
-      if (checkIfTarget(event.target as HTMLElement)) {
+      if (!checkIfTarget(event)) {
         toggle(false)
       }
     }

@@ -44,15 +44,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="">
-      <script
-        src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js"
-        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M"
-        crossOrigin="anonymous"
-        async
-        defer
-      ></script>
-
       <head>
+        <script
+          src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js"
+          integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M"
+          crossOrigin="anonymous"
+          async
+          defer
+        ></script>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="preload" href="/noInternet" />
       </head>

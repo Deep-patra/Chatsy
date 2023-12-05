@@ -1,4 +1,4 @@
-import getApp from '@/firebase'
+import { getApp } from '@/firebase'
 import { getFirestore } from 'firebase/firestore'
 
 const app = getApp()

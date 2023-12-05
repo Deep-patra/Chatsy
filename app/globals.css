@@ -13,6 +13,8 @@
   --dark-background: #121212;
   --dark-secondary-background: #485460;
   --dark-tertiary-background: #808e9b;
+
+  --scrollbar: #5e5e5e;
 }
 
 * {
@@ -65,11 +67,53 @@ input:focus {
   width: min(100%, 300px);
 }
 
+.search-modal {
+  width: min(calc(100vw - 30px), 500px);
+  height: 400px;
+}
+
+.setting-modal {
+  width: min(90vw, 600px);
+  height: 500px;
+}
+
+.profile-modal {
+  width: min(calc(100vw - 30px), 600px);
+  height: 400px;
+}
+
+.logout-modal {
+  width: min(calc(100vw - 30px), 400px);
+}
+
 .chatbox {
   grid-row-start: 2;
   grid-row-end: 3;
   display: grid;
   grid-template-rows: 50px calc(100% - 100px) 50px;
+}
+
+.decorate-scrollbar {
+  scrollbar-width: none;
+}
+
+.decorate-scrollbar:hover {
+  scrollbar-width: thin;
+}
+
+.decorate-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.decorate-scrollbar:hover::-webkit-scrollbar {
+  display: block;
+}
+
+.decorate-scrollbar:hover::-webkit-scrollbar-thumb {
+  width: 3px !important;
+  height: 3px !important;
+  border-radius: 4px;
+  background-color: var(--scrollbar);
 }
 
 @media screen and (max-width: 600px) {

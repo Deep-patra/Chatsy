@@ -10,8 +10,8 @@ import { motion } from 'framer-motion'
 import { BsImage } from 'react-icons/bs'
 import { RiSendPlane2Line, RiSendPlane2Fill } from 'react-icons/ri'
 import ImagePreview from './imagePreview'
-import Auth from '@/context/auth.context'
-import { type IContact } from '@/context/auth.context'
+import Tooltip from '../tootip'
+import Auth, { type IContact } from '@/context/auth.context'
 import ContactService from '@/services/contact.service'
 import ChatService, { MessageGroup } from '@/services/chat.service'
 
@@ -31,27 +31,29 @@ function SendButton(props: ISendButtonProps) {
   const [focus, changeFocus] = useState<boolean>(false)
 
   return (
-    <motion.button
-      type="button"
-      aria-label="Send button"
-      whileTap={{ scale: 0.92 }}
-      onMouseOver={() => {
-        changeFocus(true)
-      }}
-      onMouseLeave={() => {
-        changeFocus(false)
-      }}
-      onClick={(event) => {
-        props.handleClick(event)
-      }}
-      className="w-9 h-9 p-1 rounded-full hover:bg-black2 flex flex-row items-center justify-center text-white2 hover:text-white1"
-    >
-      {focus ? (
-        <RiSendPlane2Fill className="w-7 h-7 text-inherit" />
-      ) : (
-        <RiSendPlane2Line className="w-7 h-7 text-inherit" />
-      )}
-    </motion.button>
+    <Tooltip text="Send" position="top">
+      <motion.button
+        type="button"
+        aria-label="Send button"
+        whileTap={{ scale: 0.92 }}
+        onMouseOver={() => {
+          changeFocus(true)
+        }}
+        onMouseLeave={() => {
+          changeFocus(false)
+        }}
+        onClick={(event) => {
+          props.handleClick(event)
+        }}
+        className="w-9 h-9 p-1 rounded-full flex flex-row items-center justify-center text-white2 hover:text-white1 hover:bg-blue"
+      >
+        {focus ? (
+          <RiSendPlane2Fill className="w-5 h-5 text-inherit" />
+        ) : (
+          <RiSendPlane2Line className="w-5 h-5 text-inherit" />
+        )}
+      </motion.button>
+    </Tooltip>
   )
 }
 
@@ -155,17 +157,19 @@ function MessageInput(props: IMessageInputProps) {
           }}
         />
 
-        <motion.button
-          type="button"
-          aria-label="select image button"
-          whileTap={{ scale: 0.95 }}
-          className="hover:bg-black3 p-2 ml-auto text-white2 hover:text-white1 rounded-full disabled:text-white3 disabled:cursor-not-allowed"
-          onClick={() => {
-            imageInputRef.current?.click()
-          }}
-        >
-          <BsImage className="w-5 h-5 text-inherit" />
-        </motion.button>
+        <Tooltip text="Upload Image" position="top">
+          <motion.button
+            type="button"
+            aria-label="select image button"
+            whileTap={{ scale: 0.95 }}
+            className="hover:bg-black3 hover:text-green p-2 ml-auto text-white2 rounded-full disabled:text-white3 disabled:cursor-not-allowed"
+            onClick={() => {
+              imageInputRef.current?.click()
+            }}
+          >
+            <BsImage className="w-4 h-4 text-inherit" />
+          </motion.button>
+        </Tooltip>
       </div>
 
       <SendButton handleClick={handleSend} />

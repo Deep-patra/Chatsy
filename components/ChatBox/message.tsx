@@ -26,7 +26,7 @@ function ProfilePicture(props: IProfilePictureProps) {
   return (
     <div
       style={{ order: props.self ? 1 : 0 }}
-      className="relative flex-shrink-0 rounded-full w-5 h-5 md:w-10 md:h-10 overflow-hidden"
+      className="relative flex-shrink-0 rounded-full w-5 h-5 md:w-8 md:h-8 overflow-hidden"
     >
       <Image src={props.photoURL || '/user.png'} alt={''} fill />
     </div>

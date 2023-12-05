@@ -2,12 +2,18 @@
 
 import Image from 'next/image'
 import { RiMenu4Fill } from 'react-icons/ri'
+import { CiSearch } from 'react-icons/ci'
 import Menu from '../menu'
+import Tooltip from '../tootip'
 import Auth from '@/context/auth.context'
 
 export default function Header() {
   const handleMenuClick = (event: any) => {
     document.body.dispatchEvent(new CustomEvent('OPEN_MENU'))
+  }
+
+  const handleSearchClick = () => {
+    document.body.dispatchEvent(new CustomEvent('OPEN_SEARCH'))
   }
 
   return (
@@ -30,14 +36,29 @@ export default function Header() {
             )}
 
             <h1 className="flex flex-row items-center font-mono font-semibold text-lg text-white1">
-              <div className="relative w-8 h-8">
+              <div className="relative w-6 h-6">
                 <Image src="/favicon.svg" alt="logo" fill />
               </div>
               Chatsy
             </h1>
           </div>
 
-          {user && <Menu {...{ user }} />}
+          <div className="flex flex-row items-center gap-2">
+            {/* Search Button */}
+            {user && (
+              <Tooltip text="search">
+                <button
+                  className="text-white1 p-1 rounded-full hover:bg-black2"
+                  onClick={handleSearchClick}
+                >
+                  <CiSearch className="text-inherit w-6 h-6" />
+                </button>
+              </Tooltip>
+            )}
+
+            {/* Profile Picture & Menu */}
+            {user && <Menu {...{ user }} />}
+          </div>
         </header>
       )}
     </Auth.Consumer>
