@@ -3,6 +3,10 @@ import { useContext, useState, useEffect } from 'react'
 import Sidebar from '../Sidebar'
 import Contact from './contacts'
 import ChatBox from '../ChatBox'
+import Search from '../Search'
+import Setting from '../Setting'
+import Profile from '../Profile'
+import Logout from '../Logout'
 import Auth, { IContact } from '@/context/auth.context'
 import Chat, { type IChat, type IMessage } from '@/context/chat.context'
 import { useGetChats } from '@/hooks/getChats'
@@ -53,6 +57,18 @@ export default function Home() {
           changeOpenedContacts={changeOpenedContacts}
           changeActiveContact={changeActiveContact}
         />
+
+        {/* Search Modal */}
+        <Search />
+
+        {/* Setting Modal */}
+        <Setting />
+
+        {/* Profile Modal */}
+        <Profile />
+
+        {/* Logout Modal */}
+        <Logout />
       </div>
     </Chat.Provider>
   )

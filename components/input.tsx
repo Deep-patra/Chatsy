@@ -15,7 +15,7 @@ export default function Input(props: IInputProps) {
   const { primaryIcon, secondaryIcon, secondaryBut, ...inputProps } = props
 
   return (
-    <div className="relative flex flex-row gap-2 items-center border rounded-md border-solid border-white1 p-3 form-input text-white1">
+    <div className="relative flex flex-row gap-2 items-center border rounded-md border-solid border-white3 p-1 form-input text-white1 ">
       {/* PRIMARY ICON */}
       {primaryIcon ? primaryIcon : null}
 

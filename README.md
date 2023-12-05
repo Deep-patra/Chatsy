@@ -37,4 +37,5 @@ The following are the screenshots of the application
 - Add Groups and Blocking Feature
 
 ## License
+
 This project is licensed under MIT, for more information read the LICENSE file in the directory

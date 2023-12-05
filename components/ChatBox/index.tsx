@@ -15,7 +15,7 @@ export default function Chatbox(props: IChatBox) {
   const { activeContact, openedContacts } = props
 
   return (
-    <div className="chatbox p-2 md:m-5 md:rounded-2xl w-full max-h-full">
+    <div className="chatbox p-1 md:p-0 md:m-5 md:rounded-2xl w-full max-h-full">
       <Tabs
         activeUser={props.activeContact}
         users={props.openedContacts}

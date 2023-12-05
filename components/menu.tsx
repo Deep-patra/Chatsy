@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState, useRef, forwardRef } from 'react'
-import { useRouter } from 'next/navigation'
-import getApp from '@/firebase'
+import { useRef, forwardRef } from 'react'
+import { getApp } from '@/firebase'
 import { IUser } from '@/context/auth.context'
 import { getAuth } from 'firebase/auth'
 import { CgProfile } from 'react-icons/cg'
@@ -13,17 +12,22 @@ interface IMenuProps {
   user: IUser | null
 }
 
-interface IDropDownProps {}
-
-const ProfileHandler = (router: any) => {
-  router.push('/profile')
+interface IDropDownProps {
+  user: IUser
+  toggle: (arg0: boolean) => void
 }
-const SettingHandler = (router: any) => {
-  router.push('/settings')
+
+const ProfileHandler = (user: IUser) => {
+  // Dispatch event to open the profile modal
+  document.body.dispatchEvent(new CustomEvent('OPEN_PROFILE', { detail: user }))
+}
+const SettingHandler = (user: IUser) => {
+  // Dispatch Event to open the Setting modal
+  document.body.dispatchEvent(new CustomEvent('OPEN_SETTING', { detail: user }))
 }
 const LogoutHandler = (router: any) => {
-  getAuth(getApp()).signOut()
-  router.push('/')
+  // Dispatch Event to open the logout modal
+  document.body.dispatchEvent(new CustomEvent('CONFIRM_LOGOUT'))
 }
 
 const ICON_CLASS = 'w-5 h-5 text-inherit'
@@ -45,20 +49,20 @@ const MENU_ITEMS = [
   },
 ]
 
-const DropDown = forwardRef<HTMLDivElement>(function DropDown(
-  props: IDropDownProps,
+const DropDown = forwardRef<HTMLDivElement, IDropDownProps>(function DropDown(
+  { toggle, user }: IDropDownProps,
   ref
 ) {
-  const router = useRouter()
   return (
     <motion.div
       ref={ref}
-      className="z-10 absolute bottom-1 right-2 bg-black2 shadow-md translate-y-full overflow-hidden p-4 rounded-md"
-      initial={{ opacity: 0, height: '0' }}
-      animate={{ opacity: 1, height: 'auto' }}
-      exit={{ opacity: 0, height: '0%' }}
+      className="z-10 absolute top-[110%] right-2 bg-black2 shadow-md translate-y-full overflow-hidden p-4 rounded-md"
+      initial={{ opacity: 0, translateY: -10 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      exit={{ opacity: 0, translateY: -10 }}
     >
       <ul className="flex flex-col gap-3">
+        {/* Menu Item */}
         {MENU_ITEMS.map((item, idx) => (
           <li key={idx}>
             <motion.button
@@ -66,7 +70,10 @@ const DropDown = forwardRef<HTMLDivElement>(function DropDown(
               ariab-label="Menu item"
               whileTap={{ scale: 0.9 }}
               onClick={() => {
-                item.handler(router)
+                item.handler(user)
+
+                // close the menu
+                toggle(false)
               }}
               className="flex flex-row gap-2 items-center text-white2 hover:text-white1"
             >
@@ -94,7 +101,7 @@ export default function Menu(props: IMenuProps) {
     <>
       <div
         ref={containerRef}
-        className="relative w-7 h-7 rounded-full overflow-hidden border border-solid border-secondary sm:w-10 sm:h-10"
+        className="relative w-7 h-7 rounded-full overflow-hidden border border-solid border-secondary sm:w-8 sm:h-8"
       >
         <button
           type="button"
@@ -123,8 +130,15 @@ export default function Menu(props: IMenuProps) {
         </button>
       </div>
 
+      {/* Drop down */}
       <AnimatePresence>
-        {openDropDown && <DropDown ref={dropDownRef} />}
+        {openDropDown && (
+          <DropDown
+            ref={dropDownRef}
+            toggle={toggleDropDown}
+            user={props.user}
+          />
+        )}
       </AnimatePresence>
     </>
   )

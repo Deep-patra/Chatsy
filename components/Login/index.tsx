@@ -1,6 +1,6 @@
 'use client'
 
-import getApp from '@/firebase'
+import { getApp } from '@/firebase'
 import {
   getAuth,
   GoogleAuthProvider,

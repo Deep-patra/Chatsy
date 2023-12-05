@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import getApp from '@/firebase'
+import { getApp } from '@/firebase'
 import { onAuthStateChanged, getAuth, User } from 'firebase/auth'
 import UserService from '@/services/user.service'
 import { type IUser, type IContact } from '@/context/auth.context'

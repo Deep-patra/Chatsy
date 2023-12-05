@@ -1,11 +1,7 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
-import { RiContactsFill } from 'react-icons/ri'
 import { BsChatRightText } from 'react-icons/bs'
-import { IoMdAdd } from 'react-icons/io'
-import { RxCross2 } from 'react-icons/rx'
 import { motion } from 'framer-motion'
-import AddContacts from './addContacts'
 
 interface IContactItem {
   name: string
@@ -23,30 +19,9 @@ export default function Contacts(props: IContactsProps) {
 
   return (
     <div className="py-2">
-      <div className="p-1 flex flex-row items-center justify-between text-white2 cursor-pointer">
-        <div className="flex flex-row items-center gap-3">
-          <RiContactsFill className="w-5 h-5 text-inherit" />
-          <span className="text-lg font-semibold">Contacts</span>
-        </div>
-
-        <motion.button
-          type="button"
-          aria-label="Add contact button"
-          whileTap={{ scale: 0.95 }}
-          className="p-2 rounded-full hover:bg-black3"
-          onClick={() => {
-            toggle(!open)
-          }}
-        >
-          {open ? (
-            <RxCross2 className="w-5 h-5 text-warning" />
-          ) : (
-            <IoMdAdd className="w-5 h-5 text-white1" />
-          )}
-        </motion.button>
+      <div className="md:px-2 flex flex-row items-center justify-between text-white2 cursor-pointer">
+        <span className="text-md md:text-lg font-semibold">Contacts</span>
       </div>
-
-      <AddContacts open={open} />
 
       <ul className="flex flex-col gap-2 py-2">
         {props.contacts.length < 1 && (
