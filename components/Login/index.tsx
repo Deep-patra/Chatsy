@@ -42,7 +42,10 @@ export default function Login() {
   }
 
   return (
-    <div className="form-container flex flex-col gap-5 p-4">
+    <div
+      data-testid="login-form-container"
+      className="form-container flex flex-col gap-5 p-4"
+    >
       <LoginForm loginWithEmailPassword={handleEmailLogin} />
       <Seperator />
       <SignInWithGoogle handleClick={googleLogin} />

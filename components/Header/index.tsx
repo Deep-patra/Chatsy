@@ -19,10 +19,7 @@ export default function Header() {
   return (
     <Auth.Consumer>
       {({ user }) => (
-        <header
-          style={{ gridRowStart: 1, gridRowEnd: 2 }}
-          className="relative p-2 px-4 flex flex-row items-center justify-between"
-        >
+        <header className="relative row-start-1 row-end-2 p-2 px-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center">
             {user && (
               <button

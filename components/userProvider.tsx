@@ -25,8 +25,10 @@ export default function UserProvider({
 
   return (
     <Auth.Provider value={{ user, setContact, setUser, changeUser }}>
-      <Header />
-      <Suspense fallback={<Loading />}>{children}</Suspense>
+      <>
+        <Header />
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </>
     </Auth.Provider>
   )
 }
