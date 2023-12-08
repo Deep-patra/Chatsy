@@ -15,7 +15,7 @@ export default function Home() {
             href="/signup"
             title="signup"
             data-testidd="signup"
-            className="text-center p-2 px-3 border rounded-lg border-solid border-white2 text-white2 hover:bg-white2 hover:text-black1 transition-colors"
+            className="text-center p-2 px-3 border rounded-lg border-solid border-white1 text-white1 hover:bg-white1 hover:text-black1 transition-colors"
           >
             Sign up
           </Link>
@@ -23,7 +23,7 @@ export default function Home() {
             href="/login"
             title="login"
             data-testid="login"
-            className="text-center p-2 px-3 rounded-lg border border-solid border-white2 text-white2 hover:bg-white2 hover:text-black1 transition-colors"
+            className="text-center p-2 px-3 rounded-lg border border-solid border-white1 text-white1 hover:bg-white1 hover:text-black1 transition-colors"
           >
             Log in
           </Link>
