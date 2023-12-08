@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import UserProvider from '@/components/userProvider'
 import NoInternet from '@/components/noInternet'
+import Analytics from '@/components/analytics'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -58,7 +59,9 @@ export default function RootLayout({
 
       <body>
         <NoInternet />
-        <UserProvider>{children}</UserProvider>
+        <UserProvider>
+          <Analytics>{children}</Analytics>
+        </UserProvider>
       </body>
     </html>
   )
