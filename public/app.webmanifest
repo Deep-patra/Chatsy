@@ -4,18 +4,39 @@
   "short_name": "Chatsy",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/chatsy_32x32.png",
       "sizes": "32x32",
-      "type": "image/svg"
+      "type": "image/png"
     },
+
     {
-      "src": "/favicon.svg",
-      "sizes": "512x512",
-      "type": "image/svg"
+      "src": "/chatsy_144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
     }
   ],
+
+  "screenshots": [
+    {
+      "src": "/Chatsy_ss_353x606.png",
+      "sizes": "706x1212",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Homescreen of the chatsy"
+    },
+
+    {
+      "src": "/Chatsy_ss_1023x605.jpeg",
+      "sizes": "1023x605",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Homescreen of the Chatsy"
+    }
+  ],
+
   "start_url": "/",
   "display": "fullscreen",
+  "dispay_override": "standlone",
   "theme_color": "#28282B",
   "background_color": "#121212"
 }
