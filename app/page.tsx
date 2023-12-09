@@ -6,7 +6,7 @@ export default function Home() {
     <main className="row-start-2 row-end-3 p-2 w-full h-full flex flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-5">
         <h1 className="text-white1 text-xl">Chatsy</h1>
-        <span className="text-white3">
+        <span className="text-white3 text-center">
           A Simple, Reliable, and Secure messaging application.
         </span>
 

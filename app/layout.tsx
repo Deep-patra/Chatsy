@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     },
   },
 
-  manifest: '/app.webmanifest',
+  // manifest: '/app.webmanifest',
 }
 
 export default function RootLayout({
@@ -55,6 +55,7 @@ export default function RootLayout({
         ></script>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="preload" href="/noInternet" />
+        <link rel="manifest" href="/app.webmanifest" />
       </head>
 
       <body>
