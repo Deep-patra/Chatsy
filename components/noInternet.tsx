@@ -141,7 +141,7 @@ export default function NoInternet() {
               type="button"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="border-solid border border-white3 text-white3 p-2 px-3 rounded-md hover:bg-white3 hover:text-black1"
+              className="border-solid border border-white1 text-white1 p-2 px-3 rounded-md hover:bg-white1 hover:text-black1"
               aria-label="Retry button"
               onClick={handleRetry}
             >

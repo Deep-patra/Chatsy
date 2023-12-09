@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import UserProvider from '@/components/userProvider'
 import NoInternet from '@/components/noInternet'
 import Analytics from '@/components/analytics'
+import RegisterSW from '@/components/registerSW'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -60,6 +61,10 @@ export default function RootLayout({
 
       <body>
         <NoInternet />
+
+        {/* Register the Service worker */}
+        <RegisterSW />
+
         <UserProvider>
           <Analytics>{children}</Analytics>
         </UserProvider>
