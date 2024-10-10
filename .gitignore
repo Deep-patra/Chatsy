@@ -37,3 +37,6 @@ next-env.d.ts
 
 # screenshots
 tests/e2e/screenshots
+
+# personal files
+plan.md

@@ -23,3 +23,10 @@ export const getApp = () => {
 export const initialzeAnalytics = (app: FirebaseApp) => {
   return getAnalytics(app)
 }
+
+export const useEmulators = () => {
+  if (process.env.NEXT_PUBLIC_NODE_ENV == "development")
+    return true
+
+  return false
+}

@@ -22,8 +22,8 @@ interface ICreateParams {
 class User {
   /**
    * @desc Returns true, if the User document exists
-   * @param {string} uid Unique Id of the user
-   * @returns {Promise<boolean>}
+   * @param   {string}           uid Unique Id of the user
+   * @returns {Promise<boolean>} A Promise resolved with a boolean result
    */
   static async exists(uid: string): Promise<boolean> {
     const userDoc = await getDoc(doc(db, 'user', uid))
@@ -88,7 +88,7 @@ class User {
    * @param {Object} IUpdateParams
    * @param {string | undefined} IUpdateParams.name New name of the user
    * @param {string | undefined} IUpdateParams.photoURL New Profile picture url of the user
-   * @returns {Promise<void>}
+   * @returns {Promise<void>} A Promise which resolved with a void
    */
   static async update(
     uuid: string,
