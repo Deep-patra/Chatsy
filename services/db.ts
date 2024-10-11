@@ -6,7 +6,7 @@ const db = getFirestore(app)
 
 // Use the local emulator for Development
 if (useEmulators()) {
-  console.info("Using Local Firestore Emulator for Development")
+  console.info('Using Local Firestore Emulator for Development')
   connectFirestoreEmulator(db, 'localhost', 8080)
 }
 

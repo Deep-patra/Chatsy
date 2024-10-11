@@ -9,19 +9,24 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/forgot_password')) {
     const { session_id } = request.nextUrl.searchParams as any
 
-    // if the session_id is not present 
+    console.log(session_id)
+
+    // if the session_id is not present
     // redirect it to error pag
     if (!session_id) {
-      return NextResponse.redirect(new URL('/notFound?error_code=404', request.url))
+      return NextResponse.redirect(
+        new URL('/notFound?error_code=404', request.url)
+      )
     }
 
     // check if the session_id is valid
-    if (!checkSession)
-      return NextResponse.redirect(new URL('/notFound?error_code=403', request.url))
-
+    if (!checkSession(session_id))
+      return NextResponse.redirect(
+        new URL('/notFound?error_code=403', request.url)
+      )
   }
 }
 
 export const config = {
-  matcher: '/forgot_password'
+  matcher: '/forgot_password',
 }

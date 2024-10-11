@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 interface PageProps {
-  searchParams: {[key: string]: string | string[] | undefined }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export default function NotFound({ searchParams }: PageProps) {

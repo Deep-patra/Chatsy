@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import Input from '@/components/input'
@@ -9,13 +9,11 @@ import {
   AiOutlineEyeInvisible,
 } from 'react-icons/ai'
 
-
 export const ForgotPassword = () => {
-
-  const [new_password, changePassword] = useState<string>("")
+  const [new_password, changePassword] = useState<string>('')
   const [showPass, changeShowPass] = useState<boolean>(false)
 
-  const handleInputChange = () => { }
+  const handleInputChange = () => {}
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -29,7 +27,6 @@ export const ForgotPassword = () => {
         value={new_password}
         onChange={handleInputChange}
         primaryIcon={<AiOutlineLock className="text-2xl text-white1" />}
-
         secondaryIcon={
           showPass ? (
             <AiOutlineEyeInvisible className="text-2xl text-white2" />
@@ -37,13 +34,12 @@ export const ForgotPassword = () => {
             <AiOutlineEye className="text-2xl text-white2" />
           )
         }
-
         secondaryBut={{
           type: 'button',
           'aria-label': 'Toggle password visibility',
           onClick: () => {
             changeShowPass(!showPass)
-          }
+          },
         }}
       />
 
