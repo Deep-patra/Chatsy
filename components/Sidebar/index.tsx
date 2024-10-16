@@ -1,8 +1,9 @@
 import Tooltip from '../tootip'
-import { FaUsers } from 'react-icons/fa'
+import { FaUsers, FaSearch } from 'react-icons/fa'
 import { IoSettings } from 'react-icons/io5'
 import { HiUserAdd } from 'react-icons/hi'
 import { IoMdChatbubbles } from 'react-icons/io'
+import { CiSearch } from 'react-icons/ci'
 
 interface IButton {
   name: string
@@ -21,6 +22,12 @@ const buttons: IButton[] = [
   {
     name: 'Groups',
     icon: <FaUsers className={iconClassName} />,
+    onClick: () => {}
+  },
+
+  {
+    name: 'Search',
+    icon: <FaSearch className={iconClassName} />,
     onClick: () => {}
   },
 
@@ -55,7 +62,7 @@ const SidebarButton = ({ button }: { button: IButton }) => {
 
 export default function Siderbar() {
   return (
-    <div className="h-full | p-2 m-1 | flex flex-col items-center gap-2 | text-white2 | bg-black2">
+    <div className="h-full | p-2 | flex flex-col items-center gap-2 | text-white2 | bg-black2 | rounded-md">
       {buttons.map((button, index) => (
         <SidebarButton key={index} button={button} />
       ))}            

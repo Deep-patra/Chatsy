@@ -19,7 +19,7 @@ export default function Header() {
   return (
     <Auth.Consumer>
       {({ user }) => (
-        <header className="relative row-start-1 row-end-2 p-2 px-4 flex flex-row items-center justify-between">
+        <header className="bg-black2 rounded-md relative row-start-1 row-end-2 p-2 px-4 flex flex-row items-center justify-between">
           <div className="flex flex-row items-center">
             {user && (
               <button
@@ -42,16 +42,16 @@ export default function Header() {
 
           <div className="flex flex-row items-center gap-2">
             {/* Search Button */}
-            {user && (
+            {/*user && (
               <Tooltip text="search">
                 <button
                   className="text-white1 p-1 rounded-full hover:bg-black2"
                   onClick={handleSearchClick}
                 >
                   <CiSearch className="text-inherit w-6 h-6" />
-                </button>
               </Tooltip>
-            )}
+                </button>
+            ) */}
 
             {/* Profile Picture & Menu */}
             {user && <Menu {...{ user }} />}

@@ -45,7 +45,7 @@ export default function Home() {
 
   return (
     <Chat.Provider value={{ chats, updateChats, changeChats }}>
-      <div className="relative flex flex-row">
+      <div className="relative flex flex-row gap-1">
         <Sidebar/>
         <MiddleBar>
           <div className="overflow-y-auto">

@@ -39,7 +39,7 @@ export default function Sidebar(props: ISidebarProps) {
     <>
       <div
         style={{ gridRowStart: 2, gridRowEnd: 3 }}
-        className="w-[250px] flex-shrink-0 hidden md:block bg-black2 my-5 ml-2 rounded-lg p-1 overflow-hidden shadow-md"
+        className="w-[250px] flex-shrink-0 hidden md:block bg-midBlack2 rounded-lg p-1 overflow-hidden shadow-md"
       >
         {props.children}
       </div>
