@@ -30,6 +30,11 @@ function addMessage(messages: IMessage[], message: IMessage): IMessage[] {
   return messages
 }
 
+
+/**
+ * @desc React hook to get contacts messages from the firestore
+ * @returns {UseGetChatsReturns}
+ * */
 const useGetChats = (): UseGetChatsReturn => {
   const [chats, changeChats] = useState<IChat[]>([])
 

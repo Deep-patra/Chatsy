@@ -11,6 +11,7 @@ import SignupForm from './form'
 import Seperator from './seperator'
 import SignInWithGoogle from './signInWithGoogle'
 import AlreadyHaveAccount from './alreadyHaveAccont'
+import log from '@/components/utils/log'
 
 export default function SignUp() {
   const handleEmailSignIn = (email: string, password: string) => {
@@ -19,7 +20,7 @@ export default function SignUp() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((credential) => {
-        console.log('CREDENTIAL from EMAIL and PASSWORD', credential)
+        log('CREDENTIAL from EMAIL and PASSWORD', credential)
       })
       .catch(console.error)
   }
@@ -34,7 +35,7 @@ export default function SignUp() {
 
     signInWithPopup(auth, provider)
       .then((credential) => {
-        console.log('CREDENTIAL RECEIVED:', credential)
+        log('CREDENTIAL RECEIVED:', credential)
       })
       .catch(console.error)
   }

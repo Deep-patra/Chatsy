@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useContext, useTransition } from 'react'
 import { CiSearch } from 'react-icons/ci'
+import { RxCross1 } from 'react-icons/rx'
 import Modal from '../Modal'
 import Input from '../input'
 import SearchResults from './results'
@@ -110,9 +111,18 @@ export default function Search() {
         <Input
           className="text-sm md:text-md"
           placeholder="search"
+          autoFocus={true}
           value={value}
           onInput={handleInput}
           primaryIcon={<CiSearch className="w-6 h-6 text-inherit" />}
+
+          secondaryIcon={<RxCross1 className="w-4 h-4 text-inherit" />}
+
+          secondaryBut={{
+            type: "button",
+            "aria-label": "Claer search input",
+            onClick: () => { changeValue("") }
+          }}
         />
 
         {/* Search Items */}

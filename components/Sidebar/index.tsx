@@ -1,68 +1,64 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import Tooltip from '../tootip'
+import { FaUsers } from 'react-icons/fa'
+import { IoSettings } from 'react-icons/io5'
+import { HiUserAdd } from 'react-icons/hi'
+import { IoMdChatbubbles } from 'react-icons/io'
 
-interface ISidebarProps {
-  children: JSX.Element
+interface IButton {
+  name: string
+  icon: React.ReactNode
+  onClick: () => void
 }
 
-export default function Sidebar(props: ISidebarProps) {
-  const overlayRef = useRef<HTMLDivElement | null>(null)
+const iconClassName = "w-6 h-6 text-inherit"
+const buttons: IButton[] = [
+  {
+    name: 'Chats',
+    icon: <IoMdChatbubbles className={iconClassName} />,
+    onClick: () => {}
+  },
 
-  const [open, toggle] = useState<boolean>(false)
+  {
+    name: 'Groups',
+    icon: <FaUsers className={iconClassName} />,
+    onClick: () => {}
+  },
 
-  // Effect to listen to the OPEN_MENU event
-  useEffect(() => {
-    const handleToggleMenu = () => {
-      toggle(true)
-    }
+  {
+    name: 'Invites',
+    icon: <HiUserAdd className={iconClassName} />,
+    onClick: () => {}
+  },
+  
+  {
+    name: 'Settings',
+    icon: <IoSettings className={iconClassName} />,
+    onClick: () => {}
+  }
+]
 
-    document.body.addEventListener('OPEN_MENU', handleToggleMenu, false)
-
-    return () => {
-      document.body.removeEventListener('OPEN_MENU', handleToggleMenu, false)
-    }
-  }, [toggle])
-
-  // Effect to add click event listener to the overlay
-  useEffect(() => {
-    open &&
-      overlayRef.current?.addEventListener(
-        'click',
-        () => {
-          toggle(false)
-        },
-        { once: true }
-      )
-  }, [open])
-
+const SidebarButton = ({ button }: { button: IButton }) => {
+  const { name, icon, onClick } = button
   return (
-    <>
-      <div
-        style={{ gridRowStart: 2, gridRowEnd: 3 }}
-        className="w-[250px] flex-shrink-0 hidden md:block bg-black2 my-5 ml-2 rounded-lg p-1 overflow-hidden shadow-md"
-      >
-        {props.children}
+    <Tooltip text={name} position="right">
+      <div className="p-2 | rounded-lg">
+        <button
+          type="button"
+          onClick={onClick}
+        >
+          {icon}
+        </button>
       </div>
+    </Tooltip>
+  )
+}
 
-      <AnimatePresence>
-        {open && (
-          <div className="fixed top-0 left-0 z-10 w-screen h-screen">
-            <div
-              ref={overlayRef}
-              style={{ gridRowStart: 2, gridRowEnd: 3 }}
-              className="fixed top-0 left-0 block h-screen md:hidden w-screen bg-[rgba(0, 0, 0, 0.2)] backdrop-blur-sm"
-            ></div>
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: '0' }}
-              exit={{ x: '-100%' }}
-              className="w-[80vw] z-10 px-5 bg-black2 absolute top-0 left-0 my-2 h-[98%] rounded-tr-xl rounded-br-xl p-1 overflow-hidden shadow-md"
-            >
-              {props.children}
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </>
+export default function Siderbar() {
+  return (
+    <div className="h-full | p-2 m-1 | flex flex-col items-center gap-2 | text-white2 | bg-black2">
+      {buttons.map((button, index) => (
+        <SidebarButton key={index} button={button} />
+      ))}            
+    </div>
   )
 }

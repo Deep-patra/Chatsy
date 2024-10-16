@@ -7,11 +7,12 @@ import {
   type HTMLAttributes,
 } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import log from './utils/log'
 
 interface ITooltipProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactElement
   text: string
-  position?: 'top' | 'bottom'
+  position?: 'top' | 'bottom' | 'left' | 'right'
 }
 
 export default function Tooltip({
@@ -31,21 +32,36 @@ export default function Tooltip({
 
   useEffect(() => {
     const handleHover = (event: Event) => {
-      if (childRef.current) {
+      if (childRef.current && tooltipRef.current) {
         const childRect: DOMRect = childRef.current.getBoundingClientRect()
+        const tooltipRect: DOMRect = childRef.current.getBoundingClientRect()
 
-        if (position === 'bottom') {
-          const top = childRect.bottom
-          const left = childRect.left + childRect.width / 2
+        log(tooltipRect)
 
-          setDimen({ top, left })
-        }
+        switch(position) {
+          case 'bottom': {
+            const top = childRect.bottom
+            const left = childRect.left + childRect.width / 2
 
-        if (position === 'top') {
-          const top = childRect.top
-          const left = childRect.left + childRect.width / 2
+            setDimen({ top, left })
+          }
 
-          setDimen({ top, left })
+          case 'top': {
+            const top = childRect.top
+            const left = childRect.left + childRect.width / 2
+
+            setDimen({ top, left })
+          }
+
+          case 'left': {
+          }
+
+          case 'right': {
+            const top = childRect.top + childRect.height / 2
+            const left = childRect.left + childRect.width + 10
+
+            setDimen({ top, left })
+          }
         }
         // show the tooltip
         setIsOpen(true)
@@ -81,10 +97,11 @@ export default function Tooltip({
               top: `${dimen.top + 2}px`,
               left: `${dimen.left}px`,
               translateY: position === 'top' ? '-110%' : '0%',
+              translateX: '-50%'
             }}
-            initial={{ scale: 0, opacity: 0, translateX: '-50%' }}
-            animate={{ scale: 1, opacity: 1, translateX: '-50%' }}
-            exit={{ scale: 0, opacity: 0, translateX: '-50%' }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
             className="text-sm rounded-md px-2 py-1 bg-black3 shadow-lg text-white1 fixed z-[100] "
           >
             {text || ''}

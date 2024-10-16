@@ -1,6 +1,7 @@
 'use client'
 import { useContext, useState, useEffect } from 'react'
 import Sidebar from '../Sidebar'
+import MiddleBar from '../MiddleBar'
 import Contact from './contacts'
 import ChatBox from '../ChatBox'
 import Search from '../Search'
@@ -45,11 +46,12 @@ export default function Home() {
   return (
     <Chat.Provider value={{ chats, updateChats, changeChats }}>
       <div className="relative flex flex-row">
-        <Sidebar>
+        <Sidebar/>
+        <MiddleBar>
           <div className="overflow-y-auto">
             <Contact contacts={contacts} handleOpenChat={handleOpenChat} />
           </div>
-        </Sidebar>
+        </MiddleBar>
 
         <ChatBox
           activeContact={activeContact}

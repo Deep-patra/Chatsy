@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react'
 import Auth from '@/context/auth.context'
-import HomeComp from '@/components/Home'
+import Home from '@/components/Home'
 
-export default function Home() {
+export default function Page() {
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
@@ -12,7 +12,11 @@ export default function Home() {
   }, [])
   return (
     <>
-      <Auth.Consumer>{({ user }) => <>{user && <HomeComp />}</>}</Auth.Consumer>
+      <Auth.Consumer>
+        {({ user }) => <>
+          {user && <Home/>}
+        </>}
+      </Auth.Consumer>
     </>
   )
 }
