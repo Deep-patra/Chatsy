@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { RiMenu4Fill } from 'react-icons/ri'
-import { CiSearch } from 'react-icons/ci'
+import { FaBell, FaRegBell } from 'react-icons/fa'
 import Menu from '../menu'
 import Tooltip from '../tootip'
 import Auth from '@/context/auth.context'
@@ -52,6 +52,16 @@ export default function Header() {
               </Tooltip>
                 </button>
             ) */}
+
+            {/* Notification button */}
+            <Tooltip text="notifications" position="bottom">
+              <button
+                type="button"
+                className="p-2 | text-white2 | hover:text-white hover:bg-midBlack2 | rounded-full"
+              >
+                <FaBell className="text-inherit | w-5 h-5" />
+              </button>
+            </Tooltip>
 
             {/* Profile Picture & Menu */}
             {user && <Menu {...{ user }} />}

@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { getAuth } from 'firebase/auth'
 import { getApp } from '@/firebase'
+import { events } from './utils/events'
 import Modal from './Modal'
 
 export default function Logout() {
@@ -25,10 +26,10 @@ export default function Logout() {
   }
 
   useEffect(() => {
-    document.body.addEventListener('CONFIRM_LOGOUT', handleOpenLogout)
+    document.body.addEventListener(events.open_logout, handleOpenLogout)
 
     return () => {
-      document.body.removeEventListener('CONFIRM_LOGOUT', handleOpenLogout)
+      document.body.removeEventListener(events.open_logout, handleOpenLogout)
     }
   }, [])
 

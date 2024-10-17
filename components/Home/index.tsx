@@ -7,6 +7,7 @@ import ChatBox from '../ChatBox'
 import Search from '../Search'
 import Setting from '../Setting'
 import Profile from '../Profile'
+import InfoBar from '../Infobar'
 import Logout from '../logout'
 import Auth, { IContact } from '@/context/auth.context'
 import Chat, { type IChat, type IMessage } from '@/context/chat.context'
@@ -59,6 +60,9 @@ export default function Home() {
           changeOpenedContacts={changeOpenedContacts}
           changeActiveContact={changeActiveContact}
         />
+
+        {/* Info bar when the chat is opened */}
+        <InfoBar/>
 
         {/* Search Modal */}
         <Search />

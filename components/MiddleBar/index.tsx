@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { events } from '../utils/events'
 
 interface ISidebarProps {
   children: JSX.Element
@@ -16,10 +17,10 @@ export default function Sidebar(props: ISidebarProps) {
       toggle(true)
     }
 
-    document.body.addEventListener('OPEN_MENU', handleToggleMenu, false)
+    document.body.addEventListener(events.open_menu, handleToggleMenu, false)
 
     return () => {
-      document.body.removeEventListener('OPEN_MENU', handleToggleMenu, false)
+      document.body.removeEventListener(events.open_menu, handleToggleMenu, false)
     }
   }, [toggle])
 

@@ -32,8 +32,8 @@ interface IGroup {
  * @desc Fetches the group documents
  * @type {DocumentReference<DocumentData>}
  * @type {IGroup}
- * @param {DocumentReference<DocumentData>[]} groupRefs - An array of group document references
- * @returns {Promise<IGroup[]>} - A promise witch resolves with an array of group
+ * @param {DocumentReference<DocumentData>[]} groupRefs - Array of group document references
+ * @returns {Promise<IGroup[]>} - Promise witch resolves with an array of group
  * */
 async function getGroupDoc(groupRefs: DocumentReference<DocumentData>[]): Promise<IGroup[]> {
   return [] satisfies IGroup[]

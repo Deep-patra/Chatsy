@@ -2,17 +2,18 @@ import { useState, useEffect, type RefObject } from 'react'
 
 /**
  * Hook to detect the click event outside the component
+ * @param {boolean} open - state 
+ * @param {(boolean) => void} close - Callback for closing 
  * @param {RefObject<HTMLElement>[]} ...args - An array of element references the click will exclude
- *
- * @returns {[boolean, (boolean) => void]} - A pair containing state and callback to change the open state
  * */
 const useOutClick = (
+  open: boolean,
+  close: () => void,
   ...args: RefObject<HTMLElement>[]
-): [boolean, (result: boolean) => void] => {
-  const [open, toggle] = useState<boolean>(false)
+) => {
 
   const toggleMenu = (result: boolean) => {
-    toggle(result)
+    close()
   }
 
   const checkIfTarget = (event: Event): boolean => {
@@ -30,7 +31,7 @@ const useOutClick = (
   useEffect(() => {
     const handler = (event: Event) => {
       if (!checkIfTarget(event)) {
-        toggle(false)
+        close()
       }
     }
 
@@ -40,8 +41,6 @@ const useOutClick = (
       window.removeEventListener('click', handler, false)
     }
   }, [])
-
-  return [open, toggleMenu]
 }
 
 export default useOutClick

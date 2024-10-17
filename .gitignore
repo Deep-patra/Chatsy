@@ -30,6 +30,8 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 
+chatsy-456-firebase-admin.json
+
 # local env files
 .env*.local
 
