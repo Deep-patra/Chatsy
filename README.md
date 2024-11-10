@@ -11,6 +11,42 @@ This application uses these following technologies
 - Framer Motion (Transition and Animation)
 - Firebase (Storage and Authentiation)
 
+## Get Started
+
+To run this application locally, you need to install firebase locally 
+
+```js
+npm i firebase-tools -g
+```
+
+then install the firebase emulators mainly storage, firestore and authentication.
+Start the emulator in a other terminal session
+
+```sh
+firebase emulators:start
+```
+
+Make a .env file and set the environmental variables
+
+```.env
+NEXT_PUBLIC_NODE_ENV=development
+GEMINI_API_KEY=
+
+FIREBASE_EMULATOR_HOST=127.0.0.1:8080
+FIREBASE_STORAGE_HOST=127.0.0.1:9199
+
+# firebase admin variables
+
+project_id=
+client_email=
+private_key=
+```
+make a new terminal session and start the application
+
+```js
+npm run dev
+```
+
 ## Screenshots
 
 The following are the screenshots of the application

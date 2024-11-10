@@ -1,13 +1,16 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { memo } from 'react'
+import classname from 'classnames'
 import { FaUsers, FaSearch } from 'react-icons/fa'
+import { RiRobotFill } from 'react-icons/ri'
 import { IoSettings } from 'react-icons/io5'
 import { HiUserAdd } from 'react-icons/hi'
 import { IoMdChatbubbles } from 'react-icons/io'
 import { FiLogOut } from 'react-icons/fi'
 import Tooltip from '../tootip'
 import { events } from '../utils/events'
+import log from '../utils/log'
 
 interface IButton {
   name: string
@@ -22,6 +25,7 @@ const buttons: IButton[] = [
     icon: <IoMdChatbubbles className={iconClassName} />,
     onClick: () => {
       document.body.dispatchEvent(new Event(events.open_chats))
+      console.log("dispatching")
     }
   },
 
@@ -55,15 +59,23 @@ const buttons: IButton[] = [
     onClick: () => {
       document.body.dispatchEvent(new Event(events.open_settings))
     }
+  },
+
+  {
+    name: 'Chatbot',
+    icon: <RiRobotFill className={classname(iconClassName, "text-brightBlue")} />,
+    onClick: () => {
+      document.body.dispatchEvent(new Event(events.open_chatbot))
+    }
   }
 ]
 
-const SidebarButton = ({ button, className = "" }: { button: IButton, className?: string }) => {
+const SidebarButton = memo(function sidebarButton({ button, className = "" }: { button: IButton, className?: string }) {
   const { name, icon, onClick } = button
 
   return (
     <Tooltip text={name} position="right">
-      <div className={`rounded-lg | hover:text-white hover:bg-midBlack2 ${className}`}>
+      <div className={`rounded-lg | hover:text-brightGreen hover:bg-midBlack2 ${className}`}>
         <button
           type="button"
           className="p-2 px-3 "
@@ -74,7 +86,7 @@ const SidebarButton = ({ button, className = "" }: { button: IButton, className?
       </div>
     </Tooltip>
   )
-}
+})
 
 export default function Siderbar() {
 

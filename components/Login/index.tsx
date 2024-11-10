@@ -44,7 +44,7 @@ export default function Login() {
   return (
     <div
       data-testid="login-form-container"
-      className="form-container flex flex-col gap-5 p-4"
+      className="form-container flex flex-col gap-5 p-4 | md:w-[400px] md:bg-black1 md:p-3 md:p-8 rounded-md"
     >
       <LoginForm loginWithEmailPassword={handleEmailLogin} />
       <Seperator />

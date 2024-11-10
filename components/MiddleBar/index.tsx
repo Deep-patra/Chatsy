@@ -1,69 +1,83 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { events } from '../utils/events'
+import ContactLists from  '../ContactsList'
+import GroupLists from '../GroupsList'
+import InviteLists from '../InvitesList'
+import log from '@/components/utils/log'
 
-interface ISidebarProps {
-  children: JSX.Element
+interface IOpenedState {
+  chats: boolean
+  groups: boolean
+  invites: boolean
 }
 
-export default function Sidebar(props: ISidebarProps) {
-  const overlayRef = useRef<HTMLDivElement | null>(null)
+export default function MiddleBar() {
 
-  const [open, toggle] = useState<boolean>(false)
+  const [openedState, changeOpenedState] = useState<IOpenedState>({
+    chats: true,
+    groups: false,
+    invites: false,
+  })
 
-  // Effect to listen to the OPEN_MENU event
+  const getKey = useCallback(() => {
+    let key = "chats"
+    openedState.groups && ( key = "groups" )
+    openedState.invites && ( key = "invites" )
+
+    return key
+  }, [openedState])
+
+
   useEffect(() => {
-    const handleToggleMenu = () => {
-      toggle(true)
+
+    const handleListener = (event: Event) => {
+      const state = { chats: false, groups: false, invites: false }
+
+      switch(event.type) {
+        case events.open_chats:
+          state.chats = true
+          break
+        case events.open_groups:
+          state.groups = true
+          break
+        case events.open_invites:
+          state.invites = true
+          break
+      }
+
+      changeOpenedState(state)
     }
 
-    document.body.addEventListener(events.open_menu, handleToggleMenu, false)
+    document.body.addEventListener(events.open_chats, handleListener)
+    document.body.addEventListener(events.open_groups, handleListener)
+    document.body.addEventListener(events.open_invites,  handleListener)
 
     return () => {
-      document.body.removeEventListener(events.open_menu, handleToggleMenu, false)
+      document.body.removeEventListener(events.open_chats, handleListener)
+      document.body.removeEventListener(events.open_groups, handleListener)
+      document.body.removeEventListener(events.open_invites, handleListener)
     }
-  }, [toggle])
-
-  // Effect to add click event listener to the overlay
-  useEffect(() => {
-    open &&
-      overlayRef.current?.addEventListener(
-        'click',
-        () => {
-          toggle(false)
-        },
-        { once: true }
-      )
-  }, [open])
+  }, [])
 
   return (
-    <>
-      <div
-        style={{ gridRowStart: 2, gridRowEnd: 3 }}
-        className="w-[250px] flex-shrink-0 hidden md:block bg-midBlack2 rounded-lg p-1 overflow-hidden shadow-md"
-      >
-        {props.children}
-      </div>
-
+    <div
+      className="relative | h-full | min-w-[200px] max-w-[400px] | rounded-md | bg-midBlack2 | overflow-hidden"
+    >
       <AnimatePresence>
-        {open && (
-          <div className="fixed top-0 left-0 z-10 w-screen h-screen">
-            <div
-              ref={overlayRef}
-              style={{ gridRowStart: 2, gridRowEnd: 3 }}
-              className="fixed top-0 left-0 block h-screen md:hidden w-screen bg-[rgba(0, 0, 0, 0.2)] backdrop-blur-sm"
-            ></div>
-            <motion.div
-              initial={{ x: '-100%' }}
-              animate={{ x: '0' }}
-              exit={{ x: '-100%' }}
-              className="w-[80vw] z-10 px-5 bg-black2 absolute top-0 left-0 my-2 h-[98%] rounded-tr-xl rounded-br-xl p-1 overflow-hidden shadow-md"
-            >
-              {props.children}
-            </motion.div>
-          </div>
-        )}
+        <motion.div
+          initial={{ x: '100%', opacity: 0 }}
+          animate={{ x: '0', opacity: 1 }}
+          exit={{ x: '-100%', opacity: 0, position: 'absolute', top: 0, left: 0 }}
+          transition={{ ease: 'circOut', duration: 0.2 }}
+          key={getKey()}
+          className="h-full"
+        >
+          {openedState.chats && <ContactLists key="chats" />}
+          {openedState.groups && <GroupLists key="groups" />}
+          {openedState.invites && <InviteLists key="invites" />}
+        </motion.div>
       </AnimatePresence>
-    </>
+    </div>
   )
 }

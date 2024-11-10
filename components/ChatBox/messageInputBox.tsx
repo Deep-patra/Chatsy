@@ -2,26 +2,18 @@ import {
   useState,
   useRef,
   useContext,
+  useCallback,
   type FormEventHandler,
   type MouseEvent,
 } from 'react'
 import classnames from 'classnames'
 import { motion } from 'framer-motion'
+import ImagePreview from './imagePreview'
 import { BsImage } from 'react-icons/bs'
 import { RiSendPlane2Line, RiSendPlane2Fill } from 'react-icons/ri'
-import ImagePreview from './imagePreview'
 import Tooltip from '../tootip'
-import Auth, { type IContact } from '@/context/auth.context'
-import ContactService from '@/services/contact.service'
-import ChatService, { MessageGroup } from '@/services/chat.service'
-
-interface IMessageInputBoxProps {
-  activeContact: IContact
-}
-
-interface IMessageInputProps {
-  activeContact: IContact
-}
+import UserContext from '@/context/user.context'
+import { ChatInterface } from '@/services'
 
 interface ISendButtonProps {
   handleClick: (event: MouseEvent<HTMLButtonElement>) => void
@@ -57,65 +49,53 @@ function SendButton(props: ISendButtonProps) {
   )
 }
 
-function MessageInput(props: IMessageInputProps) {
-  const imageInputRef = useRef<HTMLInputElement>(null)
+interface IMessageInputProps {
+  chat: ChatInterface 
+}
+
+function MessageInput({ chat }: IMessageInputProps) {
+  
+  const { user } = useContext(UserContext)
 
   const [text, changeText] = useState<string>('')
-  const [files, changeFiles] = useState<File[]>([])
+  const [file, changeFiles] = useState<File | null>(null)
   const [focus, changeFocus] = useState<boolean>(false)
 
-  const { user } = useContext(Auth)
+  const imageInputRef = useRef<HTMLInputElement>(null)
 
-  const handleInput: FormEventHandler<HTMLInputElement> = (event) => {
+  const handleInput: FormEventHandler<HTMLInputElement> = useCallback((event) => {
     const target = event.target as HTMLInputElement
     changeText(target.value)
-  }
+  }, [])
 
-  const handleImageChange: FormEventHandler<HTMLInputElement> = (event) => {
+  const handleImageChange: FormEventHandler<HTMLInputElement> = useCallback((event) => {
     const target = event.target as HTMLInputElement
-    const inputFiles = []
 
     if (!target.files) {
-      changeFiles([])
+      changeFiles(null)
       return
     }
 
-    for (let i = 0; i < target.files.length; i++) {
-      if (i > 2) return
+    const f = target.files[0] ?? null
+    changeFiles(f)
+  }, [])
 
-      const file = target.files[i]
-      inputFiles.push(file)
-    }
+  const removeFile = useCallback(() => {
+    changeFiles(null)
+  }, [])
 
-    changeFiles(inputFiles)
-  }
-
-  const handleFiles = (idx: number) => {
-    const filterfiles = files.filter((file, _idx) => {
-      if (idx === _idx) return
-      return file
-    })
-
-    changeFiles(filterfiles)
-  }
-
-  const reset = () => {
+  const reset = useCallback(() => {
     changeText('')
-    changeFiles([])
-  }
+    changeFiles(null)
+  }, [])
 
-  const handleSend = (event: MouseEvent<HTMLButtonElement>) => {
-    if (text === '' && files.length === 0) return
+  const handleSend = async (event: MouseEvent<HTMLButtonElement>) => {
+    if (text === '' && !file) return
     ;(event.target as HTMLButtonElement).disabled = true
 
-    const { activeContact } = props
-    user &&
-      ChatService.addMessage(
-        activeContact.messageGroupId,
-        user?.uid,
-        text,
-        files
-      )
+    if (user)
+      chat.sendMessage(user.id, { text, image: file ?? undefined })
+
     ;(event.target as HTMLButtonElement).disabled = false
 
     // reset the fields
@@ -124,7 +104,7 @@ function MessageInput(props: IMessageInputProps) {
 
   return (
     <div className="relative flex flex-row items-center w-full gap-2">
-      {files.length > 0 && <ImagePreview {...{ files, handleFiles }} />}
+      {file && <ImagePreview {...{ file, removeFile }} />}
 
       <div
         className={classnames(
@@ -177,15 +157,19 @@ function MessageInput(props: IMessageInputProps) {
   )
 }
 
-export default function MessageInputBox(props: IMessageInputBoxProps) {
-  const { activeContact } = props
+
+interface IMessageInputBoxProps {
+  activeChat: ChatInterface
+}
+
+export default function MessageInputBox({ activeChat }: IMessageInputBoxProps) {
 
   return (
     <div
       style={{ gridRowStart: 3, gridRowEnd: 4 }}
       className="relative w-full flex flex-row items-end gap-2"
     >
-      <MessageInput {...{ activeContact }} />
+      <MessageInput chat={activeChat} />
     </div>
   )
 }

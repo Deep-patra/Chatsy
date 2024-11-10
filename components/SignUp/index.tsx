@@ -41,7 +41,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="form-container flex flex-col items-center gap-5">
+    <div className="form-container flex flex-col items-center gap-5 | md:w-[400px] md:bg-black1 md:p-3 md:p-8 rounded-md">
       <SignupForm signUpWithEmailPassword={handleEmailSignIn} />
       <Seperator />
       <SignInWithGoogle handleClick={handleGoogleSignIn} />

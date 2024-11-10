@@ -1,43 +1,66 @@
-import Tabs from './tabs'
+import { useState, useContext, useEffect } from 'react'
+import ChatContext from '@/context/chat.context'
 import ChatContainer from './chatContainer'
 import MessageInputBox from './messageInputBox'
-import { IContact } from '@/context/auth.context'
-import Chat from '@/context/chat.context'
+import TopBar from './topbar'
+import ChatBot from '@/components/Chatbot'
+import { ChatInterface  } from '@/services'
+import { events } from '../utils/events'
 
-interface IChatBox {
-  activeContact: IContact | null
-  openedContacts: IContact[]
-  changeOpenedContacts: (contacts: IContact[]) => void
-  changeActiveContact: (contact: IContact | null) => void
-}
+export default function Chatbox() {
+  const { activeChat, changeActiveChat } = useContext(ChatContext)
 
-export default function Chatbox(props: IChatBox) {
-  const { activeContact, openedContacts } = props
+  const [showChatbot, changeShowChatbot] = useState<boolean>(false)
+  const [loading, changeLoading] = useState<boolean>(false)
+
+  async function fetchMembersData (activeChat: ChatInterface) {
+    changeLoading(true)
+
+    await activeChat.fetchMembersData()
+      // .catch(console.error)
+      .finally(() => {
+        changeLoading(false)
+      })
+  }
+
+  useEffect(() => {
+    if (activeChat) {
+      // close the chat bot, if opened
+      changeShowChatbot(false)
+
+      fetchMembersData(activeChat) 
+    }
+  }, [activeChat])
+
+  useEffect(() => {
+    const handler = () => {
+      changeActiveChat(null) 
+      changeShowChatbot(true)
+    }
+
+    document.body.addEventListener(events.open_chatbot, handler)
+
+    return () => {
+      document.removeEventListener(events.open_chatbot, handler)
+    }
+  }, [])
 
   return (
-    <div className="chatbox p-1 md:p-0 md:m-5 md:rounded-2xl w-full max-h-full">
-      <Tabs
-        activeUser={props.activeContact}
-        users={props.openedContacts}
-        setUsers={props.changeOpenedContacts}
-        changeActiveUser={props.changeActiveContact}
-      />
+    <div className="chatbox | relative z-0 | p-1 rounded-md w-full max-h-full | overflow-hidden">
 
-      <Chat.Consumer>
-        {({ chats, updateChats, changeChats }) => (
-          <ChatContainer
-            {...{
-              openedContacts,
-              activeContact,
-              chats,
-              changeChats,
-              updateChats,
-            }}
-          />
-        )}
-      </Chat.Consumer>
+      { activeChat && (
+        <>
+          <TopBar {...{ activeChat }} />
 
-      {activeContact && <MessageInputBox {...{ activeContact }} />}
+          { !loading && <ChatContainer/> } 
+
+          <MessageInputBox {...{ activeChat }} />
+        </>
+      )}
+
+      { showChatbot && <ChatBot/> }
+
+
     </div>
   )
 }

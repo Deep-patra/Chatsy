@@ -10,6 +10,7 @@
   --download-progress: #4cd137;
   --warning: #e84118;
 
+  --new-dark-background: #020403;
   --dark-background: #121212;
   --dark-secondary-background: #485460;
   --dark-tertiary-background: #808e9b;
@@ -31,7 +32,7 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: var(--dark-background);
+  background-color: var(--new-dark-background);
 
   display: grid;
   grid-gap: 4px;
@@ -96,12 +97,20 @@ input:focus {
   grid-template-rows: 50px calc(100% - 100px) 50px;
 }
 
+.animateLeft {
+  animation: animate-left 0.2s linear;
+}
+
+
 .decorate-scrollbar {
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 200ms linear;
 }
 
 .decorate-scrollbar:hover {
   scrollbar-width: thin;
+  scrollbar-color: #2d3436 transparent; 
 }
 
 .decorate-scrollbar::-webkit-scrollbar {
@@ -119,5 +128,15 @@ input:focus {
   background-color: var(--scrollbar);
 }
 
+
+
 @media screen and (max-width: 600px) {
+
+}
+
+/** Animations **/
+
+@keyframes animate-left {
+  0% { left: 0 }
+  100% { right: 0 }
 }

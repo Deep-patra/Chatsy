@@ -13,8 +13,8 @@ export default function SignInWithGoogle(props: ISignInWithGoogleProps) {
         type="button"
         aria-label="sign in with google"
         whileTap={{ scale: 0.9 }}
-        whileHover={{ scale: 1.1 }}
-        className="w-full flex flex-row items-center justify-center gap-2 p-2 bg-white1 border border-solid border-white1 rounded-md text-black1 hover:bg-transparent hover:text-white1"
+        whileHover={{ scale: 0.96 }}
+        className="w-full flex flex-row items-center justify-center gap-2 p-2 bg-white1 border border-solid border-white1 rounded-md text-black1 hover:bg-transparent hover:text-white1 transition-color duration-300"
         onClick={props.handleClick}
       >
         <BsGoogle className="text-2xl text-inherit" />

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import UserProvider from '@/components/userProvider'
+import Provider from '@/components/Provider'
 import NoInternet from '@/components/noInternet'
 import Analytics from '@/components/analytics'
 import RegisterSW from '@/components/registerSW'
@@ -65,9 +65,9 @@ export default function RootLayout({
         {/* Register the Service worker */}
         <RegisterSW />
 
-        <UserProvider>
+        <Provider>
           <Analytics>{children}</Analytics>
-        </UserProvider>
+        </Provider>
       </body>
     </html>
   )

@@ -85,9 +85,9 @@ export default function SignupForm(props: ISignupFormProps) {
         <motion.button
           type="button"
           aria-label="submit"
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 0.96 }}
           whileTap={{ scale: 0.9 }}
-          className="px-4 py-2 text-lg rounded-md border text-white1 border-white2 border-solid hover:bg-white1 hover:text-black1 hover:border-white1 transition-colors"
+          className="px-4 py-2 text-lg rounded-md border text-white1 border-white2 border-solid hover:bg-white1 hover:text-black1 hover:border-white1 transition-colors duration-300"
           onClick={handleSubmit}
         >
           Sign Up

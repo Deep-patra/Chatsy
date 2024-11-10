@@ -19,7 +19,9 @@ export const getApp = () => {
 
   app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
-  connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true })
+  if (useEmulators()) 
+    connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true })
+
   return app
 }
 
@@ -28,7 +30,7 @@ export const initialzeAnalytics = (app: FirebaseApp) => {
 }
 
 export const useEmulators = () => {
-  if (process.env.NEXT_PUBLIC_NODE_ENV == 'development') return true
+  if (process.env.NEXT_PUBLIC_NODE_ENV != 'production') return true
 
   return false
 }

@@ -34,9 +34,9 @@ export default function Modal({
           className="flex flex-row items-center justify-center"
         >
           <motion.div
-            initial={{ scale: 0, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             className={`relative ${className}`}
           >
             {children}

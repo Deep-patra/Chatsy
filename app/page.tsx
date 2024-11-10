@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <main className="row-start-2 row-end-3 p-2 w-full h-full flex flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-5">
-        <h1 className="text-white1 text-xl">Chatsy</h1>
-        <span className="text-white3 text-center">
+        <h1 className="text-4xl text-brightGreen">Chatsy</h1>
+        <span className="text-white3 text-sm text-center">
           A Simple, Reliable, and Secure messaging application.
         </span>
 
@@ -15,7 +15,7 @@ export default function Home() {
             href="/signup"
             title="signup"
             data-testidd="signup"
-            className="text-center p-2 px-3 border rounded-lg border-solid border-white1 text-white1 hover:bg-white1 hover:text-black1 transition-colors"
+            className="text-center p-2 px-3 border rounded-md border-solid border-white1 text-white1 hover:bg-brightWhite2 hover:text-black1 hover:scale-95 transition-colors duration-300"
           >
             Sign up
           </Link>
@@ -23,7 +23,7 @@ export default function Home() {
             href="/login"
             title="login"
             data-testid="login"
-            className="text-center p-2 px-3 rounded-lg border border-solid border-white1 text-white1 hover:bg-white1 hover:text-black1 transition-colors"
+            className="text-center p-2 px-3 rounded-md border border-solid border-white1 text-white1 hover:bg-brightWhite2 hover:text-black1 hover:scale-95 transition-colors duration-300"
           >
             Log in
           </Link>

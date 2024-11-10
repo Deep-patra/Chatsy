@@ -1,81 +1,42 @@
 'use client'
-import { useContext, useState, useEffect } from 'react'
+
+import { useContext } from 'react'
 import Sidebar from '../Sidebar'
 import MiddleBar from '../MiddleBar'
-import Contact from './contacts'
 import ChatBox from '../ChatBox'
-import Search from '../Search'
-import Setting from '../Setting'
-import Profile from '../Profile'
 import InfoBar from '../Infobar'
-import Logout from '../logout'
-import Auth, { IContact } from '@/context/auth.context'
-import Chat, { type IChat, type IMessage } from '@/context/chat.context'
-import { useGetChats } from '@/hooks/getChats'
-import { useListenUser } from '@/hooks/listenUserDoc'
+import Modals from './modals'
+import Snackbar from '@/components/snackbar'
+import UserContext from '@/context/user.context'
+import { useListenUser } from '@/hooks/useListenUser'
+import { useListenInvites } from '@/hooks/useListenInvites'
 
 export default function Home() {
-  const [contacts, changeContacts] = useState<IContact[]>([])
-  const [openedContacts, changeOpenedContacts] = useState<IContact[]>([])
-  const [activeContact, _changeActiveContact] = useState<IContact | null>(null)
+  const { user, setUser } = useContext(UserContext)
 
-  const { user } = useContext(Auth)
-  const [chats, updateChats, changeChats] = useGetChats()
+  // listen for the user document changes
+  useListenUser(user, setUser)
 
-  // listen to user document changes
-  useListenUser()
-
-  const handleOpenChat = (uid: string) => {
-    const selectedContact = contacts.find((value) => value.uid === uid)
-
-    if (selectedContact) {
-      if (!openedContacts.find((value) => value.uid === uid))
-        changeOpenedContacts([...openedContacts, selectedContact])
-
-      _changeActiveContact(selectedContact)
-    }
-  }
-
-  const changeActiveContact = (contact: IContact | null) => {
-    _changeActiveContact(contact)
-  }
-
-  useEffect(() => {
-    user && changeContacts(user.contacts)
-  }, [user])
+  // listen for invite
+  useListenInvites()
 
   return (
-    <Chat.Provider value={{ chats, updateChats, changeChats }}>
       <div className="relative flex flex-row gap-1">
         <Sidebar/>
-        <MiddleBar>
-          <div className="overflow-y-auto">
-            <Contact contacts={contacts} handleOpenChat={handleOpenChat} />
-          </div>
-        </MiddleBar>
 
-        <ChatBox
-          activeContact={activeContact}
-          openedContacts={openedContacts}
-          changeOpenedContacts={changeOpenedContacts}
-          changeActiveContact={changeActiveContact}
-        />
+        <MiddleBar/>
+
+        {/* Chat box */}
+        <ChatBox/>
 
         {/* Info bar when the chat is opened */}
         <InfoBar/>
 
-        {/* Search Modal */}
-        <Search />
+        {/* Modals */}
+        <Modals/>
 
-        {/* Setting Modal */}
-        <Setting />
-
-        {/* Profile Modal */}
-        <Profile />
-
-        {/* Logout Modal */}
-        <Logout />
+        {/** Snackbar **/}
+        <Snackbar/>
       </div>
-    </Chat.Provider>
   )
 }

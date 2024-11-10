@@ -1,18 +1,13 @@
-import Image from 'next/image'
+import { useState, useEffect, useCallback, memo } from 'react'
 import classnames from 'classnames'
-import { type IMessage } from '@/context/chat.context'
-import { IContact, IUser } from '@/context/auth.context'
+import { IoMdResize } from 'react-icons/io'
+import { Timestamp } from 'firebase/firestore'
+import { ChatInterface, IMessage, IPhoto } from '@/services'
+import { User } from '@/services/user'
+import Image from '@/components/image'
+import { getPhotoURL } from '../utils/getPhotoURL'
+import { dispatchImagePreviewEvent } from '@/components/utils/dispatchEvent'
 
-interface IMessageProps {
-  message: IMessage
-  self: boolean
-  author: IUser | IContact
-}
-
-interface IProfilePictureProps {
-  photoURL: string | null | undefined
-  self: boolean
-}
 
 interface IImageSliderProps {
   images: string[]
@@ -22,75 +17,108 @@ interface ITextProps {
   text: string
 }
 
-function ProfilePicture(props: IProfilePictureProps) {
+const ProfilePicture = memo(function profilePicture({ self, photo }: { self: boolean, photo: IPhoto }) {
   return (
-    <div
-      style={{ order: props.self ? 1 : 0 }}
-      className="relative flex-shrink-0 rounded-full w-5 h-5 md:w-8 md:h-8 overflow-hidden"
-    >
-      <Image src={props.photoURL || '/user.png'} alt={''} fill />
-    </div>
+    <Image
+      className="w-10 h-10 | rounded-full | border border-white3 | bg-midBlack2"
+      src={getPhotoURL(photo)}
+      alt={"avatar"}
+    />
   )
-}
+})
 
-function ImageSlider(props: IImageSliderProps) {
-  return (
-    <div className="flex flex-row flex-wrap gap-2">
-      {props.images.length > 0
-        ? props.images.map((image, idx) => (
-            <div className="relative w-[200px] h-[200px]" key={idx}>
-              <Image src={image} alt={''} fill className="object-contain" />
-            </div>
-          ))
-        : null}
-    </div>
-  )
-}
 
-function Text(props: ITextProps) {
+const Text = memo(function text(props: ITextProps) {
   return (
     <div className="p-1">
       <p className="text-sm md:text-md text-white1">{props.text}</p>
     </div>
   )
+})
+
+interface IMessageProps {
+  user: User
+  activeChat: ChatInterface
+  message: IMessage
 }
 
-export default function Message(props: IMessageProps) {
-  const { text, images, time } = props.message
-  const { photoURL, name } = props.author
+export default function Message({ user, activeChat, message }: IMessageProps) {
 
-  const messageTime = time.toLocaleTimeString()
+  const [height, changeHeight] = useState<number>(0)
+
+  const self = user.id == message.author ? true : false
+  const author = activeChat.getUserInfo(message.author)
+
+  const onLoad = useCallback((event: any) => {
+    const target = event.target as HTMLImageElement
+
+    const naturalWidth = target.naturalWidth
+    const naturalHeight = target.naturalHeight
+
+    const aspectRatio = naturalHeight / naturalWidth
+
+    const h = 300 * aspectRatio
+    changeHeight(h)
+
+  }, [changeHeight])
 
   return (
     <div
       className={classnames(
         'w-full flex flex-row items-start',
-        props.self ? 'justify-end' : 'justify-start'
+        self ? 'justify-end' : 'justify-start'
       )}
     >
-      <div className="flex flex-row items-start p-2 gap-5">
+      <div className="flex-shrink-1 | flex flex-row items-start p-2 gap-2">
         {/* Profile Picture */}
-        <ProfilePicture {...{ photoURL, self: props.self }} />
+        {!self && (
+          <ProfilePicture self={self} photo={author.photo} />
+        )}
 
         {/* Message */}
         <div
-          style={{ order: self ? 0 : 1, minWidth: '200px', maxWidth: '450px' }}
-          className="flex flex-col justify-start rounded-lg p-2 bg-black2 gap-2"
+          className="min-w-[200px] max-w-[450px] | flex flex-col justify-start gap-2 | rounded-lg p-2 bg-black2"
         >
-          <span className="font-semibold text-sm md:text-md text-white2">
-            {name}
+          <span className="font-semibold text-xs md:text-sm text-white2">
+            {author.name}
           </span>
-          <Text {...{ text }} />
-          <ImageSlider {...{ images }} />
+          
+          {/* image */}
+          {message.images && (
+            <div className="relative | group">
+              {/* Open image preview */}
+              <button
+                type="button"
+                className="hidden | absolute top-1 right-1 z-10 | p-1 | rounded-full | bg-white/40 text-black1 | group-hover:block"
+                onClick={() => message.images && dispatchImagePreviewEvent(message.images)}
+              >
+                <IoMdResize className="w-4 h-4 text-inherit" />
+              </button>
+
+              <Image
+                style={{ width: `${300}px`, height: `${height}px` }}
+                src={getPhotoURL(message.images)}
+                alt={getPhotoURL(message.images)}
+                onLoad={onLoad}
+              />
+            </div>
+          )}
+
+          <Text text={message.text} />
           <span
             className={classnames(
               'text-[0.5rem] text-white3',
               self ? 'ml-auto' : 'mr-auto'
             )}
           >
-            {messageTime}
+            {(message.time as Timestamp).toDate().toLocaleTimeString()}
           </span>
         </div>
+
+        {/* Self profile picture */}
+        {self && (
+          <ProfilePicture self={self} photo={author.photo} />
+        )}
       </div>
     </div>
   )

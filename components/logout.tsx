@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { getAuth } from 'firebase/auth'
@@ -11,21 +11,23 @@ export default function Logout() {
 
   const router = useRouter()
 
-  const handleConfirmLogout = () => {
+  const handleConfirmLogout = useCallback(() => {
     // Signout from the firebase
     getAuth(getApp()).signOut()
     router.push('/')
-  }
+  }, [])
 
-  const handleOpenLogout = () => {
-    changeIsOpen(true)
-  }
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     changeIsOpen(false)
-  }
+  }, [])
+
 
   useEffect(() => {
+    const handleOpenLogout = () => {
+      changeIsOpen(true)
+    }
+
     document.body.addEventListener(events.open_logout, handleOpenLogout)
 
     return () => {
@@ -35,11 +37,11 @@ export default function Logout() {
 
   return (
     <Modal {...{ open: isOpen, onClose }}>
-      <div className="logout-modal flex flex-col p-2 gap-2 rounded-md bg-black2">
+      <div className="logout-modal flex flex-col p-2 gap-1 border border-solid border-gray1 rounded-md bg-black2">
         {/*Header*/}
-        <h4 className="text-white1 text-md md:text-lg">Logout</h4>
+        <h4 className="text-white text-md md:text-lg">Logout</h4>
 
-        <span className="text-white2 text-sm md:text-md">
+        <span className="text-white3 text-xs md:text-sm">
           You sure want to logout ?
         </span>
 
@@ -47,7 +49,7 @@ export default function Logout() {
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={handleConfirmLogout}
-          className="py-1 px-2 w-min ml-auto mt-2 rounded-md border border-solid border-green text-green hover:bg-green hover:text-white1 transition-colors"
+          className="text-xs p-1 px-2 ml-auto mt-2 rounded-sm bg-brightGreen text-black1 hover:scale-95  transition-all duration-200"
         >
           Confirm
         </motion.button>

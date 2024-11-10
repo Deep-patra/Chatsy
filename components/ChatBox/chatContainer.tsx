@@ -1,43 +1,15 @@
-import { useRef, useContext, useEffect, useState } from 'react'
-import Auth from '@/context/auth.context'
-import { IChat } from '@/context/chat.context'
-import { IContact } from '@/context/auth.context'
-import ChatService from '@/services/chat.service'
-import { useListenChats } from '@/hooks/listenChat'
+import { useRef, useContext, useEffect, useState, memo } from 'react'
+import UserContext from '@/context/user.context'
+import ChatContext from '@/context/chat.context'
 import Message from './message'
 import Loader from '@/components/loader'
+import NoActiveUser from './noActiveUser'
+import NoMessage from './noMessage'
+import { IMessage } from '@/services'
+import { useListenMessages } from '@/hooks/useListenMessages'
 
-interface IChatContainerProps {
-  openedContacts: IContact[]
-  activeContact: IContact | null
-  chats: IChat[]
-  updateChats: any
-  changeChats: any
-}
 
-interface IMessagesProps {
-  activeContact: IContact
-  chats: IChat[]
-  scrollToBottom: () => void
-}
-
-function NoMessage() {
-  return (
-    <div className="w-full h-full flex flex-row items-center justify-center">
-      <p className="text-white2">Start a conversation by saying Hi 👋.</p>
-    </div>
-  )
-}
-
-function NoActiveuser() {
-  return (
-    <div className="w-full h-full flex flex-row items-center justify-center">
-      <p className="text-white2">Select a user to start a coversation.</p>
-    </div>
-  )
-}
-
-function LoadingMessages() {
+const LoadingMessages = memo(function loadingMessages() {
   return (
     <div className="w-full flex flex-row items-center justify-center">
       <div className="w-6 h-6 relatve">
@@ -50,40 +22,14 @@ function LoadingMessages() {
       </div>
     </div>
   )
-}
+})
 
-function Messages(props: IMessagesProps) {
-  const { chats, activeContact, scrollToBottom } = props
-  let chat = chats.find((value) => value.userId === activeContact.uid)
 
-  if (!chat) chat = { userId: activeContact.uid, messages: [] }
+export default function ChatContainer() {
+  const { user } = useContext(UserContext)
+  const { activeChat } = useContext(ChatContext)
 
-  const { user } = useContext(Auth)
-
-  useEffect(() => {
-    if (chat && chat.messages.length > 0) scrollToBottom()
-  }, [chat.messages])
-
-  return (
-    <>
-      {chat && chat.messages.length > 0 ? (
-        chat.messages.map((message, idx) => (
-          <Message
-            key={idx}
-            message={message}
-            author={message.authorId === user?.uid ? user : activeContact}
-            self={message.authorId === user?.uid}
-          />
-        ))
-      ) : (
-        <NoMessage />
-      )}
-    </>
-  )
-}
-
-export default function ChatContainer(props: IChatContainerProps) {
-  const { activeContact, updateChats, chats, changeChats } = props
+  const [messages, changeMessages] = useState<IMessage[]>([])
 
   const containerRef = useRef<HTMLDivElement>(null)
   const topRef = useRef<HTMLDivElement>(null)
@@ -99,23 +45,45 @@ export default function ChatContainer(props: IChatContainerProps) {
     }
   }
 
-  // Listen to the new messages
-  useListenChats(activeContact, updateChats, chats, changeChats)
+  useListenMessages(activeChat, (m: IMessage[]) => changeMessages(m))
 
-  if (!activeContact) return <NoActiveuser />
+  useEffect(() => {
+    if (activeChat) 
+      activeChat.getMessages({ limit: 10 })
+        .then(results => { if (results) changeMessages(results) })
+        .catch(console.error)
+  }, [activeChat, changeMessages])
+
+
+  if (!user) return <></>
+
+  if (!activeChat) return <NoActiveUser />
 
   return (
     <div
       ref={containerRef}
       style={{ gridRowStart: 2, gridRowEnd: 3 }}
-      className="flex flex-col w-full h-full overflow-y-auto"
+      className="decorate-scrollbar flex flex-col w-full h-full overflow-y-auto"
     >
       <div
         ref={topRef}
         style={{ height: '5px' }}
         className="w-full flex-shrink-0"
       ></div>
-      <Messages {...{ chats, activeContact, scrollToBottom }} />
+      <>
+        {messages.length > 0 ? (
+          messages.map((message, idx) => (
+            <Message
+              key={message.id}
+              user={user}
+              activeChat={activeChat}
+              message={message}
+            />
+          ))
+        ) : (
+          <NoMessage />
+        )}
+      </>
     </div>
   )
 }

@@ -116,7 +116,7 @@ export default function Tooltip({
       childRef.current &&
         childRef.current.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [childRef.current])
+  }, [childRef.current, position])
 
   return (
     <>

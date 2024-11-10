@@ -1,27 +1,14 @@
 import { createContext } from 'react'
+import type { ChatInterface } from '@/services'
 
-export interface IMessage {
-  text: string
-  images: string[]
-  time: Date
-  authorId: string
-}
-
-export interface IChat {
-  userId: string
-  messages: IMessage[]
-}
-
-interface IChatContext {
-  chats: IChat[]
-  changeChats: (chats: IChat[]) => void
-  updateChats: (contactId: string, message: IMessage[]) => void
+export interface IChatContext {
+  activeChat: ChatInterface | null
+  changeActiveChat: (chat: ChatInterface | null) => void
 }
 
 const ChatContext = createContext<IChatContext>({
-  chats: [],
-  changeChats(chats: IChat[]) {},
-  updateChats(contactId: string, message: IMessage[]) {},
+  activeChat: null,
+  changeActiveChat: (chat: ChatInterface | null) => {},
 })
 
 export default ChatContext
