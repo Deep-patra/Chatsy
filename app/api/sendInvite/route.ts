@@ -19,13 +19,11 @@ export const POST = async (req: NextRequest) => {
     if (!user.exists || !receiver.exists)
       throw new Error("One of the user doesn't exists.")
 
-    const invite_doc_ref = await db
-      .collection('invites')
-      .add({
-        from: user_id,
-        to: receiver_id,
-        time: FieldValue.serverTimestamp(),
-      })
+    const invite_doc_ref = await db.collection('invites').add({
+      from: user_id,
+      to: receiver_id,
+      time: FieldValue.serverTimestamp(),
+    })
 
     if (!invite_doc_ref) throw new Error('Cannot create Invite')
 

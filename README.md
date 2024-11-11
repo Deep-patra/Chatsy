@@ -53,13 +53,13 @@ npm run dev
 The following are the screenshots of the application
 
 - Landing Page
-  ![Screen Shot of the Chatsy Landing page](https://user-images.githubusercontent.com/74497717/227284534-1e8e5540-536b-40b9-a671-34c82e0d4ab6.png)
+  ![Screen Shot of the Chatsy Landing page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/chatsy-mainpage-image.png)
 
 - Sign up Page
-  ![Screen Shot of the Chatsy Signup page](https://user-images.githubusercontent.com/74497717/227284851-290abc5c-03b5-4e41-afd8-2dbc97d7aa33.png)
+  ![Screen Shot of the Chatsy Signup page](https:/raw.githubusercontent.com/Deep-patra/Chatsy/development/chatsy-signup-image.png)
 
 - Login Page
-  ![Screen Shot of the Chatsy Login page](https://user-images.githubusercontent.com/74497717/227285015-68bde411-e00e-4206-ae3e-4041c75e3f8a.png)
+  ![Screen Shot of the Chatsy Login page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/chatsy-login-image.png)
 
 - Home Page
   ![Screen shot of the Chatsy Home page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-chatting-image.png)
@@ -68,10 +68,10 @@ The following are the screenshots of the application
   ![Screen shot of the chatsy settings page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-settings-image.png)
 
 - Chatbot page
-  ![Screenshot of the chatsy chatbot page](https://raw.githubusercontent/com/Deep-patra/Chatsy/development/assets/chatsy-chatbot-image.png)
+  ![Screenshot of the chatsy chatbot page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-chatbot-image.png)
 
 - Settings Page
-  ![Screen shot of the Chatsy Setting page](https://user-images.githubusercontent.com/74497717/227284010-6f14a885-4ebb-4d59-b100-6c419c1856ce.png)
+  ![Screen shot of the Chatsy Setting page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-search-image.png)
 
 ## Future Plans
 
