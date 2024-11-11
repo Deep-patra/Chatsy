@@ -1,3 +1,4 @@
+import { Blob } from 'node:buffer'
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { logger } from '@/utils/logger'
@@ -34,8 +35,8 @@ export const POST = async (req: NextRequest) => {
 
     if (!snapshots.empty) throw new Error('User with the same UID exists!')
 
-    if (photo instanceof File) {
-      const imageFile = formdata.get('photo') as File
+    if (photo && typeof photo !== "string") {
+      const imageFile = photo as File
       const { thumbnail, original } = await processImage(imageFile)
 
       const uuid = crypto.randomUUID()

@@ -86,7 +86,7 @@ export const convertToPng = async (buffer: Buffer): Promise<Buffer> => {
  * @returns {Promise<{thumbnail: Buffer, original: Buffer}>} - Promise which resolves with an object containing thumbnail buffer and converted image buffer in png
  * */
 export const processImage = async (
-  file: File
+  file: Blob 
 ): Promise<{ thumbnail: Buffer; original: Buffer }> => {
   const buffer = Buffer.from(await file.arrayBuffer())
   const thumbnail = await generateThumbnail(buffer)

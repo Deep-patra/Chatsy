@@ -31,7 +31,7 @@ export const POST = async (req: NextRequest) => {
 
     if (description) obj.description = String(formdata.get('description'))
 
-    if (photo instanceof File) {
+    if (photo && typeof photo !== "string") {
       // cleanup previous files
       if (userDoc.get('photo') && typeof userDoc.get('photo') == 'object') {
         const { uuid } = userDoc.get('photo')
