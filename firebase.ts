@@ -32,7 +32,7 @@ export const initialzeAnalytics = (app: FirebaseApp) => {
 }
 
 export const useEmulators = () => {
-  if (process.env.NEXT_PUBLIC_NODE_ENV != 'production') return true
+  if (process.env.NEXT_PUBLIC_NODE_ENV === 'development') return true
 
   return false
 }
