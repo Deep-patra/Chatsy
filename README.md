@@ -56,7 +56,7 @@ The following are the screenshots of the application
   ![Screen Shot of the Chatsy Landing page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-mainpage-image.png)
 
 - Sign up Page
-  ![Screen Shot of the Chatsy Signup page](https:/raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-signup-image.png)
+  ![Screen Shot of the Chatsy Signup page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-signup-image.png)
 
 - Login Page
   ![Screen Shot of the Chatsy Login page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-login-image.png)
