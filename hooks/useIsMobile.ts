@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 
-
 interface IUseIsMobileOptions {
   threshold?: number
 }
 
 export const useIsMobile = (options?: IUseIsMobileOptions): boolean => {
-  const threshold = options ? ( options.threshold || 600 ) : 600
+  const threshold = options ? options.threshold || 600 : 600
 
   const [isMobile, changeIsMobile] = useState<boolean>(false)
 
@@ -14,10 +13,9 @@ export const useIsMobile = (options?: IUseIsMobileOptions): boolean => {
     const handleResize = (event: UIEvent) => {
       const width = window.innerWidth
 
-      if (width <= threshold && !isMobile)
-        changeIsMobile(true)
+      if (width <= threshold && !isMobile) changeIsMobile(true)
     }
-    
+
     window.addEventListener('resize', handleResize, { passive: true })
 
     return () => {

@@ -10,8 +10,8 @@ import {
   type QuerySnapshot,
   type DocumentData,
 } from 'firebase/firestore'
-import { InviteService } from "./service";
-import { db } from '../db';
+import { InviteService } from './service'
+import { db } from '../db'
 import type { InviteDisplayInfo, InviteInterface } from '../'
 
 interface InviteReturn<T> {
@@ -32,44 +32,40 @@ export class Invite implements InviteInterface {
   static async getAll(user_id: string): Promise<InviteReturn<Invite>> {
     const result: InviteReturn<Invite> = { sent: [], received: [] }
 
-    const received_q = query(collection(db, 'invites'), where('to', '==', user_id))
+    const received_q = query(
+      collection(db, 'invites'),
+      where('to', '==', user_id)
+    )
     const receivedDocs = await getDocs(received_q)
 
-    const sent_q = query(collection(db, 'invites'), where('from', '==', user_id))
+    const sent_q = query(
+      collection(db, 'invites'),
+      where('from', '==', user_id)
+    )
     const sentDocs = await getDocs(sent_q)
 
     receivedDocs.forEach((snapshot) => {
       let data = snapshot.data()
 
-      result.received.push(new Invite(
-        snapshot.id,
-        data.to,
-        data.from,
-        data.time 
-      ))
+      result.received.push(
+        new Invite(snapshot.id, data.to, data.from, data.time)
+      )
     })
 
     sentDocs.forEach((snapshot) => {
       let data = snapshot.data()
 
-      result.sent.push(new Invite(
-        snapshot.id,
-        data.to,
-        data.from,
-        data.time 
-      ))
+      result.sent.push(new Invite(snapshot.id, data.to, data.from, data.time))
     })
 
     return result
-
   }
 
   async getDisplayInfo(user_id: string): Promise<InviteDisplayInfo> {
     if (this.data) return this.data
-  
+
     let id: string = this.to
-    if (this.to === user_id) 
-      id = this.from
+    if (this.to === user_id) id = this.from
 
     const ref = doc(collection(db, 'users'), id)
     const userDoc = await getDoc(ref)
@@ -91,14 +87,16 @@ export class Invite implements InviteInterface {
     await InviteService.cancel(this.id, user_id)
   }
 
-  static listenForUserInvites(user_id: string, cb: (snapshot: QuerySnapshot<DocumentData>) => void): Unsubscribe {
-    const unsub = InviteService.listenForChanges("invites", user_id, cb)
+  static listenForUserInvites(
+    user_id: string,
+    cb: (snapshot: QuerySnapshot<DocumentData>) => void
+  ): Unsubscribe {
+    const unsub = InviteService.listenForChanges('invites', user_id, cb)
     return unsub
   }
 }
 
 export class GroupInvite implements InviteInterface {
-  
   data: InviteDisplayInfo | null = null
 
   constructor(
@@ -112,34 +110,44 @@ export class GroupInvite implements InviteInterface {
   static async getAll(user_id: string): Promise<InviteReturn<GroupInvite>> {
     const result: InviteReturn<GroupInvite> = { sent: [], received: [] }
 
-    const received_q = query(collection(db, 'groupInvites'), where('to', '==', user_id))
+    const received_q = query(
+      collection(db, 'groupInvites'),
+      where('to', '==', user_id)
+    )
     const receivedDocs = await getDocs(received_q)
 
-    const sent_q = query(collection(db, 'groupInvites'), where('from', '==', user_id))
+    const sent_q = query(
+      collection(db, 'groupInvites'),
+      where('from', '==', user_id)
+    )
     const sentDocs = await getDocs(sent_q)
 
     receivedDocs.forEach((snapshot) => {
       let data = snapshot.data()
 
-      result.received.push(new GroupInvite(
-        snapshot.id,
-        data.group_id,
-        data.to,
-        data.from,
-        data.time 
-      ))
+      result.received.push(
+        new GroupInvite(
+          snapshot.id,
+          data.group_id,
+          data.to,
+          data.from,
+          data.time
+        )
+      )
     })
 
     sentDocs.forEach((snapshot) => {
       let data = snapshot.data()
 
-      result.sent.push(new GroupInvite(
-        snapshot.id,
-        data.group_id,
-        data.to,
-        data.from,
-        data.time 
-      ))
+      result.sent.push(
+        new GroupInvite(
+          snapshot.id,
+          data.group_id,
+          data.to,
+          data.from,
+          data.time
+        )
+      )
     })
 
     return result
@@ -168,9 +176,11 @@ export class GroupInvite implements InviteInterface {
     await InviteService.groupCancel(this.id, user_id)
   }
 
-
-  static listenForGroupInvites(user_id: string, cb: (snapshot: QuerySnapshot<DocumentData>) => void): Unsubscribe {
-    const unsub = InviteService.listenForChanges("groupInvites", user_id, cb)
+  static listenForGroupInvites(
+    user_id: string,
+    cb: (snapshot: QuerySnapshot<DocumentData>) => void
+  ): Unsubscribe {
+    const unsub = InviteService.listenForChanges('groupInvites', user_id, cb)
     return unsub
   }
 }

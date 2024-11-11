@@ -5,31 +5,29 @@ import Modal from '@/components/Modal'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { events } from '../utils/events'
 
-
 const Settings = dynamic(
-  () => import("./settings"),
+  () => import('./settings'),
 
   {
     loading: () => {
       return (
         <div className="w-full h-full">
-          <Loader color="white"/>
+          <div className="w-10 h-10">
+            <Loader color="whtie" />
+          </div>
         </div>
       )
-    }
+    },
   }
 )
 
 export default function SettingsComp() {
-  
   const [isOpen, changeIsOpen] = useState<boolean>(false)
 
   const isMobile = useIsMobile()
 
   useEffect(() => {
-    const eventHandler= () => 
-      changeIsOpen(true)
-
+    const eventHandler = () => changeIsOpen(true)
 
     document.body.addEventListener(events.open_settings, eventHandler)
     return () => {
@@ -37,9 +35,7 @@ export default function SettingsComp() {
     }
   }, [])
 
-  if (isMobile)
-    return <Settings/>
-
+  if (isMobile) return <Settings />
 
   return (
     <>
@@ -48,8 +44,8 @@ export default function SettingsComp() {
         onClose={() => changeIsOpen(false)}
         className="w-[500px] h-[500px] | bg-midBlack2 | rounded-md | border border-solid border-white3 | shadow-md | overflow-hidden"
       >
-        <Settings/>
+        <Settings />
       </Modal>
-    </> 
+    </>
   )
 }

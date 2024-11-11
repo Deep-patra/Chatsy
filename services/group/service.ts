@@ -27,11 +27,15 @@ interface IOptions {
 }
 
 export class GroupService {
-
-  static async create(user_id: string, name: string, photo?: string | File, description?: string): Promise<any> {
+  static async create(
+    user_id: string,
+    name: string,
+    photo?: string | File,
+    description?: string
+  ): Promise<any> {
     const formdata = new FormData()
 
-    if (name === "") throw new Error("Group name cannot be a empty string.")
+    if (name === '') throw new Error('Group name cannot be a empty string.')
 
     formdata.append('user_id', user_id)
     formdata.append('name', name)
@@ -40,11 +44,11 @@ export class GroupService {
 
     const response = await fetch('/api/group/create', {
       method: 'POST',
-      body: formdata
+      body: formdata,
     }).catch(console.error)
 
     if (!response || response.status !== 200)
-      throw new Error("Error in response in the GroupService::create method")
+      throw new Error('Error in response in the GroupService::create method')
 
     const json = await response.json()
     return json
@@ -57,36 +61,41 @@ export class GroupService {
     const userGroup_id = userDoc.get('groups')
 
     const groupDoc_promises: Promise<DocumentSnapshot<DocumentData>>[] =
-    userGroup_id.map((id: string) => getDoc(doc(collection(db, 'groups'), id)))
+      userGroup_id.map((id: string) =>
+        getDoc(doc(collection(db, 'groups'), id))
+      )
 
-    const groupDocs: DocumentSnapshot<DocumentData>[] = await Promise.all(groupDoc_promises)
+    const groupDocs: DocumentSnapshot<DocumentData>[] = await Promise.all(
+      groupDoc_promises
+    )
 
     const groups: Group[] = []
 
     groupDocs.forEach((doc) => {
       if (!doc.exists()) return
 
-      const { 
+      const {
         name = '',
         photo = '',
         description = '',
         members = [],
         admin = '',
-        created
+        created,
       } = doc.data()
 
-      groups.push(new Group(
-        doc.id,
-        {
+      groups.push(
+        new Group(doc.id, {
           name,
           photo,
           description,
           memberIds: members,
           admin,
-          created: Timestamp.fromMillis(created._seconds * 1000 + created._nanoseconds)
-        }
-      ))
-    }) 
+          created: Timestamp.fromMillis(
+            created._seconds * 1000 + created._nanoseconds
+          ),
+        })
+      )
+    })
 
     return groups
   }
@@ -94,7 +103,7 @@ export class GroupService {
   static async updateGroup(
     user_id: string,
     group_id: string,
-    data: { name?: string, text?: string, photo?: File } = {}
+    data: { name?: string; text?: string; photo?: File } = {}
   ) {
     const formdata = new FormData()
     formdata.append('user_id', user_id)
@@ -106,43 +115,51 @@ export class GroupService {
 
     const res = await fetch('/api/group/update', {
       method: 'POST',
-      body: formdata
+      body: formdata,
     })
 
     if (res.status != 200)
-      throw new Error((await res.json()).error || "ERROR in GroupService::UpdateGroup")
-   
+      throw new Error(
+        (await res.json()).error || 'ERROR in GroupService::UpdateGroup'
+      )
+
     const json = await res.json()
     return json
   }
 
-  static async sendMessage(user_id: string, group_id: string, text?: string, image?: File) {
+  static async sendMessage(
+    user_id: string,
+    group_id: string,
+    text?: string,
+    image?: File
+  ) {
     const formdata = new FormData()
 
     formdata.append('user_id', user_id)
     formdata.append('group_id', group_id)
-    
-    if (text && text.trim() !== "")
-      text && formdata.append('text', text)
 
-    if (image)
-      formdata.append('image', image)
+    if (text && text.trim() !== '') text && formdata.append('text', text)
+
+    if (image) formdata.append('image', image)
 
     const res = await fetch('/api/group/sendMessage', {
       method: 'POST',
-      body: formdata
+      body: formdata,
     })
 
     if (res.status != 200)
-      throw new Error("ERROR in GroupService::SendMessage::Method")
+      throw new Error('ERROR in GroupService::SendMessage::Method')
 
     const json = await res.json()
 
-    if (json.result !== 'ok')
-      throw new Error("Response result is not ok")
+    if (json.result !== 'ok') throw new Error('Response result is not ok')
   }
 
-  static async sendInvite(group_id: string, user_id: string, contact_id: string): Promise<void> {
+  static async sendInvite(
+    group_id: string,
+    user_id: string,
+    contact_id: string
+  ): Promise<void> {
     const formdata = new FormData()
 
     formdata.append('group_id', group_id)
@@ -151,14 +168,17 @@ export class GroupService {
 
     const response = await fetch('/api/group/sendInvite', {
       method: 'POST',
-      body: formdata
+      body: formdata,
     })
 
-    if (response.status !== 200)
-      throw new Error("response status is not 200")
+    if (response.status !== 200) throw new Error('response status is not 200')
   }
 
-  static async removeMember(group_id: string, user_id: string, member_id: string): Promise<void> {
+  static async removeMember(
+    group_id: string,
+    user_id: string,
+    member_id: string
+  ): Promise<void> {
     const formdata = new FormData()
 
     formdata.append('group_id', group_id)
@@ -167,11 +187,10 @@ export class GroupService {
 
     const response = await fetch('/api/group/removeMember', {
       method: 'POST',
-      body: formdata
+      body: formdata,
     })
 
-    if (response.status !== 200)
-      throw new Error("Response status is not 200")
+    if (response.status !== 200) throw new Error('Response status is not 200')
   }
 
   static async deleteGroup(group_id: string, user_id: string): Promise<void> {
@@ -182,11 +201,10 @@ export class GroupService {
 
     const response = await fetch('/api/group/delete', {
       method: 'POST',
-      body: formdata
+      body: formdata,
     })
 
-    if (response.status !== 200)
-      throw new Error("Response status is not 200")
+    if (response.status !== 200) throw new Error('Response status is not 200')
   }
 
   static async getMessages(
@@ -195,7 +213,7 @@ export class GroupService {
   ): Promise<IMessage[]> {
     const q = query(
       collection(db, 'messages'),
-      where("group_id", '==', group_id),
+      where('group_id', '==', group_id),
       orderBy('time', options.order),
       limit(options.limit || 10),
       startAfter(options.offset || 0)
@@ -221,7 +239,10 @@ export class GroupService {
     return messages
   }
 
-  static listenForGroupChanges(group_id: string, cb: (snapshot: DocumentSnapshot<DocumentData>) => void): Unsubscribe {
+  static listenForGroupChanges(
+    group_id: string,
+    cb: (snapshot: DocumentSnapshot<DocumentData>) => void
+  ): Unsubscribe {
     const ref = doc(collection(db, 'groups'), group_id)
     const unsubsribe = onSnapshot(ref, cb)
     return unsubsribe
@@ -231,9 +252,12 @@ export class GroupService {
     group_id: string,
     cb: (snapshot: QuerySnapshot<DocumentData>) => void
   ): Unsubscribe {
-    const q = query(collection(db, 'groupMessages'), where('group_id', '==', group_id), limit(10))
+    const q = query(
+      collection(db, 'groupMessages'),
+      where('group_id', '==', group_id),
+      limit(10)
+    )
     const unsubscribe = onSnapshot(q, cb)
     return unsubscribe
   }
-
 }

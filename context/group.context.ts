@@ -10,8 +10,7 @@ export interface IGroupContext {
 const GroupContext = createContext<IGroupContext>({
   groups: [],
   setGroups: (groups: Group[]) => {},
-  updateGroup: (group: Group) => {}
+  updateGroup: (group: Group) => {},
 })
 
 export default GroupContext
-

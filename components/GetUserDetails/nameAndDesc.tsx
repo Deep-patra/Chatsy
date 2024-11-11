@@ -36,9 +36,9 @@ export default function NameAndDescription(props: NameAndDescriptionProps) {
             className="min-h-[100px] | resize-y | text-xs text-white1 | w-full | border border-solid border-white3 | focus:border-white hover:border-white1 | rounded-md | p-1"
             onChange={props.onDescriptionChange}
             placeholder="Write something about yourself..."
-          ></textarea> 
+          ></textarea>
         </div>
       </div>
-    </>    
+    </>
   )
 }

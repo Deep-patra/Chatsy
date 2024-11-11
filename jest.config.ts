@@ -1,4 +1,4 @@
-import { pathsToModuleNameMapper } from 'ts-jest';
+import { pathsToModuleNameMapper } from 'ts-jest'
 import { compilerOptions } from './tsconfig.json'
 
 export default {
@@ -9,6 +9,8 @@ export default {
 
   transformIgnorePatterns: ['node_modules/(?!@dicebear)'],
 
-  moduleDirectories: ["node_modules", "<rootDir>"],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>' })
+  moduleDirectories: ['node_modules', '<rootDir>'],
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>',
+  }),
 }

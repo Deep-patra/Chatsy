@@ -26,14 +26,12 @@ export default function ImagePreview({ file, removeFile }: IImagePreviewProps) {
     return fileToUrl()
   }, [file, changeSource])
 
-
-  if (!source && !file)
-    return <></>
+  if (!source && !file) return <></>
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 0, scale: 0.95 }}
-      animate={{ opacity: 1, y: "-100%", scale: 1 }}
+      animate={{ opacity: 1, y: '-100%', scale: 1 }}
       exit={{ opacity: 0 }}
       className="flex flex-col gap-1 | p-2 | rounded-md | absolute -top-2 left-2 | z-10 bg-black2"
     >
@@ -49,7 +47,7 @@ export default function ImagePreview({ file, removeFile }: IImagePreviewProps) {
         src={source!}
         alt={source!}
         className="w-[200px] h-[150px] | rounded-md | overflow-hidden"
-      /> 
+      />
     </motion.div>
   )
 }

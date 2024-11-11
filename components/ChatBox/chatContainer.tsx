@@ -8,7 +8,6 @@ import NoMessage from './noMessage'
 import { IMessage } from '@/services'
 import { useListenMessages } from '@/hooks/useListenMessages'
 
-
 const LoadingMessages = memo(function loadingMessages() {
   return (
     <div className="w-full flex flex-row items-center justify-center">
@@ -23,7 +22,6 @@ const LoadingMessages = memo(function loadingMessages() {
     </div>
   )
 })
-
 
 export default function ChatContainer() {
   const { user } = useContext(UserContext)
@@ -48,12 +46,14 @@ export default function ChatContainer() {
   useListenMessages(activeChat, (m: IMessage[]) => changeMessages(m))
 
   useEffect(() => {
-    if (activeChat) 
-      activeChat.getMessages({ limit: 10 })
-        .then(results => { if (results) changeMessages(results) })
+    if (activeChat)
+      activeChat
+        .getMessages({ limit: 10 })
+        .then((results) => {
+          if (results) changeMessages(results)
+        })
         .catch(console.error)
   }, [activeChat, changeMessages])
-
 
   if (!user) return <></>
 
@@ -63,7 +63,7 @@ export default function ChatContainer() {
     <div
       ref={containerRef}
       style={{ gridRowStart: 2, gridRowEnd: 3 }}
-      className="decorate-scrollbar flex flex-col w-full h-full overflow-y-auto"
+      className="decorate-scrollbar flex flex-col justify-end w-full h-full overflow-y-auto"
     >
       <div
         ref={topRef}

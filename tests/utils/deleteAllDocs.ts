@@ -6,11 +6,8 @@ export const deleteAllDocs = async (...collections: string[]) => {
 
     const promises = []
     const batch = db.batch()
-    for (const doc of docs) 
-    promises.push(batch.delete(doc.ref))
+    for (const doc of docs) promises.push(batch.delete(doc.ref))
 
-    if (promises.length > 0) 
-      batch.commit()
-
+    if (promises.length > 0) batch.commit()
   }
 }

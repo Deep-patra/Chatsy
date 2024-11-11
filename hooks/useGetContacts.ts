@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react'
 import { Contact } from '@/services/contact'
 import { type IContactContext } from '@/context/contact.context'
 
-
 export const useGetContacts = (): IContactContext => {
   const [contacts, changeContacts] = useState<Contact[]>([])
- 
+
   const setContacts = (contacts: Contact[]) => {
     changeContacts(contacts)
   }
@@ -15,10 +14,9 @@ export const useGetContacts = (): IContactContext => {
 
     let found = false
     for (const c of contacts) {
-
       if (contact.id !== c.id) {
         new_contacts.push(c)
-        continue;  
+        continue
       }
 
       found = true
@@ -29,5 +27,5 @@ export const useGetContacts = (): IContactContext => {
     changeContacts(new_contacts)
   }
 
-  return {  contacts, setContacts, updateContact }
+  return { contacts, setContacts, updateContact }
 }

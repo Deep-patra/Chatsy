@@ -9,12 +9,7 @@ interface IGetNameAndDescription {
 }
 
 export default function GetNameAndDescription(props: IGetNameAndDescription) {
-  const {
-    name,
-    description,
-    changeName,
-    changeDescription
-  } = props
+  const { name, description, changeName, changeDescription } = props
 
   const handleInputChange = useCallback((event: any) => {
     const target = event.target as HTMLInputElement
@@ -28,7 +23,6 @@ export default function GetNameAndDescription(props: IGetNameAndDescription) {
 
   return (
     <div className="flex flex-col gap-3 | w-full">
-      
       {/* Name field */}
       <div className="flex flex-col gap-1 | w-full">
         <span className="text-sm text-white1">

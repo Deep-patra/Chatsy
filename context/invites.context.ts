@@ -3,12 +3,12 @@ import { Invite, GroupInvite } from '@/services/invites'
 
 export interface I_Invites {
   user: {
-    sent: Invite[],
+    sent: Invite[]
     received: Invite[]
-  },
+  }
 
   group: {
-    sent: GroupInvite[],
+    sent: GroupInvite[]
     received: GroupInvite[]
   }
 }
@@ -25,7 +25,7 @@ const InviteContext = createContext<IInviteContext>({
     group: { sent: [], received: [] },
   },
   setInvites: (invites: I_Invites) => {},
-  refreshInvites: (user_id: string) => {}
+  refreshInvites: (user_id: string) => {},
 })
 
 export default InviteContext

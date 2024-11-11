@@ -2,7 +2,7 @@ import { forwardRef, type ReactNode, type HTMLAttributes } from 'react'
 import { motion } from 'framer-motion'
 
 interface IBackdropProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode 
+  children: ReactNode
 }
 
 export default forwardRef<HTMLDivElement | null, IBackdropProps>(

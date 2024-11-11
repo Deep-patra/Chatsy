@@ -4,12 +4,10 @@ export const fetchUserAvatar = async (seed: string) => {
 
   const res = await fetch(url)
 
-  if (res.status !== 200)
-    return null
+  if (res.status !== 200) return null
 
   const json = await res.json()
   return json.dataURI
-
 }
 
 export const fetchGroupAvatar = async (seed: string) => {
@@ -18,8 +16,7 @@ export const fetchGroupAvatar = async (seed: string) => {
 
   const res = await fetch(url)
 
-  if (res.status !== 200)
-    return
+  if (res.status !== 200) return
 
   const json = await res.json()
   const uri = json.dataURI

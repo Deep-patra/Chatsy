@@ -12,13 +12,12 @@ export const generateAvatar = async (seed: string): Promise<string> => {
   const avatar = createAvatar(lorelei, {
     scale: 100,
     size: 96,
-    backgroundType: ["gradientLinear", "solid"],
+    backgroundType: ['gradientLinear', 'solid'],
     seed,
   }).toDataUri()
 
   return avatar
 }
-
 
 /**
  * Generates a random avatar for the group.
@@ -26,7 +25,9 @@ export const generateAvatar = async (seed: string): Promise<string> => {
  * @param {string} seed - seed for generating the avatar e.g. John Doe
  * @returns {Promise<string>} - Promise which resolves with a string
  * */
-export const generateAvatarForGroups = async (seed: string): Promise<string> => {
+export const generateAvatarForGroups = async (
+  seed: string
+): Promise<string> => {
   const avatar = createAvatar(glass, {
     scale: 100,
     size: 96,
@@ -50,7 +51,7 @@ export const generateThumbnail = async (buffer: Buffer): Promise<Buffer> => {
       .resize(200, 200)
       .png()
       .toBuffer()
-               
+
     return thumbnailBuffer
   }
 
@@ -62,7 +63,7 @@ export const generateThumbnail = async (buffer: Buffer): Promise<Buffer> => {
     .resize(thumbnailWidth, thumbnailHeight)
     .png()
     .toBuffer()
-             
+
   return thumbnailBuffer
 }
 
@@ -73,9 +74,7 @@ export const generateThumbnail = async (buffer: Buffer): Promise<Buffer> => {
  * @returns {Buffer} - png image file buffer
  * */
 export const convertToPng = async (buffer: Buffer): Promise<Buffer> => {
-  const png = await sharp(buffer)
-    .png()
-    .toBuffer()
+  const png = await sharp(buffer).png().toBuffer()
 
   return png
 }
@@ -86,14 +85,16 @@ export const convertToPng = async (buffer: Buffer): Promise<Buffer> => {
  * @param {File} file - Input image file in any format
  * @returns {Promise<{thumbnail: Buffer, original: Buffer}>} - Promise which resolves with an object containing thumbnail buffer and converted image buffer in png
  * */
-export const processImage = async (file: File): Promise<{ thumbnail: Buffer, original: Buffer }> => {
+export const processImage = async (
+  file: File
+): Promise<{ thumbnail: Buffer; original: Buffer }> => {
   const buffer = Buffer.from(await file.arrayBuffer())
   const thumbnail = await generateThumbnail(buffer)
-  
+
   let original_file_buffer = buffer
 
   if (!file.type.match('image/png'))
-     original_file_buffer = await convertToPng(buffer)
- 
+    original_file_buffer = await convertToPng(buffer)
+
   return { thumbnail, original: original_file_buffer }
 }

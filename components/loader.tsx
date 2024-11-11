@@ -57,7 +57,7 @@ export default function Loader(props: ILoaderProps) {
           style={{
             fill: 'none',
             stroke: color,
-            strokeWidth: '1',
+            strokeWidth: '2',
             strokeLinecap: 'round',
           }}
           d="M 102.35893,79.818748 A 22.540178,22.540178 0 0 1 79.818748,102.35893 22.540178,22.540178 0 0 1 57.27857,79.818748 22.540178,22.540178 0 0 1 79.818748,57.27857 22.540178,22.540178 0 0 1 102.35893,79.818748 Z"

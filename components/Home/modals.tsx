@@ -10,25 +10,25 @@ export default function Modals() {
   return (
     <>
       {/* Settings Modal */}
-      <Settings/>
+      <Settings />
 
       {/* Search Modal */}
-      <Search/>
+      <Search />
 
       {/* Create Group Modal */}
-      <CreateGroup/>
+      <CreateGroup />
 
       {/* Add Member Modal */}
-      <AddMember/>
+      <AddMember />
 
       {/* Remove Member Modal */}
-      <RemoveMember/>
+      <RemoveMember />
 
       {/* Image Preview */}
-      <ImagePreview/>
+      <ImagePreview />
 
       {/* Logout Modal */}
-      <Logout/>
+      <Logout />
     </>
   )
-} 
+}

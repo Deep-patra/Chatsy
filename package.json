@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 5000",
+    "dev": "firebase emulators:exec \"next dev -p 5000\"",
     "build": "next build",
     "start": "next start -p 5000",
     "lint": "next lint",
     "fmt": "prettier --write .",
-    "test:unit": "firebase emulators:exec --only firebase,storage,auth jest ./tests/unit/*",
+    "test:unit": "firebase emulators:exec \"npx jest tests/unit/* \"",
     "test:e2e": "playwright test",
     "prepare": "husky install"
   },

@@ -8,32 +8,48 @@ interface ISnackbar {
   id: string
   type: 'success' | 'info' | 'error'
   text: string
+  remainingTime: number
 }
 
 export default function Snackbar() {
   const [items, changeItems] = useState<ISnackbar[]>([])
 
   const handleRemoveItem = useCallback((items: ISnackbar[], id: string) => {
-    const new_items = items.filter(item => id === item.id ? undefined : item)
+    const new_items = items.filter((item) =>
+      id === item.id ? undefined : item
+    )
     changeItems([...new_items])
   }, [])
-
 
   useEffect(() => {
     const handleOpenSnackbar = (event: CustomEvent<ISnackbar>) => {
       const { text, type } = event.detail
 
-      changeItems(items.concat({ text, type, id: crypto.randomUUID() }))
+      changeItems(
+        items.concat({
+          text,
+          type,
+          id: crypto.randomUUID(),
+          remainingTime: 5000,
+        })
+      )
     }
 
-    document.body.addEventListener(events.open_add_snackbar, handleOpenSnackbar as any)
+    document.body.addEventListener(
+      events.open_add_snackbar,
+      handleOpenSnackbar as any
+    )
 
-    return () => document.body.removeEventListener(events.open_add_snackbar, handleOpenSnackbar as any)
+    return () =>
+      document.body.removeEventListener(
+        events.open_add_snackbar,
+        handleOpenSnackbar as any
+      )
   }, [items])
 
   return (
     <div
-      style={{  }}
+      style={{}}
       className="fixed bottom-2 right-2 z-[1000] max-h-[300px] | flex flex-col gap-1"
     >
       <AnimatePresence>
@@ -48,9 +64,15 @@ export default function Snackbar() {
           >
             {/* Snackbar icon */}
             <span className="text-inherit">
-              {item.type === "success" && <MdCheckCircle className="w- h-5 text-inherit" />}
-              {item.type === "error" && <BiError className="w-5 h-5 text-inherit" />}
-              {item.type === "info" && <MdInfo className="w-5 h-5 text-inherit" />}
+              {item.type === 'success' && (
+                <MdCheckCircle className="w- h-5 text-inherit" />
+              )}
+              {item.type === 'error' && (
+                <BiError className="w-5 h-5 text-inherit" />
+              )}
+              {item.type === 'info' && (
+                <MdInfo className="w-5 h-5 text-inherit" />
+              )}
             </span>
 
             {/* Snackbar text */}

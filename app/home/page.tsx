@@ -15,9 +15,5 @@ export default function Page() {
 
     hljs.highlightAll()
   }, [])
-  return (
-    <>
-      {user && <Home/>}
-    </>
-  )
+  return <>{user && <Home />}</>
 }

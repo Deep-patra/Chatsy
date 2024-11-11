@@ -7,7 +7,6 @@ interface ISwitchProps {
 }
 
 export default memo(function Switch({ enable, toggle }: ISwitchProps) {
-
   return (
     <button
       data-enable={enable}
@@ -17,11 +16,9 @@ export default memo(function Switch({ enable, toggle }: ISwitchProps) {
       {/* circle */}
       <motion.span
         initial={{ left: 0 }}
-        animate={enable ? { left: "100%", x: "-100%" } : { left: 0 }}
+        animate={enable ? { left: '100%', x: '-100%' } : { left: 0 }}
         className="absolute top-0 bg-white1 block | rounded-full | h-[20px] w-[20px] | shadow-md"
-      >
-      </motion.span>
+      ></motion.span>
     </button>
   )
 })
-

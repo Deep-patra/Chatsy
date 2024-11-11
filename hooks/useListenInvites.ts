@@ -1,12 +1,8 @@
 import { useContext, useEffect } from 'react'
-import type {
-  QuerySnapshot,
-  DocumentData,
-} from 'firebase/firestore'
+import type { QuerySnapshot, DocumentData } from 'firebase/firestore'
 import UserContext from '@/context/user.context'
 import InviteContext from '@/context/invites.context'
 import { Invite, GroupInvite } from '@/services/invites'
-
 
 type cb = (snapshot: QuerySnapshot<DocumentData>) => void
 
@@ -18,16 +14,12 @@ const getCallback = (
     const changes = snapshot.docChanges()
 
     changes.forEach((change) => {
+      if (change.type == 'removed') refreshInvites(user_id)
 
-      if (change.type == "removed")
-        refreshInvites(user_id)
-
-      if (change.type == "added")
-        refreshInvites(user_id)
+      if (change.type == 'added') refreshInvites(user_id)
     })
   }
 }
-
 
 export const useListenInvites = () => {
   const { user } = useContext(UserContext)
@@ -38,8 +30,14 @@ export const useListenInvites = () => {
     let unsubGroup = () => {}
 
     if (user) {
-      unsubUser = Invite.listenForUserInvites(user.id, getCallback(user.id,  refreshInvites))
-      unsubGroup = GroupInvite.listenForGroupInvites(user.id, getCallback(user.id,  refreshInvites))
+      unsubUser = Invite.listenForUserInvites(
+        user.id,
+        getCallback(user.id, refreshInvites)
+      )
+      unsubGroup = GroupInvite.listenForGroupInvites(
+        user.id,
+        getCallback(user.id, refreshInvites)
+      )
     }
 
     return () => {

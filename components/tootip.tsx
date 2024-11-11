@@ -21,9 +21,11 @@ export default function Tooltip({
   position = 'bottom',
   ...props
 }: ITooltipProps) {
-
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [translateStyle, changeTranslateStyle] = useState<{x: string, y: string}>({ x: '', y: '' })
+  const [translateStyle, changeTranslateStyle] = useState<{
+    x: string
+    y: string
+  }>({ x: '', y: '' })
   const [dimen, setDimen] = useState<{ top: number; left: number }>({
     top: 0,
     left: 0,
@@ -33,26 +35,23 @@ export default function Tooltip({
 
   useEffect(() => {
     const handleHover = (event: Event) => {
-
       if (childRef.current) {
-
         const childRect: DOMRect = childRef.current.getBoundingClientRect()
 
-        // Set the top, left and translation style 
-        // based on the position 
-        switch(position) {
-
+        // Set the top, left and translation style
+        // based on the position
+        switch (position) {
           case 'bottom': {
             const top = childRect.bottom + 5
             const left = childRect.left + childRect.width / 2
-            
+
             changeTranslateStyle({
               x: '-50%',
-              y: '0'
+              y: '0',
             })
 
             setDimen({ top, left })
-            break;
+            break
           }
 
           case 'top': {
@@ -61,11 +60,11 @@ export default function Tooltip({
 
             changeTranslateStyle({
               x: '-50%',
-              y: '-100%'
+              y: '-100%',
             })
 
             setDimen({ top, left })
-            break;
+            break
           }
 
           case 'left': {
@@ -74,12 +73,12 @@ export default function Tooltip({
 
             changeTranslateStyle({
               x: '-100%',
-              y: '-50%'
+              y: '-50%',
             })
 
             setDimen({ top, left })
 
-            break;
+            break
           }
 
           case 'right': {
@@ -88,11 +87,11 @@ export default function Tooltip({
 
             changeTranslateStyle({
               x: '0',
-              y: '-50%'
+              y: '-50%',
             })
 
             setDimen({ top, left })
-            break;
+            break
           }
         }
         // show the tooltip
@@ -122,13 +121,13 @@ export default function Tooltip({
     <>
       {cloneElement(children, { ref: childRef })}
       <AnimatePresence>
-        {(isOpen && text != '') && (
+        {isOpen && text != '' && (
           <motion.div
             style={{
               top: `${dimen.top}px`,
               left: `${dimen.left}px`,
               translateY: `${translateStyle.y}`,
-              translateX: `${translateStyle.x}`
+              translateX: `${translateStyle.x}`,
             }}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

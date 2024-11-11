@@ -30,18 +30,12 @@ export class Contact implements ChatInterface {
   created: Timestamp
   photo: IPhoto | string
 
-  chatroom: { id: string, members: User[] } | null = null
+  chatroom: { id: string; members: User[] } | null = null
   messages: IMessage[] = []
 
   constructor(
     readonly id: string,
-    {
-      name,
-      chatroom_id,
-      description,
-      created,
-      photo
-    }: IParams
+    { name, chatroom_id, description, created, photo }: IParams
   ) {
     this.name = name
     this.description = description
@@ -54,45 +48,42 @@ export class Contact implements ChatInterface {
     const userRef = doc(collection(db, 'users'), user_id)
     const userDoc = await getDoc(userRef)
 
-    if (!userDoc.exists())
-      throw new Error("User doesn't exists")
+    if (!userDoc.exists()) throw new Error("User doesn't exists")
 
     const contacts = userDoc.data()?.contacts || []
 
-    if (contacts.length === 0)
-      return []
+    if (contacts.length === 0) return []
 
     const data: DocumentSnapshot<DocumentData>[] = []
-    for (const item of contacts) 
+    for (const item of contacts)
       data.push(await getDoc(doc(collection(db, 'users'), item.user_id)))
 
     const results: Contact[] = []
 
     for (const item of data) {
-
-      if (!item.exists())
-        continue;
+      if (!item.exists()) continue
 
       const found = contacts.find((c: any) => c.user_id == item.id)
 
-      if (!found) 
-        continue;
+      if (!found) continue
 
-      results.push(new Contact (
-        item.id, {
+      results.push(
+        new Contact(item.id, {
           name: item.get('name'),
           chatroom_id: found.chatroom_id,
           description: item.get('description'),
           photo: item.get('photo'),
-          created: item.get('created')
-        }
-      ))
+          created: item.get('created'),
+        })
+      )
     }
 
-    log("results in Contacts.getAll() => ", results)
+    log('results in Contacts.getAll() => ', results)
 
     // fill up thier chatroom fields
-    const promises: Promise<void>[] = results.map((value) => value.getChatroom())
+    const promises: Promise<void>[] = results.map((value) =>
+      value.getChatroom()
+    )
     await Promise.all(promises).catch(console.error)
 
     return results
@@ -102,19 +93,15 @@ export class Contact implements ChatInterface {
     const userRef = doc(collection(db, 'users'), user_id)
     const userDoc = await getDoc(userRef)
 
-    if (!userDoc.exists())
-      throw new Error("User doesn't exsits")
+    if (!userDoc.exists()) throw new Error("User doesn't exsits")
 
-    return new Contact(
-      userDoc.id,
-      {
-        name: userDoc.get('name'),
-        chatroom_id,
-        description: userDoc.get('description'),
-        photo: userDoc.get('photo'),
-        created: userDoc.get('created')
-      }
-    )
+    return new Contact(userDoc.id, {
+      name: userDoc.get('name'),
+      chatroom_id,
+      description: userDoc.get('description'),
+      photo: userDoc.get('photo'),
+      created: userDoc.get('created'),
+    })
   }
 
   async fetchMembersData(): Promise<void> {
@@ -122,16 +109,13 @@ export class Contact implements ChatInterface {
   }
 
   getUserInfo(user_id: string): User {
-    if (!this.chatroom)
-      throw new Error("Cannot get User")
+    if (!this.chatroom) throw new Error('Cannot get User')
 
-    if (this.chatroom.members[0].id == user_id)
-      return this.chatroom.members[0]
+    if (this.chatroom.members[0].id == user_id) return this.chatroom.members[0]
 
-    if (this.chatroom.members[1].id == user_id)
-      return this.chatroom.members[1]
+    if (this.chatroom.members[1].id == user_id) return this.chatroom.members[1]
 
-    throw new Error("User not found")
+    throw new Error('User not found')
   }
 
   async delete(user_id: string) {
@@ -139,25 +123,31 @@ export class Contact implements ChatInterface {
   }
 
   async getChatroom() {
-    const chatroomDoc = await getDoc(doc(collection(db, 'chatrooms'), this.chatroom_id))
+    const chatroomDoc = await getDoc(
+      doc(collection(db, 'chatrooms'), this.chatroom_id)
+    )
     const memberIds: string[] = chatroomDoc.get('members')
 
-    const members = await Promise.all([User.getUser(memberIds[0]), User.getUser(memberIds[1])])
+    const members = await Promise.all([
+      User.getUser(memberIds[0]),
+      User.getUser(memberIds[1]),
+    ])
 
     if (members[0] == null || members[1] == null)
-      throw new Error("On of the member is not present")
+      throw new Error('On of the member is not present')
 
     this.chatroom = { id: this.chatroom_id, members: members as any }
   }
 
-  async sendMessage(user_id: string, data: { text?: string, image?: File }) {
+  async sendMessage(user_id: string, data: { text?: string; image?: File }) {
     await ContactService.sendMessage(user_id, this.chatroom_id, data)
   }
 
-
-
   pushMessages(...messages: IMessage[]) {
-    if (this.messages.length === 0) { this.messages = messages; return; }
+    if (this.messages.length === 0) {
+      this.messages = messages
+      return
+    }
 
     if (this.messages[0].time > messages[messages.length - 1].time)
       this.messages = messages.concat(this.messages)
@@ -167,28 +157,34 @@ export class Contact implements ChatInterface {
       const new_messages = this.messages.concat(...messages)
 
       new_messages.sort((a, b) => {
-        if (a.time < b.time)
-          return 1
+        if (a.time < b.time) return 1
 
         return -1
       })
 
       this.messages = new_messages
     }
-
   }
 
-  async getMessages(options: { offset?: number, limit?: number, order?: 'asc' | 'desc' }): Promise<IMessage[]> {
+  async getMessages(options: {
+    offset?: number
+    limit?: number
+    order?: 'asc' | 'desc'
+  }): Promise<IMessage[]> {
     const messages = await ContactService.getMessages(this.chatroom_id, options)
     return messages || []
   }
 
-  listenForChanges(cb: (snapshot: DocumentSnapshot<DocumentData>) => void): Unsubscribe {
+  listenForChanges(
+    cb: (snapshot: DocumentSnapshot<DocumentData>) => void
+  ): Unsubscribe {
     const unsub = ContactService.listenForContactChanges(this.id, cb)
     return unsub
   }
 
-  listenForMessages(cb: (snapshot: QuerySnapshot<DocumentData>) => void): Unsubscribe {
+  listenForMessages(
+    cb: (snapshot: QuerySnapshot<DocumentData>) => void
+  ): Unsubscribe {
     const unsub = ContactService.listenForMessages(this.chatroom_id, cb)
     return unsub
   }

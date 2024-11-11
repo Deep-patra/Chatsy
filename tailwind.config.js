@@ -15,10 +15,10 @@ module.exports = {
         gray1: '#5E5E5E',
         gray2: '#9E9E9E',
 
-        obsidian: "#020403",
+        obsidian: '#020403',
 
-        midBlack: "#2d3436",
-        midBlack2: "#1E201E",
+        midBlack: '#2d3436',
+        midBlack2: '#1E201E',
 
         white1: '#ffffffde',
         white2: '#ffffff99',
@@ -26,7 +26,9 @@ module.exports = {
 
         brightWhite: '#f1f2f6',
         brightWhite2: '#f7f1e3',
-        brightGreen: '#7bed9f',
+        brightGreen: '#2ed573',
+        // brightGreen: '#7bed9f',
+        // brightGreen: '#44bd32',
         brightBlue: '#686de0',
         brightOrange: '#ff793f',
         brightPurple: '#9c88ff',
@@ -40,7 +42,8 @@ module.exports = {
         green: '#4cd137',
         warning: '#e84118',
 
-        gradient: 'background-image: linear-gradient(to right, #2c5364, #203a43, #0f2027)'
+        gradient:
+          'background-image: linear-gradient(to right, #2c5364, #203a43, #0f2027)',
       },
     },
   },

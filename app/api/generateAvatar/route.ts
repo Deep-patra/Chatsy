@@ -14,7 +14,6 @@ import {
 } from '@dicebear/collection'
 import { logger } from '@/utils/logger'
 
-
 const MODULES = [
   funEmoji,
   bigSmile,
@@ -34,27 +33,25 @@ const getRandomAvatar = (seed: string): string => {
 
   const uri = createAvatar(m as any, {
     scale: 100,
-    size: 96
+    size: 96,
   }).toDataUri()
 
-  return uri 
+  return uri
 }
 
 export const GET = (req: NextRequest) => {
   try {
     const seed = req.nextUrl.searchParams.get('seed')
 
-    if (!seed)
-      throw new Error("name is required")
+    if (!seed) throw new Error('name is required')
 
     const uri = getRandomAvatar(seed)
 
     return new NextResponse(JSON.stringify({ dataURI: uri }), { status: 200 })
-
-  } catch(error: any) {
+  } catch (error: any) {
     logger.error(error)
     return new NextResponse(
-      JSON.stringify({ error: error.message || "cannot generate avatars" }),
+      JSON.stringify({ error: error.message || 'cannot generate avatars' }),
       { status: 400 }
     )
   }

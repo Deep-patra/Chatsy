@@ -1,4 +1,3 @@
-
 // prettier-ignore
 export const enum events {
   open_profiles      = "OPEN_PROFILES",

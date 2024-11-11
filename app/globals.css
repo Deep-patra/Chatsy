@@ -101,7 +101,6 @@ input:focus {
   animation: animate-left 0.2s linear;
 }
 
-
 .decorate-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
@@ -110,7 +109,7 @@ input:focus {
 
 .decorate-scrollbar:hover {
   scrollbar-width: thin;
-  scrollbar-color: #2d3436 transparent; 
+  scrollbar-color: #2d3436 transparent;
 }
 
 .decorate-scrollbar::-webkit-scrollbar {
@@ -128,15 +127,16 @@ input:focus {
   background-color: var(--scrollbar);
 }
 
-
-
 @media screen and (max-width: 600px) {
-
 }
 
 /** Animations **/
 
 @keyframes animate-left {
-  0% { left: 0 }
-  100% { right: 0 }
+  0% {
+    left: 0;
+  }
+  100% {
+    right: 0;
+  }
 }

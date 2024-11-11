@@ -8,39 +8,31 @@ import { type IUserContext } from '@/context/user.context'
 import log from '@/components/utils/log'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context'
 
-
 const getUser = async (user: AuthUser | null) => {
-  if (!user) 
-    throw new Error ("User is Null")
+  if (!user) throw new Error('User is Null')
 
   const { displayName, photoURL, uid, email } = user
 
-  let userDoc = await User.getUserWithUID(uid)
-      .catch(console.error)
+  let userDoc = await User.getUserWithUID(uid).catch(console.error)
 
-  if (userDoc)
-    return userDoc
+  if (userDoc) return userDoc
 
   return null
 }
 
 const createUser = async (user: AuthUser | null) => {
-  if (!user)
-    throw new Error("auth user is null")
+  if (!user) throw new Error('auth user is null')
 
   const { uid, displayName, photoURL, email } = user
 
-  if (!email)
-    throw new Error("email is not present")
+  if (!email) throw new Error('email is not present')
 
-  const doc = await User.create(uid, email)
+  const doc = await User.create(uid, email, displayName ?? undefined)
 
-  if (!doc)
-    throw new Error("cannot create user document")
+  if (!doc) throw new Error('cannot create user document')
 
   return doc
 }
-
 
 export const useGetUser = (): IUserContext => {
   const [_user, changeUser] = useState<User | null>(null)
@@ -58,16 +50,11 @@ export const useGetUser = (): IUserContext => {
       auth,
 
       async (user) => {
-
         // if the auth user is not present
         // return
-        if (!user)
-          return
+        if (!user) return
 
-        log(user)
-
-        const doc = await getUser(user)
-          .catch(console.error)
+        const doc = await getUser(user).catch(console.error)
 
         // if the user is present
         // set the user
@@ -77,16 +64,13 @@ export const useGetUser = (): IUserContext => {
 
           // if the user name is not present
           // route to getDetails page
-          if (!doc.name || doc.name == "")
-            router.push('/getDetails')
-          else 
-            router.push('/home')
+          if (!doc.name || doc.name == '') router.push('/getDetails')
+          else router.push('/home')
 
           return
         }
 
-        const userDoc = await createUser(user)
-            .catch(console.error)
+        const userDoc = await createUser(user).catch(console.error)
 
         // if user cannot be created
         // route to error page
@@ -95,7 +79,7 @@ export const useGetUser = (): IUserContext => {
           return
         }
 
-        // set the user 
+        // set the user
         // route to getDetails page
         setUser(userDoc)
         router.push('/getDetails')
@@ -104,11 +88,11 @@ export const useGetUser = (): IUserContext => {
       },
 
       (error) => {
-        console.error("Error in Auth", error)
+        console.error('Error in Auth', error)
       },
 
       () => {
-        log("COMPLETED")
+        log('COMPLETED')
       }
     )
 
@@ -118,7 +102,7 @@ export const useGetUser = (): IUserContext => {
   useEffect(() => {
     const unsub = authStateChanged()
     return unsub
-  }, []) 
+  }, [])
 
   return { user: _user, setUser }
 }

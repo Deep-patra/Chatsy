@@ -23,7 +23,6 @@ interface IParam {
 }
 
 export class Group implements ChatInterface {
-
   readonly name: string
   readonly photo: IPhoto | string
   readonly description: string
@@ -36,14 +35,7 @@ export class Group implements ChatInterface {
 
   constructor(
     readonly id: string,
-    {
-      name,
-      photo,
-      description,
-      memberIds,
-      admin,
-      created
-    }: IParam
+    { name, photo, description, memberIds, admin, created }: IParam
   ) {
     this.name = name
     this.photo = photo
@@ -53,8 +45,16 @@ export class Group implements ChatInterface {
     this.created = created
   }
 
-  static async create(user_id: string, data: { name: string, photo?: string | File, description?: string }): Promise<Group> {
-    const result = await GroupService.create(user_id, data.name, data.photo, data.description)
+  static async create(
+    user_id: string,
+    data: { name: string; photo?: string | File; description?: string }
+  ): Promise<Group> {
+    const result = await GroupService.create(
+      user_id,
+      data.name,
+      data.photo,
+      data.description
+    )
 
     const group = new Group(result.id, {
       name: result.name,
@@ -62,7 +62,7 @@ export class Group implements ChatInterface {
       photo: result.photo,
       memberIds: result.members,
       admin: result.admin,
-      created: result.created
+      created: result.created,
     })
 
     return group
@@ -72,32 +72,33 @@ export class Group implements ChatInterface {
     const userRef = doc(collection(db, 'users'), user_id)
     const userDoc = await getDoc(userRef)
 
-    if (!userDoc.exists())
-      throw new Error("User doesn't exists")
+    if (!userDoc.exists()) throw new Error("User doesn't exists")
 
     const groups: string[] = userDoc.get('groups')
 
-    if (groups.length === 0)
-      return []
+    if (groups.length === 0) return []
 
-    const promises = groups.map((id) => getDoc(doc(collection(db, 'groups'), id)))
+    const promises = groups.map((id) =>
+      getDoc(doc(collection(db, 'groups'), id))
+    )
 
     const data = await Promise.all(promises)
 
     const results: Group[] = []
 
     for (const d of data) {
-      if (!d.exists()) 
-        continue
+      if (!d.exists()) continue
 
-      results.push(new Group(d.id, {
-        name: d.get('name'),
-        description: d.get('description'),
-        photo: d.get('photo'),
-        memberIds: d.get('members'),
-        admin: d.get('admin'),
-        created: d.get('created'),
-      }))
+      results.push(
+        new Group(d.id, {
+          name: d.get('name'),
+          description: d.get('description'),
+          photo: d.get('photo'),
+          memberIds: d.get('members'),
+          admin: d.get('admin'),
+          created: d.get('created'),
+        })
+      )
     }
 
     return results
@@ -107,8 +108,7 @@ export class Group implements ChatInterface {
     const groupRef = doc(collection(db, 'groups'), group_id)
     const groupDoc = await getDoc(groupRef)
 
-    if (!groupDoc.exists())
-      throw new Error("Group doesn't exists")
+    if (!groupDoc.exists()) throw new Error("Group doesn't exists")
 
     const data = groupDoc.data()
 
@@ -118,20 +118,18 @@ export class Group implements ChatInterface {
       photo: data.photo,
       memberIds: data.members,
       admin: data.admin,
-      created: data.created
+      created: data.created,
     })
   }
 
   async fetchMembersData(): Promise<void> {
-    await this.getMembers() 
+    await this.getMembers()
   }
-
 
   async getUserInfo(user_id: string): Promise<User> {
     const user = this.members.find((m) => m.id === user_id)
 
-    if (user == null) 
-      throw new Error("Cannot get the user information")
+    if (user == null) throw new Error('Cannot get the user information')
 
     return user
   }
@@ -159,8 +157,7 @@ export class Group implements ChatInterface {
       const new_messages = this.messages.concat(...messages)
 
       new_messages.sort((a, b) => {
-        if (a.time < b.time)
-          return 1
+        if (a.time < b.time) return 1
 
         return -1
       })
@@ -181,23 +178,29 @@ export class Group implements ChatInterface {
     await GroupService.deleteGroup(this.id, user_id)
   }
 
-  async getMessages(
-    options: { offset?: number, limit?: number, order?: 'asc' | 'desc' }
-  ): Promise<IMessage[]> {
+  async getMessages(options: {
+    offset?: number
+    limit?: number
+    order?: 'asc' | 'desc'
+  }): Promise<IMessage[]> {
     const messages = await GroupService.getMessages(this.id, options)
     return messages || []
   }
 
-  async sendMessage(user_id: string, data: { text?: string, image?: File }) {
+  async sendMessage(user_id: string, data: { text?: string; image?: File }) {
     await GroupService.sendMessage(user_id, this.id, data.text, data.image)
   }
 
-  listenForChanges(cb: (snapshot: DocumentSnapshot<DocumentData>) => void): Unsubscribe {
+  listenForChanges(
+    cb: (snapshot: DocumentSnapshot<DocumentData>) => void
+  ): Unsubscribe {
     const unsub = GroupService.listenForGroupChanges(this.id, cb)
     return unsub
   }
 
-  listenForMessages(cb: (snapshot: QuerySnapshot<DocumentData>) => void): Unsubscribe {
+  listenForMessages(
+    cb: (snapshot: QuerySnapshot<DocumentData>) => void
+  ): Unsubscribe {
     const unsub = GroupService.listenForMessages(this.id, cb)
     return unsub
   }

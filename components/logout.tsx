@@ -17,11 +17,9 @@ export default function Logout() {
     router.push('/')
   }, [])
 
-
   const onClose = useCallback(() => {
     changeIsOpen(false)
   }, [])
-
 
   useEffect(() => {
     const handleOpenLogout = () => {

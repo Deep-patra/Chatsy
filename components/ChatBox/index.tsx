@@ -4,7 +4,7 @@ import ChatContainer from './chatContainer'
 import MessageInputBox from './messageInputBox'
 import TopBar from './topbar'
 import ChatBot from '@/components/Chatbot'
-import { ChatInterface  } from '@/services'
+import { ChatInterface } from '@/services'
 import { events } from '../utils/events'
 
 export default function Chatbox() {
@@ -13,28 +13,29 @@ export default function Chatbox() {
   const [showChatbot, changeShowChatbot] = useState<boolean>(false)
   const [loading, changeLoading] = useState<boolean>(false)
 
-  async function fetchMembersData (activeChat: ChatInterface) {
-    changeLoading(true)
-
-    await activeChat.fetchMembersData()
-      // .catch(console.error)
-      .finally(() => {
-        changeLoading(false)
-      })
-  }
-
   useEffect(() => {
+    async function fetchMembersData(activeChat: ChatInterface) {
+      changeLoading(true)
+
+      await activeChat
+        .fetchMembersData()
+        // .catch(console.error)
+        .finally(() => {
+          changeLoading(false)
+        })
+    }
+
     if (activeChat) {
       // close the chat bot, if opened
       changeShowChatbot(false)
 
-      fetchMembersData(activeChat) 
+      fetchMembersData(activeChat)
     }
   }, [activeChat])
 
   useEffect(() => {
     const handler = () => {
-      changeActiveChat(null) 
+      changeActiveChat(null)
       changeShowChatbot(true)
     }
 
@@ -47,20 +48,17 @@ export default function Chatbox() {
 
   return (
     <div className="chatbox | relative z-0 | p-1 rounded-md w-full max-h-full | overflow-hidden">
-
-      { activeChat && (
+      {activeChat && (
         <>
-          <TopBar {...{ activeChat }} />
+          <TopBar />
 
-          { !loading && <ChatContainer/> } 
+          {!loading && <ChatContainer />}
 
           <MessageInputBox {...{ activeChat }} />
         </>
       )}
 
-      { showChatbot && <ChatBot/> }
-
-
+      {showChatbot && <ChatBot />}
     </div>
   )
 }

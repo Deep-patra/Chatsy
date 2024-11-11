@@ -8,7 +8,6 @@ import Image from '@/components/image'
 import { getPhotoURL } from '../utils/getPhotoURL'
 import { dispatchImagePreviewEvent } from '@/components/utils/dispatchEvent'
 
-
 interface IImageSliderProps {
   images: string[]
 }
@@ -17,16 +16,21 @@ interface ITextProps {
   text: string
 }
 
-const ProfilePicture = memo(function profilePicture({ self, photo }: { self: boolean, photo: IPhoto }) {
+const ProfilePicture = memo(function profilePicture({
+  self,
+  photo,
+}: {
+  self: boolean
+  photo: IPhoto
+}) {
   return (
     <Image
       className="w-10 h-10 | rounded-full | border border-white3 | bg-midBlack2"
       src={getPhotoURL(photo)}
-      alt={"avatar"}
+      alt={'avatar'}
     />
   )
 })
-
 
 const Text = memo(function text(props: ITextProps) {
   return (
@@ -43,24 +47,25 @@ interface IMessageProps {
 }
 
 export default function Message({ user, activeChat, message }: IMessageProps) {
-
   const [height, changeHeight] = useState<number>(0)
 
   const self = user.id == message.author ? true : false
   const author = activeChat.getUserInfo(message.author)
 
-  const onLoad = useCallback((event: any) => {
-    const target = event.target as HTMLImageElement
+  const onLoad = useCallback(
+    (event: any) => {
+      const target = event.target as HTMLImageElement
 
-    const naturalWidth = target.naturalWidth
-    const naturalHeight = target.naturalHeight
+      const naturalWidth = target.naturalWidth
+      const naturalHeight = target.naturalHeight
 
-    const aspectRatio = naturalHeight / naturalWidth
+      const aspectRatio = naturalHeight / naturalWidth
 
-    const h = 300 * aspectRatio
-    changeHeight(h)
-
-  }, [changeHeight])
+      const h = 300 * aspectRatio
+      changeHeight(h)
+    },
+    [changeHeight]
+  )
 
   return (
     <div
@@ -71,18 +76,14 @@ export default function Message({ user, activeChat, message }: IMessageProps) {
     >
       <div className="flex-shrink-1 | flex flex-row items-start p-2 gap-2">
         {/* Profile Picture */}
-        {!self && (
-          <ProfilePicture self={self} photo={author.photo} />
-        )}
+        {!self && <ProfilePicture self={self} photo={author.photo} />}
 
         {/* Message */}
-        <div
-          className="min-w-[200px] max-w-[450px] | flex flex-col justify-start gap-2 | rounded-lg p-2 bg-black2"
-        >
+        <div className="min-w-[200px] max-w-[450px] | flex flex-col justify-start gap-1 | rounded-lg p-2 bg-black2">
           <span className="font-semibold text-xs md:text-sm text-white2">
             {author.name}
           </span>
-          
+
           {/* image */}
           {message.images && (
             <div className="relative | group">
@@ -90,7 +91,9 @@ export default function Message({ user, activeChat, message }: IMessageProps) {
               <button
                 type="button"
                 className="hidden | absolute top-1 right-1 z-10 | p-1 | rounded-full | bg-white/40 text-black1 | group-hover:block"
-                onClick={() => message.images && dispatchImagePreviewEvent(message.images)}
+                onClick={() =>
+                  message.images && dispatchImagePreviewEvent(message.images)
+                }
               >
                 <IoMdResize className="w-4 h-4 text-inherit" />
               </button>
@@ -116,9 +119,7 @@ export default function Message({ user, activeChat, message }: IMessageProps) {
         </div>
 
         {/* Self profile picture */}
-        {self && (
-          <ProfilePicture self={self} photo={author.photo} />
-        )}
+        {self && <ProfilePicture self={self} photo={author.photo} />}
       </div>
     </div>
   )

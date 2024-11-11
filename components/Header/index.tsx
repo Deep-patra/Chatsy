@@ -34,19 +34,14 @@ export default function Header() {
         )}
 
         <h1 className="flex flex-row items-center font-mono font-semibold text-lg text-white1">
-          <Image
-            src="/favicon.svg"
-            alt="logo"
-            className="w-6 h-6"
-          />
+          <Image src="/favicon.svg" alt="logo" className="w-6 h-6" />
           Chatsy
         </h1>
       </div>
 
       <div className="flex flex-row items-center gap-2">
-
         {/* Notification button */}
-        {user &&
+        {user && (
           <DropDown
             open={dropdownOpen}
             close={() => changeDropDown(false)}
@@ -71,13 +66,16 @@ export default function Header() {
               </Tooltip>
             </Badge>
           </DropDown>
-        }
+        )}
 
         {user && (
           <Image
             src={getPhotoURL(user.photo)}
             alt="avatar"
-            style={{ backgroundImage: "linear-gradient(to right, #2c5364, #203a43, #0f2027)" }}
+            style={{
+              backgroundImage:
+                'linear-gradient(to right, #2c5364, #203a43, #0f2027)',
+            }}
             className="w-6 h-6 md:w-10 md:h-10 | rounded-full border-2 border-midBlack border-solid"
           />
         )}

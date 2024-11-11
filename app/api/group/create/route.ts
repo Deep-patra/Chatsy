@@ -14,9 +14,8 @@ export const POST = async (req: NextRequest) => {
     const name = formdata.get('name')
     const photo = formdata.get('photo')
     const description = formdata.get('description')
-  
-    if (!user_id) 
-      throw new Error('User ID is not present')
+
+    if (!user_id) throw new Error('User ID is not present')
 
     if (!name || String(name).trim() === '')
       throw new Error('Groups needs a name!')
@@ -29,54 +28,54 @@ export const POST = async (req: NextRequest) => {
 
     const doc = await userRef.get()
 
-    if (!doc.exists)
-      throw new Error("User doesn't exists")
+    if (!doc.exists) throw new Error("User doesn't exists")
 
-    if (description)
-      obj.description = String(description)
+    if (description) obj.description = String(description)
 
     if (photo instanceof File) {
       const uuid = crypto.randomUUID()
-      const { thumbnail, original } = await processImage(formdata.get('photo') as File)
-      
-      const thumbnail_url = await storeFile(thumbnail, 'thumbnails', `${uuid}-thumbnail.png`)
+      const { thumbnail, original } = await processImage(
+        formdata.get('photo') as File
+      )
+
+      const thumbnail_url = await storeFile(
+        thumbnail,
+        'thumbnails',
+        `${uuid}-thumbnail.png`
+      )
       const original_url = await storeFile(original, 'images', `${uuid}.png`)
 
       obj.photo = {
         uuid,
         thumbnail_url,
-        original_url
+        original_url,
       }
-    } else if (typeof photo === "string") 
-        obj.photo = photo
-      else 
-        obj.photo = await generateAvatarForGroups(String(name))
+    } else if (typeof photo === 'string') obj.photo = photo
+    else obj.photo = await generateAvatarForGroups(String(name))
 
-
-    const groupDoc = await db
-        .collection('groups')
-        .add({
-          admin: user_id,
-          created: FieldValue.serverTimestamp(),
-          members: [ user_id ],
-          description: '',
-          ...obj
-        })
-
-    await userRef.update({
-      groups: FieldValue.arrayUnion(groupDoc.id)
+    const groupDoc = await db.collection('groups').add({
+      admin: user_id,
+      created: FieldValue.serverTimestamp(),
+      members: [user_id],
+      description: '',
+      ...obj,
     })
 
-    const _doc = await groupDoc.get()                    
+    await userRef.update({
+      groups: FieldValue.arrayUnion(groupDoc.id),
+    })
 
-    logger.info({ create: { group: { id: _doc.id, ..._doc.data() }}})
+    const _doc = await groupDoc.get()
 
-    return new NextResponse(JSON.stringify({ id: _doc.id, ..._doc.data() }), { status: 200})
+    logger.info({ create: { group: { id: _doc.id, ..._doc.data() } } })
 
-  } catch(e: any) {
+    return new NextResponse(JSON.stringify({ id: _doc.id, ..._doc.data() }), {
+      status: 200,
+    })
+  } catch (e: any) {
     logger.error(e)
     return new NextResponse(
-      JSON.stringify({ error: e.message || "Invalid Request!" }),
+      JSON.stringify({ error: e.message || 'Invalid Request!' }),
       { status: 400 }
     )
   }

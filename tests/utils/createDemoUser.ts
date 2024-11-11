@@ -7,15 +7,15 @@ const DEFAULT = {
   description: '',
   contacts: [],
   groups: [],
-  created: FieldValue.serverTimestamp()
+  created: FieldValue.serverTimestamp(),
 }
 
 interface IData {
   name?: string
   uid?: string
   description?: string
-  contacts?: any[],
-  groups?: string[],
+  contacts?: any[]
+  groups?: string[]
   created?: Timestamp
 }
 

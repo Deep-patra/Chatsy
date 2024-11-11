@@ -7,13 +7,12 @@ import { db, storage } from '@/utils/firebase_admin_app'
 import { append } from '@/tests/utils/formdata'
 
 afterAll(async () => {
-
   // delete all user documents
   const docs = await db.collection('users').listDocuments()
   const promises = []
 
   for (const doc of docs) {
-    promises.push(doc.delete())  
+    promises.push(doc.delete())
   }
 
   await Promise.all(promises)
@@ -26,22 +25,22 @@ afterAll(async () => {
 }, 10000)
 
 describe('POST /api/user/create', () => {
- 
-  test("Should return User", async () => {
-
+  test('Should return User', async () => {
     const uid = crypto.randomUUID()
-    const name = "Deep patra"
-    const description = "Hello! I am deep patra"
-    const email = "deeppatra1999@gmail.com"
-    
+    const name = 'Deep patra'
+    const description = 'Hello! I am deep patra'
+    const email = 'deeppatra1999@gmail.com'
 
     const f = new FormData()
     append(f, { uid, name, description, email })
 
-    const req = new NextRequest(new URL('/api/user/create', 'http://localhost:5000'), {
-      method: 'POST',
-      body: f
-    })
+    const req = new NextRequest(
+      new URL('/api/user/create', 'http://localhost:5000'),
+      {
+        method: 'POST',
+        body: f,
+      }
+    )
 
     const res = await POST(req)
 
@@ -61,26 +60,27 @@ describe('POST /api/user/create', () => {
     expect(json.created).toBeDefined()
 
     expect(json.photo).toBeDefined()
-  }) 
-  
-  test("Should store the profile photo and generate a thumbnail", async () => {
+  })
 
+  test('Should store the profile photo and generate a thumbnail', async () => {
     const uid = crypto.randomUUID()
-    const name = "Deep patra"
-    const description = "Hello! I am deep patra"
-    const email = "deeppatra1999@gmail.com"
+    const name = 'Deep patra'
+    const description = 'Hello! I am deep patra'
+    const email = 'deeppatra1999@gmail.com'
 
-    const buffer = readFileSync(path.join(__dirname, "./user.png")) 
-    const photo = new File([buffer], "user.png", { type: "image/png" })
-    
+    const buffer = readFileSync(path.join(__dirname, './user.png'))
+    const photo = new File([buffer], 'user.png', { type: 'image/png' })
 
     const f = new FormData()
     append(f, { uid, name, description, email, photo })
 
-    const req = new NextRequest(new URL('/api/user/create', 'http://localhost:5000'), {
-      method: 'POST',
-      body: f
-    })
+    const req = new NextRequest(
+      new URL('/api/user/create', 'http://localhost:5000'),
+      {
+        method: 'POST',
+        body: f,
+      }
+    )
 
     const res = await POST(req)
 
@@ -106,18 +106,20 @@ describe('POST /api/user/create', () => {
   })
 
   test("Should return an error with message 'User UID is not present'", async () => {
-    const name = "Deep patra"
-    const description = "Hello! I am deep patra"
-    const email = "deeppatra1999@gmail.com"
-   
+    const name = 'Deep patra'
+    const description = 'Hello! I am deep patra'
+    const email = 'deeppatra1999@gmail.com'
 
     const f = new FormData()
     append(f, { name, description, email })
 
-    const req = new NextRequest(new URL('/api/user/create', 'http://localhost:5000'), {
-      method: 'POST',
-      body: f
-    })
+    const req = new NextRequest(
+      new URL('/api/user/create', 'http://localhost:5000'),
+      {
+        method: 'POST',
+        body: f,
+      }
+    )
 
     const res = await POST(req)
 
@@ -126,22 +128,24 @@ describe('POST /api/user/create', () => {
     expect(res.status).toBe(400)
 
     expect(json.error).toBeDefined()
-    expect(json.error).toBe("User UID is not present.")
+    expect(json.error).toBe('User UID is not present.')
   })
 
   test("Should return an error with a message 'Username'", async () => {
-    const uid = crypto.randomUUID() 
-    const description = "Hello! I am deep patra"
-    const email = "deeppatra1999@gmail.com"
-   
+    const uid = crypto.randomUUID()
+    const description = 'Hello! I am deep patra'
+    const email = 'deeppatra1999@gmail.com'
 
     const f = new FormData()
     append(f, { uid, description, email })
 
-    const req = new NextRequest(new URL('/api/user/create', 'http://localhost:5000'), {
-      method: 'POST',
-      body: f
-    })
+    const req = new NextRequest(
+      new URL('/api/user/create', 'http://localhost:5000'),
+      {
+        method: 'POST',
+        body: f,
+      }
+    )
 
     const res = await POST(req)
 
@@ -150,7 +154,6 @@ describe('POST /api/user/create', () => {
     expect(res.status).toBe(400)
 
     expect(json.error).toBeDefined()
-    expect(json.error).toBe("Username is not present.")
+    expect(json.error).toBe('Username is not present.')
   })
-
 })

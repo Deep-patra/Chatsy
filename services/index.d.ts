@@ -13,8 +13,8 @@ export interface IMessage {
 }
 
 export interface InviteDisplayInfo {
-  name: string,
-  photo: IPhoto | string,
+  name: string
+  photo: IPhoto | string
   time: Timestamp
 }
 
@@ -39,10 +39,18 @@ export interface ChatInterface {
 
   fetchMembersData: () => Promise<void>
 
-  getMessages: (options: { offset?: number, limit?: number, order?: 'asc' | 'desc' }) => Promise<IMessage[]>
+  getMessages: (options: {
+    offset?: number
+    limit?: number
+    order?: 'asc' | 'desc'
+  }) => Promise<IMessage[]>
   pushMessages: (...messages: IMessage[]) => void
   getUserInfo: (user_id: string) => User
-  sendMessage: (user_id: string, data: { text?: string, image?: File }) => Promise<void>
-  listenForMessages: (cb: (snapshot: QuerySnapshot<DocumentData>) => void) => Unsubscribe
+  sendMessage: (
+    user_id: string,
+    data: { text?: string; image?: File }
+  ) => Promise<void>
+  listenForMessages: (
+    cb: (snapshot: QuerySnapshot<DocumentData>) => void
+  ) => Unsubscribe
 }
-

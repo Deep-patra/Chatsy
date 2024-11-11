@@ -2,16 +2,16 @@ import { useState } from 'react'
 import { Invite, GroupInvite } from '@/services/invites'
 import { type IInviteContext, type I_Invites } from '@/context/invites.context'
 
-const initial: I_Invites =  {
+const initial: I_Invites = {
   user: {
     sent: [],
-    received: []
+    received: [],
   },
 
   group: {
     sent: [],
-    received: []
-  }
+    received: [],
+  },
 }
 
 export const useGetInvites = (): IInviteContext => {
@@ -22,13 +22,14 @@ export const useGetInvites = (): IInviteContext => {
   }
 
   const refreshInvites = async (user_id: string) => {
-    const user_invites = await Invite.getAll(user_id)
-        .catch((error) => console.error(`ERROR in refreshInvites(${user_id})`, error))
+    const user_invites = await Invite.getAll(user_id).catch((error) =>
+      console.error(`ERROR in refreshInvites(${user_id})`, error)
+    )
 
-    const group_invites = await GroupInvite.getAll(user_id)
-        .catch((error) => console.error(`ERROR in refreshInvites(${user_id}) | groupInvites`, error))
+    const group_invites = await GroupInvite.getAll(user_id).catch((error) =>
+      console.error(`ERROR in refreshInvites(${user_id}) | groupInvites`, error)
+    )
 
-     
     if (user_invites && group_invites)
       changeInvites({ user: user_invites, group: group_invites })
   }

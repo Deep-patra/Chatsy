@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { events } from '../utils/events'
-import ContactLists from  '../ContactsList'
+import ContactLists from '../ContactsList'
 import GroupLists from '../GroupsList'
 import InviteLists from '../InvitesList'
 import log from '@/components/utils/log'
@@ -13,7 +13,6 @@ interface IOpenedState {
 }
 
 export default function MiddleBar() {
-
   const [openedState, changeOpenedState] = useState<IOpenedState>({
     chats: true,
     groups: false,
@@ -21,20 +20,18 @@ export default function MiddleBar() {
   })
 
   const getKey = useCallback(() => {
-    let key = "chats"
-    openedState.groups && ( key = "groups" )
-    openedState.invites && ( key = "invites" )
+    let key = 'chats'
+    openedState.groups && (key = 'groups')
+    openedState.invites && (key = 'invites')
 
     return key
   }, [openedState])
 
-
   useEffect(() => {
-
     const handleListener = (event: Event) => {
       const state = { chats: false, groups: false, invites: false }
 
-      switch(event.type) {
+      switch (event.type) {
         case events.open_chats:
           state.chats = true
           break
@@ -51,7 +48,7 @@ export default function MiddleBar() {
 
     document.body.addEventListener(events.open_chats, handleListener)
     document.body.addEventListener(events.open_groups, handleListener)
-    document.body.addEventListener(events.open_invites,  handleListener)
+    document.body.addEventListener(events.open_invites, handleListener)
 
     return () => {
       document.body.removeEventListener(events.open_chats, handleListener)
@@ -61,14 +58,18 @@ export default function MiddleBar() {
   }, [])
 
   return (
-    <div
-      className="relative | h-full | min-w-[200px] max-w-[400px] | rounded-md | bg-midBlack2 | overflow-hidden"
-    >
+    <div className="relative | h-full | min-w-[200px] max-w-[400px] | rounded-md | bg-midBlack2 | overflow-hidden">
       <AnimatePresence>
         <motion.div
           initial={{ x: '100%', opacity: 0 }}
           animate={{ x: '0', opacity: 1 }}
-          exit={{ x: '-100%', opacity: 0, position: 'absolute', top: 0, left: 0 }}
+          exit={{
+            x: '-100%',
+            opacity: 0,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
           transition={{ ease: 'circOut', duration: 0.2 }}
           key={getKey()}
           className="h-full"

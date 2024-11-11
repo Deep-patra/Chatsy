@@ -38,8 +38,8 @@ export default function UserProvider({
   return (
     <User.Provider value={{ user, setUser }}>
       <Contact.Provider value={{ contacts, setContacts, updateContact }}>
-        <Group.Provider value={{ groups, setGroups, updateGroup }} >
-          <Invite.Provider value={{ invites, setInvites, refreshInvites }} >
+        <Group.Provider value={{ groups, setGroups, updateGroup }}>
+          <Invite.Provider value={{ invites, setInvites, refreshInvites }}>
             <Chat.Provider value={{ activeChat, changeActiveChat }}>
               <>
                 <Header />

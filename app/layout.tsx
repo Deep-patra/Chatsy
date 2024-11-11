@@ -1,8 +1,10 @@
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 import Provider from '@/components/Provider'
 import NoInternet from '@/components/noInternet'
 import Analytics from '@/components/analytics'
 import RegisterSW from '@/components/registerSW'
+import Loader from '@/components/loader'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -39,6 +41,16 @@ export const metadata: Metadata = {
   // manifest: '/app.webmanifest',
 }
 
+const Fallback = () => {
+  return (
+    <div className="w-full h-full | flex flex-row items-center justify-center">
+      <div className="w-10 h-10">
+        <Loader color="white" />
+      </div>
+    </div>
+  )
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -47,13 +59,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script
-          src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js"
-          integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M"
-          crossOrigin="anonymous"
-          async
-          defer
-        ></script>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="preload" href="/noInternet" />
         <link rel="manifest" href="/app.webmanifest" />
@@ -62,12 +67,16 @@ export default function RootLayout({
       <body>
         <NoInternet />
 
-        {/* Register the Service worker */}
-        <RegisterSW />
+        <Suspense fallback={<Fallback />}>
+          <>
+            {/* Register the Service worker */}
+            <RegisterSW />
 
-        <Provider>
-          <Analytics>{children}</Analytics>
-        </Provider>
+            <Provider>
+              <Analytics>{children}</Analytics>
+            </Provider>
+          </>
+        </Suspense>
       </body>
     </html>
   )

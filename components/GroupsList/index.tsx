@@ -23,9 +23,7 @@ const Loading = memo(function loader() {
   )
 })
 
-
 export default function GroupsList() {
-
   const { user } = useContext(UserContext)
   const { groups, setGroups } = useContext(GroupContext)
   const { activeChat, changeActiveChat } = useContext(ChatContext)
@@ -40,25 +38,19 @@ export default function GroupsList() {
     changeActiveChat(group)
   }, [])
 
-
   useEffect(() => {
-
     const processGroups = async (user: User) => {
-      if (groups.length === 0)
-        changeLoading(true)
+      if (groups.length === 0) changeLoading(true)
 
-      const g = await Group.getAll(user.id)
-        .catch(console.error)
+      const g = await Group.getAll(user.id).catch(console.error)
 
-      log("Groups: ", g)
+      log('Groups: ', g)
       setGroups(g || [])
 
       changeLoading(false)
     }
 
-
-    if (user)
-      processGroups(user)
+    if (user) processGroups(user)
   }, [user])
 
   return (
@@ -66,52 +58,57 @@ export default function GroupsList() {
       <span className="text-brightOrange | p-2">Groups</span>
 
       <div className="w-full | overflow-hidden">
-        {
-          (groups.length > 0 && !loading) && (
-            <ul className="flex flex-col gap-1 | w-full">
-              {
-                groups.map((group, index) => (
-                  <li 
-                    key={index}
-                    className={classnames("w-full | group | hover:bg-black2 | p-1", activeChat === group ? "!bg-coral text-white" : "" )}
-                  >
-                    <button
-                      type="button"
-                      className="w-full | flex flex-row items-center gap-2 | p-1"
-                      onClick={() => { handleClick(group) }}
-                    >
-                      <Image
-                        src={getPhotoURL(group.photo)}
-                        alt={group.name}
-                        className="w-8 h-8 | bg-white3 | rounded-full | border-2 border-white3 | group-hover:border-white2"
-                      />
+        {groups.length > 0 && !loading && (
+          <ul className="flex flex-col gap-1 | w-full">
+            {groups.map((group, index) => (
+              <li
+                key={index}
+                className={classnames(
+                  'w-full | group | hover:bg-black2 | p-1',
+                  activeChat === group ? '!bg-coral text-white' : ''
+                )}
+              >
+                <button
+                  type="button"
+                  className="w-full | flex flex-row items-center gap-2 | p-1"
+                  onClick={() => {
+                    handleClick(group)
+                  }}
+                >
+                  <Image
+                    src={getPhotoURL(group.photo)}
+                    alt={group.name}
+                    className="w-8 h-8 | bg-white3 | rounded-full | border-2 border-white3 | group-hover:border-white2"
+                  />
 
-                      <span className="text-white1 text-sm | group-hover:text-white">{group.name}</span>
-                    </button>
-                  </li>
-                ))
-              }
-            </ul>
-          )
-        }
+                  <span className="text-white1 text-sm | group-hover:text-white">
+                    {group.name}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Loading */}
-      {loading && (<Loading />)}
+      {loading && <Loading />}
 
       {/* Empty */}
-      {(!loading && groups.length == 0) && 
+      {!loading && groups.length == 0 && (
         <Empty>
           <span className="text-xs text-white2">no groups</span>
         </Empty>
-      }
+      )}
 
       <button
         type="button"
         className="mt-auto | flex flex-row items-center gap-2 | text-sm text-white | bg-brightBlue | p-2 | hover:rounded-md hover:scale-x-95 | transition-all duration-200"
         onClick={handleCreateGroup}
       >
-        <span><FiPlus className="w-5 h-5 text-inherit" /></span>
+        <span>
+          <FiPlus className="w-5 h-5 text-inherit" />
+        </span>
         <span>Create</span>
       </button>
     </div>

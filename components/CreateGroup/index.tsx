@@ -10,9 +10,7 @@ import { events } from '@/components/utils/events'
 import { fetchGroupAvatar } from '@/components/utils/fetchAvatar'
 import log from '@/components/utils/log'
 
-
 export default function CreateGroup() {
-
   const { user } = useContext(UserContext)
 
   const [loading, changeLoading] = useState<boolean>(false)
@@ -20,12 +18,11 @@ export default function CreateGroup() {
 
   const [name, changeName] = useState<string>('')
   const [description, changeDescription] = useState<string>('')
-  const [source, changeSource] = useState<string>("")
+  const [source, changeSource] = useState<string>('')
   const [file, changeFile] = useState<File | null>(null)
 
   const handleClick = () => {
-    if (!user)
-      return
+    if (!user) return
 
     // change loading state to true
     changeLoading(true)
@@ -34,10 +31,10 @@ export default function CreateGroup() {
 
     Group.create(user.id, { name, description, photo })
       .then((group) => {
-        log("Group created: ", group)
+        log('Group created: ', group)
       })
       .catch(console.error)
-      .finally(() => { 
+      .finally(() => {
         changeLoading(false)
 
         // Close the Modal
@@ -47,14 +44,12 @@ export default function CreateGroup() {
 
   const refreshAvatar = useCallback(() => {
     fetchGroupAvatar(crypto.randomUUID())
-      .then(res => {
-        if (res)
-          changeSource(res)
+      .then((res) => {
+        if (res) changeSource(res)
       })
       .catch(console.error)
       .finally(() => {})
   }, [])
-
 
   useEffect(() => {
     const generateURL = (file: File | null) => {
@@ -70,9 +65,7 @@ export default function CreateGroup() {
     }
 
     return generateURL(file)
-
   }, [file])
-
 
   useEffect(() => {
     const handler = () => {
@@ -93,12 +86,9 @@ export default function CreateGroup() {
       className="flex flex-col gap-2 | w-[400px] h-[400px] min-h-0 | p-1 | rounded-md | bg-midBlack2"
     >
       <div className="w-full h-full | flex flex-col gap-3 | p-1 | overflow-hidden">
-       <span className="text-white text-lg | p-1">Create Group</span> 
+        <span className="text-white text-lg | p-1">Create Group</span>
 
-        <div
-          className="w-full h-full px-2 | decorate-scrollbar | overflow-y-scroll"
-        >
-
+        <div className="w-full h-full px-2 | decorate-scrollbar | overflow-y-scroll">
           <span className="text-sm text-white1">Group Picture</span>
 
           {/* Avatar */}
@@ -106,7 +96,7 @@ export default function CreateGroup() {
             {...{
               source,
               changeFile,
-              refreshAvatar
+              refreshAvatar,
             }}
           />
 
@@ -116,7 +106,7 @@ export default function CreateGroup() {
               name,
               description,
               changeName,
-              changeDescription
+              changeDescription,
             }}
           />
         </div>
@@ -125,14 +115,18 @@ export default function CreateGroup() {
           <button
             type="button"
             onClick={handleClick}
-            disabled={name === ""}
+            disabled={name === ''}
             className="flex flex-row items-center gap-1 | p-1 px-2 | hover:bg-brightGreen hover:text-black1 | rounded-md | disabled:!bg-transparent disabled:!text-white3 | transition-colors duration-200"
           >
-            {loading &&  (<div className="w-5 h-5"><Loader color="white" /></div>)}
+            {loading && (
+              <div className="w-5 h-5">
+                <Loader color="white" />
+              </div>
+            )}
             {!loading && (
               <>
                 <IoCreate className="w-5 h-5 text-inherit" />
-                <span className="text-xs text-inherit" >Create</span>
+                <span className="text-xs text-inherit">Create</span>
               </>
             )}
           </button>

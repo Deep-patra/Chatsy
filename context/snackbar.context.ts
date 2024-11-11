@@ -1,18 +1,18 @@
 import { createContext } from 'react'
 
 interface ISnackbarOptions {
-  severity: "success" | "info" | "error"
+  severity: 'success' | 'info' | 'error'
   autoHideDuration: number
 }
 
 interface ISnackbarQueueItem {
   text: string
-  severity: "success" | "info" | "error"
+  severity: 'success' | 'info' | 'error'
   autoHideDuration: number
 }
 
 interface ISnackbarContext {
-  queue: ISnackbarQueueItem[] 
+  queue: ISnackbarQueueItem[]
   show: (text: string, opts: ISnackbarOptions) => void
   onClose: () => string
 }
@@ -20,5 +20,5 @@ interface ISnackbarContext {
 const SnackBarContext = createContext<ISnackbarContext>({
   queue: [],
   show: () => {},
-  onClose: () => ""
+  onClose: () => '',
 })

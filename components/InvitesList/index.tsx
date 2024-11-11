@@ -1,19 +1,27 @@
-import { useState, useContext, useEffect, useMemo, useCallback, Suspense } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import {
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+  Suspense,
+} from 'react'
+import { motion } from 'framer-motion'
 import classnames from 'classnames'
 import Loading from '@/components/loader'
 import Image from '@/components/image'
+import LoadingButton from '@/components/loadingButton'
 import UserContext from '@/context/user.context'
 import InviteContext from '@/context/invites.context'
 import { User } from '@/services/user'
-import { Invite, GroupInvite } from "@/services/invites"
+import { Invite, GroupInvite } from '@/services/invites'
 import log from '@/components/utils/log'
 import Empty from '@/components/empty'
 import type { InviteDisplayInfo, InviteInterface } from '@/services'
-import type { I_Invites } from '@/context/invites.context'
 import { getPhotoURL } from '../utils/getPhotoURL'
+import { dispatchSnackbarEvent } from '@/components/utils/dispatchEvent'
 
-type InviteType = "send" | "received"
+type InviteType = 'send' | 'received'
 
 interface InviteGroupProps {
   label: string
@@ -22,43 +30,76 @@ interface InviteGroupProps {
   invites: InviteInterface[]
 }
 
-const getInviteData = async (user_id: string, invite: InviteInterface): Promise<InviteDisplayInfo> => {
+const getInviteData = async (
+  user_id: string,
+  invite: InviteInterface
+): Promise<InviteDisplayInfo> => {
   const data = await invite.getDisplayInfo(user_id)
   return data
 }
 
-const InviteGroupItem = ({ invite, user, type }: { user: User, invite: InviteInterface , type: InviteType }) => {
-
+const InviteGroupItem = ({
+  invite,
+  user,
+  type,
+}: {
+  user: User
+  invite: InviteInterface
+  type: InviteType
+}) => {
   const { refreshInvites } = useContext(InviteContext)
 
-  const [inviteDisplay, changeInviteDisplay] = useState<InviteDisplayInfo | null>(null)
+  const [inviteDisplay, changeInviteDisplay] =
+    useState<InviteDisplayInfo | null>(null)
   const [loading, changeLoading] = useState<boolean>(false)
 
+  const handleClick = useCallback(
+    (_changeLoading: (ns: boolean) => void) => {
+      // show the loading in the button
+      _changeLoading(true)
 
-  const handleClick = useCallback(() => {
-    if (type === "send") 
-      invite.cancel(user.id)
-        .then(() => { refreshInvites(user.id) })
-        .catch(console.error)
-    else 
-      invite.accept(user.id)
-        .then(() => { refreshInvites(user.id) })
-        .catch(console.error)
-  }, [type])
+      if (type === 'send')
+        invite
+          .cancel(user.id)
+          .then(() => {
+            refreshInvites(user.id)
+
+            // notify the user with the snackbar
+            dispatchSnackbarEvent({
+              type: 'success',
+              text: 'Invite is canceled',
+            })
+          })
+          .catch(console.error)
+          .finally(() => _changeLoading(false))
+      else
+        invite
+          .accept(user.id)
+          .then(() => {
+            refreshInvites(user.id)
+
+            // notify the user with the snackbar
+            dispatchSnackbarEvent({
+              type: 'success',
+              text: 'Invite is accepted',
+            })
+          })
+          .catch(console.error)
+          .finally(() => _changeLoading(false))
+    },
+    [type]
+  )
 
   const fallback = useMemo(() => {
     return <li className="w-full h-[50px] | rounded-md | "></li>
   }, [])
 
-
   useEffect(() => {
     const getDisplayData = async () => {
       changeLoading(true)
-      const result = await getInviteData(user.id, invite)
-        .catch(console.error)
+      const result = await getInviteData(user.id, invite).catch(console.error)
 
-      if (result)
-        changeInviteDisplay(result)
+      if (result) changeInviteDisplay(result)
 
       changeLoading(false)
     }
@@ -69,11 +110,12 @@ const InviteGroupItem = ({ invite, user, type }: { user: User, invite: InviteInt
   return (
     <>
       <Suspense fallback={fallback}>
-        {( !loading && inviteDisplay ) && (
+        {!loading && inviteDisplay && (
           <motion.li
             layout
             exit={{ height: 0, opacity: 0 }}
-            className="group | w-full | rounded-md | p-2 | flex flex-col gap-2 | hover:bg-black2">
+            className="group | w-full | rounded-md | p-2 | flex flex-col gap-2 | hover:bg-black2"
+          >
             <div className="w-full | flex flex-row items-center gap-2">
               <Image
                 src={getPhotoURL(inviteDisplay.photo)}
@@ -84,12 +126,15 @@ const InviteGroupItem = ({ invite, user, type }: { user: User, invite: InviteInt
             </div>
 
             <div className="group-hover:block hidden | w-full">
-              <button
-                className={classnames("w-full | border border-white3 | rounded-md hover:rounded-none | text-white | transition-all", type === "send" ? "bg-red-500" : "bg-brightGreen")}
-                onClick={handleClick}
+              <LoadingButton
+                className={classnames(
+                  'w-full | border border-white3 | rounded-md hover:rounded-none | text-white | transition-all',
+                  type === 'send' ? 'bg-red-500' : 'bg-brightGreen'
+                )}
+                onclick={handleClick}
               >
-                {type === "send" ? "cancel" : "accept"}
-              </button>
+                {type === 'send' ? 'cancel' : 'accept'}
+              </LoadingButton>
             </div>
           </motion.li>
         )}
@@ -98,24 +143,22 @@ const InviteGroupItem = ({ invite, user, type }: { user: User, invite: InviteInt
   )
 }
 
-
 const InviteGroup = ({ label, user, invites, type }: InviteGroupProps) => {
-  
-  if (invites.length === 0)
-    return <></>
+  if (invites.length === 0) return <></>
 
   return (
     <>
-      <span className="text-sm text-white2 | bg-black2 | p-1 px-2 | rounded-md" >{label}</span>
+      <span className="text-sm text-white2 | bg-black2 | p-1 px-2 | rounded-md">
+        {label}
+      </span>
       <ul className="flex flex-col gap-1">
         {invites.map((invite) => (
-          <InviteGroupItem key={invite.id} {...{invite, user, type}} />
+          <InviteGroupItem key={invite.id} {...{ invite, user, type }} />
         ))}
       </ul>
     </>
   )
 }
-
 
 export default function InvitesList() {
   const { user } = useContext(UserContext)
@@ -123,23 +166,25 @@ export default function InvitesList() {
 
   const [loading, changeLoading] = useState<boolean>(false)
 
-
   const getTotalInvites = useMemo(() => {
-    return invites.user.sent.length + invites.user.received.length + 
-      invites.group.sent.length + invites.group.received.length
+    return (
+      invites.user.sent.length +
+      invites.user.received.length +
+      invites.group.sent.length +
+      invites.group.received.length
+    )
   }, [invites])
 
   useEffect(() => {
     const fetchInvites = async (user: User) => {
       const user_invites = await Invite.getAll(user.id)
       const group_invites = await GroupInvite.getAll(user.id)
-    
+
       log('User: ', user_invites)
       log('Group: ', group_invites)
 
       setInvites({ user: user_invites, group: group_invites })
     }
-
 
     if (user) {
       // show the loading icon
@@ -157,14 +202,14 @@ export default function InvitesList() {
     <div className="w-full h-full | flex flex-col gap-1 | p-2">
       <span className="text-brightPurple">Invites</span>
 
-      {(!loading && getTotalInvites !== 0 && user ) && (
+      {!loading && getTotalInvites !== 0 && user && (
         <div className="flex flex-col gap-2 | h-full">
           <InviteGroup
             label="Received"
             type="received"
             user={user}
             invites={invites.user.received.concat(invites.group.received)}
-          />          
+          />
           <InviteGroup
             label="sent"
             type="send"
@@ -174,22 +219,21 @@ export default function InvitesList() {
         </div>
       )}
 
-
       {/* Loading */}
       {loading && (
         <div className="flex flex-col items-center justify-center | w-full h-full flex-grow">
           <div className="relative w-10 h-10">
-            <Loading color="white"/>
+            <Loading color="white" />
           </div>
         </div>
       )}
 
       {/* Empty Invites */}
-      {(!loading && getTotalInvites === 0) && 
+      {!loading && getTotalInvites === 0 && (
         <Empty>
           <span className="text-xs text-white2">no invites</span>
         </Empty>
-      }
+      )}
     </div>
   )
 }

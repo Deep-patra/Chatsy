@@ -10,7 +10,6 @@ export default function SearchComp() {
   const isMobile = useIsMobile()
 
   useEffect(() => {
-
     const handler = () => changeIsOpen(true)
 
     document.body.addEventListener(events.open_search, handler)
@@ -20,9 +19,7 @@ export default function SearchComp() {
     }
   }, [])
 
-
-  if (isMobile)
-    return <Search/>
+  if (isMobile) return <Search />
 
   return (
     <Modal
@@ -30,7 +27,7 @@ export default function SearchComp() {
       onClose={() => changeIsOpen(false)}
       className="w-[400px] h-[400px] | bg-midBlack2 | p-2 | rounded-md | shadow-md"
     >
-      <Search/>
-    </Modal>    
+      <Search />
+    </Modal>
   )
 }

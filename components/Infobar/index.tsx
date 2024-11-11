@@ -19,15 +19,23 @@ interface InfoProps {
   created: Timestamp
 }
 
-const Info = memo(function info({ photo, name, description, created }: InfoProps) {
-  log("created: ", created)
+const Info = memo(function info({
+  photo,
+  name,
+  description,
+  created,
+}: InfoProps) {
+  log('created: ', created)
 
   return (
     <>
       <Image
         src={getPhotoURL(photo)}
         alt={name}
-        style={{ backgroundImage: "linear-gradient(to right, #0f0c29, #302b63, #24243e)" }}
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, #0f0c29, #302b63, #24243e)',
+        }}
         className="w-32 h-32 | rounded-lg |  border-white2 | bg-midBlack | shadow-md"
       />
       <span className="text-lg text-brightGreen">{name}</span>
@@ -53,27 +61,25 @@ const Info = memo(function info({ photo, name, description, created }: InfoProps
   )
 })
 
-
 const variants = {
   open_bar: {
-    maxWidth: 200
+    maxWidth: 200,
   },
 
   close_bar: {
-    maxWidth: 40
-  }
+    maxWidth: 40,
+  },
 }
 
 const button_variants = {
   open: {
-    rotate: 0 
+    rotate: 0,
   },
 
   close: {
-    rotate: 180
-  }
+    rotate: 180,
+  },
 }
-
 
 export default function InfoBar() {
   const { user } = useContext(UserContext)
@@ -90,7 +96,9 @@ export default function InfoBar() {
 
     const members = []
 
-    const admin = activeChat.members.find(value => value.id ===  activeChat.admin)
+    const admin = activeChat.members.find(
+      (value) => value.id === activeChat.admin
+    )
 
     // if cannot find admin, return
     if (!admin) return []
@@ -107,22 +115,20 @@ export default function InfoBar() {
     return members
   }, [activeChat])
 
-
-  if (!user && !activeChat)
-    return <></>
+  if (!user && !activeChat) return <></>
 
   return (
     <motion.div
-      style={{ gridRowStart: 2, gridRowEnd: 3}}
+      style={{ gridRowStart: 2, gridRowEnd: 3 }}
       className="hidden md:flex flex-col flex-grow gap-2 | max-w-[200px] min-w-0 w-full p-1 | rounded-md | bg-midBlack2 | overflow-hidden"
-      animate={isOpen ? variants.open_bar : variants.close_bar} 
+      animate={isOpen ? variants.open_bar : variants.close_bar}
     >
       <motion.div
         className="w-full | flex flex-col items-center justify-center gap-2 | mt-10"
         animate={isOpen ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
       >
         {/* show active chat info */}
-        {activeChat && <Info { ...activeChat} />}
+        {activeChat && <Info {...activeChat} />}
 
         {/* If no active chat is present, show user info */}
         {!activeChat && (
@@ -137,11 +143,10 @@ export default function InfoBar() {
 
       {/* if active chat is a group, display the list of members */}
       {members.length > 0 && (
-      <div className="flex flex-col gap-2 | w-full | overflow-hidden | decorate-scrollbar | overflow-y-scroll">
-
-        <span className="text-sm text-white2 | px-1">
-          <p className="text-inherit">members</p>
-        </span>
+        <div className="flex flex-col gap-2 | w-full | overflow-hidden | decorate-scrollbar | overflow-y-scroll">
+          <span className="text-sm text-white2 | px-1">
+            <p className="text-inherit">members</p>
+          </span>
 
           <ul className="flex flex-col gap-1">
             {members.map((member, index) => (
@@ -155,21 +160,26 @@ export default function InfoBar() {
                   className=" w-8 h-8 | rounded-full | border border-white1 | object-cover"
                 />
 
-                <span
-                  className="text-xs text-white1 text-ellipsis | max-w-full | overflow-hidden"
-                >{member.name}</span>
+                <span className="text-xs text-white1 text-ellipsis | max-w-full | overflow-hidden">
+                  {member.name}
+                </span>
               </li>
             ))}
           </ul>
         </div>
-        )}
+      )}
 
       <div className="flex flex-row items-center | mt-auto | py-2 px-1">
-        <Tooltip position={isOpen ? "top" : "left"} text={isOpen ? "collapse" : "open"}>
+        <Tooltip
+          position={isOpen ? 'top' : 'left'}
+          text={isOpen ? 'collapse' : 'open'}
+        >
           <motion.button
             type="button"
             className="rounded-full | text-white2 | hover:bg-black2 hover:text-white"
-            onClick={() => { changeIsOpen(!isOpen) }}
+            onClick={() => {
+              changeIsOpen(!isOpen)
+            }}
             animate={isOpen ? button_variants.open : button_variants.close}
           >
             <FiArrowRight className="w-6 h-6 text-inherit" />

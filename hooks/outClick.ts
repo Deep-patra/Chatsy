@@ -2,8 +2,8 @@ import { useState, useEffect, type RefObject } from 'react'
 
 /**
  * Hook to detect the click event outside the component
- * @param {boolean} open - state 
- * @param {(boolean) => void} close - Callback for closing 
+ * @param {boolean} open - state
+ * @param {(boolean) => void} close - Callback for closing
  * @param {RefObject<HTMLElement>[]} ...args - An array of element references the click will exclude
  * */
 const useOutClick = (
@@ -11,7 +11,6 @@ const useOutClick = (
   close: () => void,
   ...args: RefObject<HTMLElement>[]
 ) => {
-
   const toggleMenu = (result: boolean) => {
     close()
   }

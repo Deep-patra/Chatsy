@@ -50,11 +50,10 @@ function SendButton(props: ISendButtonProps) {
 }
 
 interface IMessageInputProps {
-  chat: ChatInterface 
+  chat: ChatInterface
 }
 
 function MessageInput({ chat }: IMessageInputProps) {
-  
   const { user } = useContext(UserContext)
 
   const [text, changeText] = useState<string>('')
@@ -63,22 +62,44 @@ function MessageInput({ chat }: IMessageInputProps) {
 
   const imageInputRef = useRef<HTMLInputElement>(null)
 
-  const handleInput: FormEventHandler<HTMLInputElement> = useCallback((event) => {
-    const target = event.target as HTMLInputElement
-    changeText(target.value)
-  }, [])
+  const sendMessage = useCallback(() => {
+    if (user) chat.sendMessage(user.id, { text, image: file ?? undefined })
+  }, [user, text, file])
 
-  const handleImageChange: FormEventHandler<HTMLInputElement> = useCallback((event) => {
-    const target = event.target as HTMLInputElement
+  const handleChange: FormEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      const target = event.target as HTMLInputElement
+      changeText(target.value)
+    },
+    []
+  )
 
-    if (!target.files) {
-      changeFiles(null)
-      return
-    }
+  const handleKeyDown = useCallback(
+    (event: any) => {
+      if (event.key === 'Enter') {
+        sendMessage()
 
-    const f = target.files[0] ?? null
-    changeFiles(f)
-  }, [])
+        // reset after sending the message
+        reset()
+      }
+    },
+    [sendMessage]
+  )
+
+  const handleImageChange: FormEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      const target = event.target as HTMLInputElement
+
+      if (!target.files) {
+        changeFiles(null)
+        return
+      }
+
+      const f = target.files[0] ?? null
+      changeFiles(f)
+    },
+    []
+  )
 
   const removeFile = useCallback(() => {
     changeFiles(null)
@@ -93,9 +114,8 @@ function MessageInput({ chat }: IMessageInputProps) {
     if (text === '' && !file) return
     ;(event.target as HTMLButtonElement).disabled = true
 
-    if (user)
-      chat.sendMessage(user.id, { text, image: file ?? undefined })
-
+    // send the message
+    sendMessage()
     ;(event.target as HTMLButtonElement).disabled = false
 
     // reset the fields
@@ -128,7 +148,8 @@ function MessageInput({ chat }: IMessageInputProps) {
           autoFocus
           placeholder="Type Something ..."
           className="w-full flex-grow text-base text-white1"
-          onChange={handleInput}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
           onFocus={() => {
             changeFocus(true)
           }}
@@ -157,13 +178,11 @@ function MessageInput({ chat }: IMessageInputProps) {
   )
 }
 
-
 interface IMessageInputBoxProps {
   activeChat: ChatInterface
 }
 
 export default function MessageInputBox({ activeChat }: IMessageInputBoxProps) {
-
   return (
     <div
       style={{ gridRowStart: 3, gridRowEnd: 4 }}

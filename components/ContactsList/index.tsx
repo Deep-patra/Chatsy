@@ -1,4 +1,11 @@
-import { useState, useEffect, useContext, useCallback, memo, useMemo } from 'react'
+import {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  memo,
+  useMemo,
+} from 'react'
 import classnames from 'classnames'
 import { GiCube } from 'react-icons/gi'
 import ContactContext from '@/context/contact.context'
@@ -11,7 +18,6 @@ import Loader from '@/components/loader'
 import Image from '../image'
 import Empty from '@/components/empty'
 import { getPhotoURL } from '../utils/getPhotoURL'
-
 
 const Loading = memo(function loading() {
   return (
@@ -26,7 +32,6 @@ const Loading = memo(function loading() {
   )
 })
 
-
 export default function ContactsList() {
   const { user } = useContext(UserContext)
   const { contacts, setContacts } = useContext(ContactContext)
@@ -39,25 +44,20 @@ export default function ContactsList() {
   }, [])
 
   useEffect(() => {
-
     // fetch the contacts when the component is mounted
-    // and store them in the context 
+    // and store them in the context
     const processContacts = async (user: User) => {
-      if (contacts.length === 0)
-        changeLoading(true)
+      if (contacts.length === 0) changeLoading(true)
 
-      const results = await Contact.getAll(user.id)
-        .catch(console.error)
+      const results = await Contact.getAll(user.id).catch(console.error)
 
-      log("Contacts: ", results)
+      log('Contacts: ', results)
       setContacts(results || [])
 
       changeLoading(false)
     }
 
-
-    if (user)
-      processContacts(user)
+    if (user) processContacts(user)
   }, [user])
 
   return (
@@ -72,8 +72,11 @@ export default function ContactsList() {
               <li
                 key={index}
                 className={classnames(
-                  "flex flex-row items-center justify-between | group | hover:bg-black3 | p-1 | transition-colors duration-200",
-                  { "!bg-brightGreen": activeChat && contact.id === activeChat.id }
+                  'flex flex-row items-center justify-between | group | hover:bg-black3 | p-1 | transition-colors duration-200',
+                  {
+                    '!bg-brightGreen':
+                      activeChat && contact.id === activeChat.id,
+                  }
                 )}
               >
                 <button
@@ -84,16 +87,24 @@ export default function ContactsList() {
                   <Image
                     src={getPhotoURL(contact.photo)}
                     alt={contact.name}
-                    style={{ backgroundImage: "linear-gradient(to right, #2c5364, #203a43, #0f2027)" }}
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(to right, #2c5364, #203a43, #0f2027)',
+                    }}
                     className="w-10 h-10 | rounded-full | border-2 border-solid border-white3 group-hover:border-white2"
                   />
 
                   <span
                     className={classnames(
-                      "text-sm text-white2 text-ellipsis overflow-hidden | group-hover:text-white1",
-                      { "!text-midBlack2": activeChat && contact.id === activeChat.id }
+                      'text-sm text-white2 text-ellipsis overflow-hidden | group-hover:text-white1',
+                      {
+                        '!text-midBlack2':
+                          activeChat && contact.id === activeChat.id,
+                      }
                     )}
-                  >{contact.name}</span>
+                  >
+                    {contact.name}
+                  </span>
                 </button>
               </li>
             ))}
@@ -101,13 +112,13 @@ export default function ContactsList() {
         </div>
       )}
 
-      {loading && (<Loading />)}
+      {loading && <Loading />}
 
-      {(!loading && contacts.length == 0) && 
+      {!loading && contacts.length == 0 && (
         <Empty>
           <span className="text-xs text-whtie2">no contacts</span>
         </Empty>
-      }
+      )}
     </div>
   )
 }

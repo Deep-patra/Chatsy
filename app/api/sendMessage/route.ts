@@ -14,10 +14,10 @@ export const POST = async (req: NextRequest) => {
     const image = formdata.get('image')
 
     if (!user_id || !chatroom_id)
-      throw new Error("User ID or ChatRoom ID is not present")
+      throw new Error('User ID or ChatRoom ID is not present')
 
     if (!text && !image)
-      throw new Error ("message is empty. It should have a text or and image.")
+      throw new Error('message is empty. It should have a text or and image.')
 
     const obj = {} as any
 
@@ -26,40 +26,41 @@ export const POST = async (req: NextRequest) => {
       const { thumbnail, original } = await processImage(imageFile)
 
       const uuid = crypto.randomUUID()
-      const thumbnail_url = await storeFile(thumbnail, 'thumbnails', `${uuid}-thumbnail.png`)
+      const thumbnail_url = await storeFile(
+        thumbnail,
+        'thumbnails',
+        `${uuid}-thumbnail.png`
+      )
       const original_url = await storeFile(original, 'images', `${uuid}.png`)
 
       obj.images = {
         uuid,
         thumbnail_url,
-        original_url
+        original_url,
       }
     }
 
-    await db
-      .collection('messages')
-      .add({
-        author: user_id,
-        chatroom_id,
-        time: FieldValue.serverTimestamp(),
-        text: text ?? '',
-        ...obj
-      })
+    await db.collection('messages').add({
+      author: user_id,
+      chatroom_id,
+      time: FieldValue.serverTimestamp(),
+      text: text ?? '',
+      ...obj,
+    })
 
-    logger.info(
-      { message: {
+    logger.info({
+      message: {
         author_id: user_id,
         chatroom_id,
-        ...obj
-      }}
-    )
+        ...obj,
+      },
+    })
 
     return new NextResponse(JSON.stringify({ result: 'ok' }), { status: 200 })
-
-  } catch(e: any) {
+  } catch (e: any) {
     logger.error(e)
     return new NextResponse(
-      JSON.stringify({ error: e.message || "Invalid Request!" }),
+      JSON.stringify({ error: e.message || 'Invalid Request!' }),
       { status: 400 }
     )
   }

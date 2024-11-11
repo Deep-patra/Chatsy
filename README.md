@@ -13,7 +13,7 @@ This application uses these following technologies
 
 ## Get Started
 
-To run this application locally, you need to install firebase locally 
+To run this application locally, you need to install firebase locally
 
 ```js
 npm i firebase-tools -g
@@ -41,6 +41,7 @@ project_id=
 client_email=
 private_key=
 ```
+
 make a new terminal session and start the application
 
 ```js
@@ -61,7 +62,13 @@ The following are the screenshots of the application
   ![Screen Shot of the Chatsy Login page](https://user-images.githubusercontent.com/74497717/227285015-68bde411-e00e-4206-ae3e-4041c75e3f8a.png)
 
 - Home Page
-  ![Screen shot of the Chatsy Home page](https://user-images.githubusercontent.com/74497717/227284330-77655a34-1acb-4780-988a-34d04b3c2626.png)
+  ![Screen shot of the Chatsy Home page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-chatting-image.png)
+
+- Settings page
+  ![Screen shot of the chatsy settings page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-settings-image.png)
+
+- Chatbot page
+  ![Screenshot of the chatsy chatbot page](https://raw.githubusercontent/com/Deep-patra/Chatsy/development/assets/chatsy-chatbot-image.png)
 
 - Settings Page
   ![Screen shot of the Chatsy Setting page](https://user-images.githubusercontent.com/74497717/227284010-6f14a885-4ebb-4d59-b100-6c419c1856ce.png)

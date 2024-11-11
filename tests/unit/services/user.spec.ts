@@ -12,9 +12,8 @@ import { db } from '../../../services/db'
 
 import { UserService } from '../../../services/user/service'
 
-const user = { name: "deep patra", description: "🤘 yo!" }
+const user = { name: 'deep patra', description: '🤘 yo!' }
 let userRef: DocumentReference<DocumentData> | null = null
-
 
 beforeAll(async () => {
   // Adding a user
@@ -25,25 +24,21 @@ beforeAll(async () => {
     contacts: [],
     groups: [],
     invites: [],
-    created_at: serverTimestamp()
+    created_at: serverTimestamp(),
   })
 })
 
 afterAll(async () => {
   // Deleting user
-  if (userRef)
-    await deleteDoc(doc(db, 'users', userRef.id))
+  if (userRef) await deleteDoc(doc(db, 'users', userRef.id))
 })
 
-it("Should get the User Document", async () => {
-
-  if (!userRef)
-    fail("User Ref is null")
+it('Should get the User Document', async () => {
+  if (!userRef) fail('User Ref is null')
 
   const user_doc = await UserService.get(userRef.id)
 
-  if (!user_doc)
-    fail("User document is undefined")
+  if (!user_doc) fail('User document is undefined')
 
   expect(user_doc.name).toBe(user.name)
   expect(user_doc.description).toBe(user.description)
@@ -54,5 +49,3 @@ it("Should get the User Document", async () => {
 
   expect(user_doc.created_at).toBeInstanceOf(Timestamp)
 })
-
-

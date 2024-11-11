@@ -1,20 +1,18 @@
 import { useEffect } from 'react'
-import {
-  type DocumentSnapshot,
-  type DocumentData,
-} from 'firebase/firestore'
+import { type DocumentSnapshot, type DocumentData } from 'firebase/firestore'
 import { User, UserService } from '@/services/user'
 import log from '@/components/utils/log'
 
-
-export const useListenUser = (user: User | null, setUser: (user: User) => void) => {
+export const useListenUser = (
+  user: User | null,
+  setUser: (user: User) => void
+) => {
   const callback = (snapshot: DocumentSnapshot<DocumentData>) => {
     const data = snapshot.data()
 
     log("Snapshot in 'useListenUser'", data)
 
-    if (!data)
-      return
+    if (!data) return
 
     const new_user = new User(
       snapshot.id,
@@ -31,10 +29,11 @@ export const useListenUser = (user: User | null, setUser: (user: User) => void) 
 
   useEffect(() => {
     let unsub = () => {}
-    
-    if (user)
-      unsub = UserService.listenForUserChanges(user.id, callback)
 
-    return () => { unsub() }
+    if (user) unsub = UserService.listenForUserChanges(user.id, callback)
+
+    return () => {
+      unsub()
+    }
   }, [user ? user.id : null])
 }

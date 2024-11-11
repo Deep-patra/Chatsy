@@ -1,13 +1,13 @@
-import  { useEffect } from 'react'
-import {
-  type QuerySnapshot,
-  type DocumentData,
-} from 'firebase/firestore'
+import { useEffect } from 'react'
+import { type QuerySnapshot, type DocumentData } from 'firebase/firestore'
 import type { ChatInterface, IMessage } from '@/services'
 import log from '@/components/utils/log'
 
 // check if the message is present in the messages array
-const isMessageAlreadyPresent = (messages: IMessage[], message_id: string): boolean => {
+const isMessageAlreadyPresent = (
+  messages: IMessage[],
+  message_id: string
+): boolean => {
   if (messages.length === 0) return false
 
   const found = messages.find((item) => item.id === message_id)
@@ -17,14 +17,15 @@ const isMessageAlreadyPresent = (messages: IMessage[], message_id: string): bool
   return false
 }
 
-export const useListenMessages = (chat: ChatInterface | null, cb?: (messages: IMessage[]) => void) => {
-
+export const useListenMessages = (
+  chat: ChatInterface | null,
+  cb?: (messages: IMessage[]) => void
+) => {
   const callback = (snapshot: QuerySnapshot<DocumentData>) => {
     const changes = snapshot.docChanges()
 
     changes.forEach((change) => {
-      if (change.type == "added") {
-
+      if (change.type == 'added') {
         const doc = change.doc
         const data = change.doc.data()
 
@@ -34,23 +35,20 @@ export const useListenMessages = (chat: ChatInterface | null, cb?: (messages: IM
           chat!.pushMessages({
             id: doc.id,
             author: data.author,
-            text: data.text || "",
+            text: data.text || '',
             images: data.images || [],
-            time: data.time 
+            time: data.time,
           })
 
-        if (cb && chat)
-          cb(chat.messages)
+        if (cb && chat) cb(chat.messages)
       }
     })
   }
 
-
   useEffect(() => {
     let unsub = () => {}
 
-    if (chat) 
-      unsub = chat.listenForMessages(callback)
+    if (chat) unsub = chat.listenForMessages(callback)
 
     return () => {
       unsub()

@@ -19,8 +19,10 @@ export const getApp = () => {
 
   app = initializeApp(firebaseConfig)
   const auth = getAuth(app)
-  if (useEmulators()) 
-    connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true })
+  if (useEmulators())
+    connectAuthEmulator(auth, 'http://127.0.0.1:9099', {
+      disableWarnings: true,
+    })
 
   return app
 }
