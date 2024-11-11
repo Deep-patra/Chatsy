@@ -1,26 +1,26 @@
 import {
   useState,
   useCallback,
-  type HTMLAttributes,
   type ReactNode,
+  type ButtonHTMLAttributes,
 } from 'react'
 import Loader from './loader'
 
-interface ILoadingButtonProps extends HTMLAttributes<HTMLButtonElement> {
+interface ILoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   onclick: (changeLoading: (ns: boolean) => void) => void
 }
 
-export default function LoadingButton(props: ILoadingButtonProps) {
+export default function LoadingButton({ children, onclick, ...props }: ILoadingButtonProps) {
   const [loading, changeLoading] = useState<boolean>(false)
 
   const handleClick = useCallback(() => {
-    props.onclick(changeLoading)
-  }, [changeLoading, props.onclick])
+    onclick(changeLoading)
+  }, [changeLoading, onclick])
 
   return (
     <button {...props} onClick={handleClick}>
-      {!loading && props.children}
+      {!loading && children}
       {loading && (
         <span className="block | w-5 h-5">
           <Loader color="white" />

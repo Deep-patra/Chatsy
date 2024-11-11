@@ -1,8 +1,11 @@
 import { forwardRef, type ReactNode, type HTMLAttributes } from 'react'
+import { type MotionProps } from 'framer-motion'
 import { motion } from 'framer-motion'
 
-interface IBackdropProps extends HTMLAttributes<HTMLDivElement> {
+interface IBackdropProps extends MotionProps {
+  className: string
   children: ReactNode
+  onClick?: (event: any) => void
 }
 
 export default forwardRef<HTMLDivElement | null, IBackdropProps>(
@@ -16,7 +19,9 @@ export default forwardRef<HTMLDivElement | null, IBackdropProps>(
         className={`fixed top-0 left-0 w-screen h-screen backdrop-blur-sm ${className}`}
         {...props}
       >
-        {children}
+        <>
+          {children}
+        </>
       </motion.div>
     )
   }
