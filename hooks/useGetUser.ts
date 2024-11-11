@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { getApp } from '@/firebase'
-import { onAuthStateChanged, getAuth } from 'firebase/auth'
+import { signInWithCustomToken, onAuthStateChanged, getAuth } from 'firebase/auth'
 import type { User as AuthUser } from 'firebase/auth'
 import { User } from '@/services/user'
 import { type IUserContext } from '@/context/user.context'
 import log from '@/components/utils/log'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context'
 
 const getUser = async (user: AuthUser | null) => {
   if (!user) throw new Error('User is Null')
@@ -99,10 +98,10 @@ export const useGetUser = (): IUserContext => {
     return unsub
   }
 
-  useEffect(() => {
-    const unsub = authStateChanged()
-    return unsub
-  }, [])
+  // useEffect(() => {
+  //   const unsub = authStateChanged()
+  //   return unsub
+  // }, [])
 
   return { user: _user, setUser }
 }

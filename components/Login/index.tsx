@@ -1,5 +1,7 @@
 'use client'
 
+import { useCallback, useContext } from 'react'
+import { useRouter } from 'next/navigation'
 import { getApp } from '@/firebase'
 import {
   getAuth,
@@ -7,26 +9,63 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from 'firebase/auth'
+import * as Auth from 'firebase/auth'
 import LoginForm from './form'
 import Seperator from './seperator'
 import SignInWithGoogle from './logInWithGoogle'
 import DontHaveAccount from './dontHaveAccount'
+import { User } from '@/services/user'
+import UserContext from '@/context/user.context'
+import log from '@/components/utils/log'
 
 export default function Login() {
-  const handleEmailLogin = (email: string, password: string) => {
+  const { setUser } = useContext(UserContext)
+
+  const router = useRouter()
+
+  const getUser = useCallback(async (user: Auth.User) => {
+    const doc = await User.getUserWithUID(user.uid)
+        .catch(console.error)
+
+    return doc
+  }, [])
+
+  const handleEmailLogin = useCallback((email: string, password: string) => {
     if (email && password) {
       const app = getApp()
       const auth = getAuth(app)
 
       signInWithEmailAndPassword(auth, email, password)
-        .then((credential) => {
-          console.log('LOGIN CREDENTIAL', credential)
+        .then(async (credential) => {
+          log('LOGIN CREDENTIAL', credential)
+
+          const { user } = credential
+
+          const doc = await getUser(user)
+
+          // if the user document doesnot exists
+          // redirect to "/userDoesNotExists"
+          if (!doc) {
+            router.push('/userDoesNotExsits')
+            return
+          }
+
+          setUser(doc)
+
+          // if user name is not present
+          // redirect to "getDetails" page
+          if (!doc.name || doc.name === "") {
+            router.push('/getDetails')
+            return
+          }
+
+          router.push('/home')
         })
         .catch(console.error)
     }
-  }
+  }, [router])
 
-  const googleLogin = () => {
+  const googleLogin = useCallback(() => {
     const app = getApp()
     const auth = getAuth(app)
 
@@ -35,11 +74,32 @@ export default function Login() {
     provider.addScope('email')
 
     signInWithPopup(auth, provider)
-      .then((credential) => {
-        console.log('GOOGLE credential', credential)
+      .then(async (credential) => {
+        log('GOOGLE credential', credential)
+
+        const { user } = credential
+
+        const doc = await getUser(user)
+
+        if (!doc) {
+          router.push('userDoesNotExists')
+          return
+        }
+          
+        setUser(doc)
+
+        // if user name is not present
+        // redirect to "getDetails" page
+        if (!doc.name || doc.name === "") {
+          router.push('/getDetails')
+          return
+        }
+
+        router.push('/home')
+        
       })
       .catch(console.error)
-  }
+  }, [])
 
   return (
     <div
