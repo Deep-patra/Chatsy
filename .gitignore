@@ -35,6 +35,9 @@ chatsy-456-firebase-admin.json
 # local env files
 .env*.local
 
+# firebase functions
+/functions
+
 # vercel
 .vercel
 

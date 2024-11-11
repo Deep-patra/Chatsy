@@ -11,7 +11,11 @@ interface ILoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onclick: (changeLoading: (ns: boolean) => void) => void
 }
 
-export default function LoadingButton({ children, onclick, ...props }: ILoadingButtonProps) {
+export default function LoadingButton({
+  children,
+  onclick,
+  ...props
+}: ILoadingButtonProps) {
   const [loading, changeLoading] = useState<boolean>(false)
 
   const handleClick = useCallback(() => {

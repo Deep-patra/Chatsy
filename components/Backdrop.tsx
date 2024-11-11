@@ -19,9 +19,7 @@ export default forwardRef<HTMLDivElement | null, IBackdropProps>(
         className={`fixed top-0 left-0 w-screen h-screen backdrop-blur-sm ${className}`}
         {...props}
       >
-        <>
-          {children}
-        </>
+        <>{children}</>
       </motion.div>
     )
   }
