@@ -53,13 +53,13 @@ npm run dev
 The following are the screenshots of the application
 
 - Landing Page
-  ![Screen Shot of the Chatsy Landing page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/chatsy-mainpage-image.png)
+  ![Screen Shot of the Chatsy Landing page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-mainpage-image.png)
 
 - Sign up Page
-  ![Screen Shot of the Chatsy Signup page](https:/raw.githubusercontent.com/Deep-patra/Chatsy/development/chatsy-signup-image.png)
+  ![Screen Shot of the Chatsy Signup page](https:/raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-signup-image.png)
 
 - Login Page
-  ![Screen Shot of the Chatsy Login page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/chatsy-login-image.png)
+  ![Screen Shot of the Chatsy Login page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-login-image.png)
 
 - Home Page
   ![Screen shot of the Chatsy Home page](https://raw.githubusercontent.com/Deep-patra/Chatsy/development/assets/chatsy-chatting-image.png)
