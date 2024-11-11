@@ -21,7 +21,7 @@ export const POST = async (req: NextRequest) => {
 
     const obj = {} as any
 
-    if (image && typeof image !== "string") {
+    if (image && typeof image !== 'string') {
       const imageFile = image as File
       const { thumbnail, original } = await processImage(imageFile)
 

@@ -32,7 +32,7 @@ export const POST = async (req: NextRequest) => {
 
     if (description) obj.description = String(description)
 
-    if (photo && typeof photo !== "string") {
+    if (photo && typeof photo !== 'string') {
       const uuid = crypto.randomUUID()
       const { thumbnail, original } = await processImage(
         formdata.get('photo') as File

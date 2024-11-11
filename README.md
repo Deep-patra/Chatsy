@@ -20,11 +20,6 @@ npm i firebase-tools -g
 ```
 
 then install the firebase emulators mainly storage, firestore and authentication.
-Start the emulator in a other terminal session
-
-```sh
-firebase emulators:start
-```
 
 Make a .env file and set the environmental variables
 

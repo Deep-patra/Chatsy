@@ -35,7 +35,7 @@ export const POST = async (req: NextRequest) => {
 
     if (!snapshots.empty) throw new Error('User with the same UID exists!')
 
-    if (photo && typeof photo !== "string") {
+    if (photo && typeof photo !== 'string') {
       const imageFile = photo as File
       const { thumbnail, original } = await processImage(imageFile)
 
