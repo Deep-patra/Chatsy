@@ -45,7 +45,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const messageRef = await db.collection('groupMessages').add({
-      author_id: user_id,
+      author: user_id,
       group_id: group_id,
       time: FieldValue.serverTimestamp(),
       ...obj,

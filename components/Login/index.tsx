@@ -24,46 +24,48 @@ export default function Login() {
   const router = useRouter()
 
   const getUser = useCallback(async (user: Auth.User) => {
-    const doc = await User.getUserWithUID(user.uid)
-        .catch(console.error)
+    const doc = await User.getUserWithUID(user.uid).catch(console.error)
 
     return doc
   }, [])
 
-  const handleEmailLogin = useCallback((email: string, password: string) => {
-    if (email && password) {
-      const app = getApp()
-      const auth = getAuth(app)
+  const handleEmailLogin = useCallback(
+    (email: string, password: string) => {
+      if (email && password) {
+        const app = getApp()
+        const auth = getAuth(app)
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then(async (credential) => {
-          log('LOGIN CREDENTIAL', credential)
+        signInWithEmailAndPassword(auth, email, password)
+          .then(async (credential) => {
+            log('LOGIN CREDENTIAL', credential)
 
-          const { user } = credential
+            const { user } = credential
 
-          const doc = await getUser(user)
+            const doc = await getUser(user)
 
-          // if the user document doesnot exists
-          // redirect to "/userDoesNotExists"
-          if (!doc) {
-            router.push('/userDoesNotExsits')
-            return
-          }
+            // if the user document doesnot exists
+            // redirect to "/userDoesNotExists"
+            if (!doc) {
+              router.push('/userDoesNotExsits')
+              return
+            }
 
-          setUser(doc)
+            setUser(doc)
 
-          // if user name is not present
-          // redirect to "getDetails" page
-          if (!doc.name || doc.name === "") {
-            router.push('/getDetails')
-            return
-          }
+            // if user name is not present
+            // redirect to "getDetails" page
+            if (!doc.name || doc.name === '') {
+              router.push('/getDetails')
+              return
+            }
 
-          router.push('/home')
-        })
-        .catch(console.error)
-    }
-  }, [router])
+            router.push('/home?')
+          })
+          .catch(console.error)
+      }
+    },
+    [router]
+  )
 
   const googleLogin = useCallback(() => {
     const app = getApp()
@@ -85,18 +87,17 @@ export default function Login() {
           router.push('userDoesNotExists')
           return
         }
-          
+
         setUser(doc)
 
         // if user name is not present
         // redirect to "getDetails" page
-        if (!doc.name || doc.name === "") {
+        if (!doc.name || doc.name === '') {
           router.push('/getDetails')
           return
         }
 
         router.push('/home')
-        
       })
       .catch(console.error)
   }, [])

@@ -43,34 +43,34 @@ export default function ChatContainer() {
     }
   }
 
-  useListenMessages(activeChat, (m: IMessage[]) => changeMessages(m))
+  useListenMessages(activeChat, (m: IMessage[]) => changeMessages(messages.concat(m)))
 
-  useEffect(() => {
-    if (activeChat)
-      activeChat
-        .getMessages({ limit: 10 })
-        .then((results) => {
-          if (results) changeMessages(results)
-        })
-        .catch(console.error)
-  }, [activeChat, changeMessages])
+  // useEffect(() => {
+  //   if (activeChat)
+  //     activeChat
+  //       .getMessages({ limit: 10 })
+  //       .then((results) => {
+  //         if (results) changeMessages(results)
+  //       })
+  //       .catch(console.error)
+  // }, [activeChat, changeMessages])
 
   if (!user) return <></>
 
   if (!activeChat) return <NoActiveUser />
 
   return (
-    <div
+    <main
       ref={containerRef}
       style={{ gridRowStart: 2, gridRowEnd: 3 }}
-      className="decorate-scrollbar flex flex-col justify-end w-full h-full overflow-y-auto"
+      className="flex flex-col justify-end w-full h-full"
     >
       <div
         ref={topRef}
         style={{ height: '5px' }}
         className="w-full flex-shrink-0"
       ></div>
-      <>
+      <ul className="decorate-scrollbar | flex flex-col | w-full h-full | overflow-y-auto">
         {messages.length > 0 ? (
           messages.map((message, idx) => (
             <Message
@@ -83,7 +83,7 @@ export default function ChatContainer() {
         ) : (
           <NoMessage />
         )}
-      </>
-    </div>
+      </ul>
+    </main>
   )
 }

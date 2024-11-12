@@ -33,7 +33,7 @@ export class User {
     photo: IPhoto | string,
     contactIds: { chatroom_id: string; user_id: string }[],
     groupIds: string[],
-    created: Timestamp
+    created: Timestamp,
   ) {
     this.id = id
     this.name = name

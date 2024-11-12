@@ -67,6 +67,10 @@ export default function Message({ user, activeChat, message }: IMessageProps) {
     [changeHeight]
   )
 
+  if (!author)
+    return <></>
+
+
   return (
     <div
       className={classnames(

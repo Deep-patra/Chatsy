@@ -9,11 +9,17 @@ export default function Page() {
         <span className="text-sm text-white2">
           <p>User with the entered credentials doesn't exists</p>
           <span className="flex flex-row items-center justify-center gap-1 | w-full">
-            <p>Try</p>  
-            <a href="/signup" title="signup" className="text-brightGreen | hover:underline">signup</a>
+            <p>Try</p>
+            <a
+              href="/signup"
+              title="signup"
+              className="text-brightGreen | hover:underline"
+            >
+              signup
+            </a>
           </span>
         </span>
-      </section> 
+      </section>
     </main>
   )
 }

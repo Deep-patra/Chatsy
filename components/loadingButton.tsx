@@ -26,9 +26,11 @@ export default function LoadingButton({
     <button {...props} onClick={handleClick}>
       {!loading && children}
       {loading && (
-        <span className="block | w-5 h-5">
-          <Loader color="white" />
-        </span>
+        <div className="w-full h-full | flex flex-row items-center justify-center">
+          <span className="block | w-5 h-5 | p-1">
+            <Loader color="white" />
+          </span>
+        </div>
       )}
     </button>
   )

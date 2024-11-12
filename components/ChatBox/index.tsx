@@ -4,8 +4,8 @@ import ChatContainer from './chatContainer'
 import MessageInputBox from './messageInputBox'
 import TopBar from './topbar'
 import ChatBot from '@/components/Chatbot'
-import { ChatInterface } from '@/services'
 import { events } from '../utils/events'
+import log from '../utils/log'
 
 export default function Chatbox() {
   const { activeChat, changeActiveChat } = useContext(ChatContext)
@@ -14,22 +14,11 @@ export default function Chatbox() {
   const [loading, changeLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    async function fetchMembersData(activeChat: ChatInterface) {
-      changeLoading(true)
-
-      await activeChat
-        .fetchMembersData()
-        // .catch(console.error)
-        .finally(() => {
-          changeLoading(false)
-        })
-    }
-
     if (activeChat) {
+      log(activeChat)
+
       // close the chat bot, if opened
       changeShowChatbot(false)
-
-      fetchMembersData(activeChat)
     }
   }, [activeChat])
 

@@ -12,6 +12,7 @@ import { GroupService } from './service'
 import { User } from '../user'
 import { db } from '../db'
 import type { IPhoto, ChatInterface, IMessage } from '..'
+import log from '@/components/utils/log'
 
 interface IParam {
   name: string
@@ -126,10 +127,15 @@ export class Group implements ChatInterface {
     await this.getMembers()
   }
 
-  async getUserInfo(user_id: string): Promise<User> {
+  getUserInfo(user_id: string): User | null {
     const user = this.members.find((m) => m.id === user_id)
 
-    if (user == null) throw new Error('Cannot get the user information')
+    if (user == null) {
+      log("Cannot find member with user id => ", user_id, this.members)
+      return null
+    }
+
+    log("member => ", user)
 
     return user
   }

@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { getApp } from '@/firebase'
-import { signInWithCustomToken, onAuthStateChanged, getAuth } from 'firebase/auth'
+import {
+  signInWithCustomToken,
+  onAuthStateChanged,
+  getAuth,
+} from 'firebase/auth'
 import type { User as AuthUser } from 'firebase/auth'
 import { User } from '@/services/user'
 import { type IUserContext } from '@/context/user.context'

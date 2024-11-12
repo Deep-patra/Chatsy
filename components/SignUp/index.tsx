@@ -24,23 +24,25 @@ export default function SignUp() {
 
   const router = useRouter()
 
-  const redirectIfUserExists = useCallback(async (user: Auth.User) => {
-    const userDoc = await User.getUserWithUID(user.uid)
-      .catch(console.error)
+  const redirectIfUserExists = useCallback(
+    async (user: Auth.User) => {
+      const userDoc = await User.getUserWithUID(user.uid).catch(console.error)
 
-    // if the user document is present,
-    // redirect to "/userAlreadyExists"
-    if (userDoc)
-      router.push('/userAlreadyExists')
-  }, [router])
-
+      // if the user document is present,
+      // redirect to "/userAlreadyExists"
+      if (userDoc) router.push('/userAlreadyExists')
+    },
+    [router]
+  )
 
   const createUser = useCallback(async (user: Auth.User) => {
-    if (!user.email)
-      return
+    if (!user.email) return
 
-    const userDoc = await User.create(user.uid, user?.email, user.displayName ?? undefined)
-        .catch(console.error)
+    const userDoc = await User.create(
+      user.uid,
+      user?.email,
+      user.displayName ?? undefined
+    ).catch(console.error)
 
     if (!userDoc) {
       dispatchSnackbarEvent({ type: 'error', text: 'cannot sign up' })
@@ -88,7 +90,7 @@ export default function SignUp() {
         log('CREDENTIAL RECEIVED:', credential)
 
         const { user } = credential
-        
+
         // redirect if the user document exsits
         await redirectIfUserExists(user)
 

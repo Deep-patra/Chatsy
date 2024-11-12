@@ -1,3 +1,5 @@
+import { Unsubscribe } from "firebase/auth"
+
 export interface IPhoto {
   uuid: string
   thumbnail_url: string
@@ -44,13 +46,14 @@ export interface ChatInterface {
     limit?: number
     order?: 'asc' | 'desc'
   }) => Promise<IMessage[]>
+
   pushMessages: (...messages: IMessage[]) => void
   getUserInfo: (user_id: string) => User
   sendMessage: (
     user_id: string,
     data: { text?: string; image?: File }
   ) => Promise<void>
-  listenForMessages: (
-    cb: (snapshot: QuerySnapshot<DocumentData>) => void
-  ) => Unsubscribe
+
+  listenForChanges: (cb: (snaphost: DocumentSnapshot<DocumentData>) => void) => Unsubscribe
+  listenForMessages: (cb: (snapshot: QuerySnapshot<DocumentData>) => void) => Unsubscribe
 }
