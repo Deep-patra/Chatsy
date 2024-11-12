@@ -143,30 +143,38 @@ export default function InfoBar() {
 
       {/* if active chat is a group, display the list of members */}
       {members.length > 0 && (
-        <div className="flex flex-col gap-2 | w-full | overflow-hidden | decorate-scrollbar | overflow-y-scroll">
+        <motion.div
+          animate={isOpen ? variants.open_bar : variants.close_bar}
+          className="flex flex-col gap-2 | w-full | overflow-hidden | decorate-scrollbar | overflow-y-scroll"
+        >
           <span className="text-sm text-white2 | px-1">
             <p className="text-inherit">members</p>
           </span>
 
           <ul className="flex flex-col gap-1">
-            {members.map((member, index) => (
-              <li
-                key={member.id}
-                className="p-1 | rounded-sm | flex flex-row items-center gap-2 | hover:bg-black2"
-              >
-                <Image
-                  src={getPhotoURL(member.photo)}
-                  alt={member.name}
-                  className=" w-8 h-8 | rounded-full | border border-white1 | object-cover"
-                />
+            <AnimatePresence>
+              {members.map((member, index) => (
+                <motion.li
+                  key={member.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="p-1 | rounded-sm | flex flex-row items-center gap-2 | hover:bg-black2"
+                >
+                  <Image
+                    src={getPhotoURL(member.photo)}
+                    alt={member.name}
+                    className=" w-8 h-8 | rounded-full | border border-white1 | object-cover"
+                  />
 
-                <span className="text-xs text-white1 text-ellipsis | max-w-full | overflow-hidden">
-                  {member.name}
-                </span>
-              </li>
-            ))}
+                  <span className="text-xs text-white1 text-ellipsis | max-w-full | overflow-hidden">
+                    {member.name}
+                  </span>
+                </motion.li>
+              ))}
+            </AnimatePresence>
           </ul>
-        </div>
+        </motion.div>
       )}
 
       <div className="flex flex-row items-center | mt-auto | py-2 px-1">
