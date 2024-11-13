@@ -6,10 +6,12 @@ import Loader from './loader'
 import { events } from './utils/events'
 import { IPhoto } from '@/services'
 
-const Loading = memo(function loading({ show }: { show: boolean }) {
+const Loading = memo(function loading() {
   return (
-    <div data-show={show} className="w-10 h-10 | data-[show=false]:hidden">
-      <Loader color="white" />
+    <div className="relative | w-full h-full">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-10 h-10">
+        <Loader color="white" />
+      </div>
     </div>
   )
 })
@@ -80,7 +82,7 @@ export default function ImagePreview() {
           {source && (
             <>
               {/** loading **/}
-              <Loading show={loading} />
+              {loading && (<Loading/>)}
 
               {/** image **/}
               <Image

@@ -59,7 +59,7 @@ export default function SignUp() {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (credential) => {
         log('CREDENTIAL from EMAIL and PASSWORD', credential)
-
+      
         const { user } = credential
 
         // redirect if the user document exsits

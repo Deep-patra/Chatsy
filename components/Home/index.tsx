@@ -10,7 +10,8 @@ import Snackbar from '@/components/snackbar'
 import UserContext from '@/context/user.context'
 import { useListenUser } from '@/hooks/useListenUser'
 import { useListenInvites } from '@/hooks/useListenInvites'
-import { useRedirectIfUserIsNull } from '@/hooks/useRedirectIfUserIsNull'
+import { useRegisterSW } from '@/hooks/useRegisterSW'
+import { useOnAuthStateChanges } from '@/hooks/useOnAuthStateChange'
 
 export default function Home() {
   const { user, setUser } = useContext(UserContext)
@@ -20,27 +21,34 @@ export default function Home() {
 
   // listen for invite
   useListenInvites()
+ 
+  // Register service worker and enable code syntax hightlighting
+  useRegisterSW()
 
-  // Redirect the user, if its null
-  useRedirectIfUserIsNull(user, '/login')
+  // onAuthStateChanges
+  useOnAuthStateChanges()
 
   return (
-    <div className="relative flex flex-row gap-1">
-      <Sidebar />
+    <>
+      {user && (
+        <div className="relative flex flex-row gap-1">
+          <Sidebar />
 
-      <MiddleBar />
+          <MiddleBar />
 
-      {/* Chat box */}
-      <ChatBox />
+          {/* Chat box */}
+          <ChatBox />
 
-      {/* Info bar when the chat is opened */}
-      <InfoBar />
+          {/* Info bar when the chat is opened */}
+          <InfoBar />
 
-      {/* Modals */}
-      <Modals />
+          {/* Modals */}
+          <Modals />
 
-      {/** Snackbar **/}
-      <Snackbar />
-    </div>
+          {/** Snackbar **/}
+          <Snackbar />
+        </div>
+      )}
+    </>
   )
 }

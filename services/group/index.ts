@@ -148,28 +148,42 @@ export class Group implements ChatInterface {
     const members = await Promise.all(promises)
     this.members = members
   }
+  
+  private checkIfMessageAlreadyPresent(messages: IMessage[], message: IMessage): boolean {
+    const found = messages.find((m) => m.id === message.id)
+    return !!found
+  }
 
   pushMessages(...messages: IMessage[]) {
+    let new_messages = this.messages
+
     if (this.messages.length === 0) {
-      this.messages = messages
+      this.messages = new_messages.concat(messages)
       return
     }
 
-    if (this.messages[0].time > messages[messages.length - 1].time)
-      this.messages = messages.concat(this.messages)
-    else if (this.messages[this.messages.length - 1].time < messages[0].time)
-      this.messages.push(...messages)
-    else {
-      const new_messages = this.messages.concat(...messages)
+    messages.forEach(m => {
 
-      new_messages.sort((a, b) => {
-        if (a.time < b.time) return 1
+      if (this.checkIfMessageAlreadyPresent(new_messages, m))
+        return
 
-        return -1
-      })
+      if ((new_messages[0].time as Timestamp).toDate() > m.time.toDate())
+        new_messages = [m].concat(new_messages)
 
-      this.messages = new_messages
-    }
+      else if (new_messages[new_messages.length - 1].time.toDate() < m.time.toDate())
+        new_messages = new_messages.concat(m)
+
+      else {
+        const index = new_messages.findIndex(item => item.time.toDate() < m.time.toDate())
+        new_messages = [
+          ...new_messages.slice(0, index + 1),
+          m,
+          ...new_messages.slice(index + 1, new_messages.length),
+        ]
+      }
+    })
+
+    this.messages = new_messages
   }
 
   async sendInvite(user_id: string, receiver_id: string): Promise<void> {

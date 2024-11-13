@@ -140,7 +140,7 @@ export class GroupService {
 
     if (text && text.trim() !== '') text && formdata.append('text', text)
 
-    if (image) formdata.append('image', image)
+    if (image) formdata.append('images', image)
 
     const res = await fetch('/api/group/sendMessage', {
       method: 'POST',

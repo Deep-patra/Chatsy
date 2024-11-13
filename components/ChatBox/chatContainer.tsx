@@ -43,7 +43,7 @@ export default function ChatContainer() {
     }
   }
 
-  useListenMessages(activeChat, (m: IMessage[]) => changeMessages(messages.concat(m)))
+  useListenMessages(activeChat, (m: IMessage[]) => changeMessages(m))
 
   // useEffect(() => {
   //   if (activeChat)
@@ -70,7 +70,7 @@ export default function ChatContainer() {
         style={{ height: '5px' }}
         className="w-full flex-shrink-0"
       ></div>
-      <ul className="decorate-scrollbar | flex flex-col | w-full h-full | overflow-y-auto">
+      <ul className="decorate-scrollbar | flex flex-col | w-full min-h-0 max-h-full | overflow-y-auto">
         {messages.length > 0 ? (
           messages.map((message, idx) => (
             <Message

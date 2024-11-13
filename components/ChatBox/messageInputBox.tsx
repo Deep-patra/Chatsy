@@ -112,11 +112,11 @@ function MessageInput({ chat }: IMessageInputProps) {
 
   const handleSend = async (event: MouseEvent<HTMLButtonElement>) => {
     if (text === '' && !file) return
-    ;(event.target as HTMLButtonElement).disabled = true
+      ; (event.target as HTMLButtonElement).disabled = true
 
     // send the message
     sendMessage()
-    ;(event.target as HTMLButtonElement).disabled = false
+      ; (event.target as HTMLButtonElement).disabled = false
 
     // reset the fields
     reset()

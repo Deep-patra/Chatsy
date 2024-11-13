@@ -37,7 +37,7 @@ export const POST = async (req: NextRequest) => {
       )
       const original_url = await storeFile(original, 'images', `${uuid}.png`)
 
-      obj.photo = {
+      obj.images = {
         uuid,
         thumbnail_url,
         original_url,

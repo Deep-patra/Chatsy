@@ -144,11 +144,11 @@ export default function InfoBar() {
       {/* if active chat is a group, display the list of members */}
       {members.length > 0 && (
         <motion.div
-          animate={isOpen ? variants.open_bar : variants.close_bar}
-          className="flex flex-col gap-2 | w-full | overflow-hidden | decorate-scrollbar | overflow-y-scroll"
+          animate={isOpen ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+          className="flex flex-col gap-2 | rounded-md | py-1 | bg-black2 | w-full | overflow-hidden | decorate-scrollbar | overflow-y-auto"
         >
           <span className="text-sm text-white2 | px-1">
-            <p className="text-inherit">members</p>
+            <p className="text-sm text-inherit">members</p>
           </span>
 
           <ul className="flex flex-col gap-1">

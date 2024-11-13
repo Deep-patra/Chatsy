@@ -49,7 +49,7 @@ export default function CreateGroup() {
       })
       .catch(console.error)
       .finally(() => {})
-  }, [])
+  }, [changeSource])
 
   useEffect(() => {
     const generateURL = (file: File | null) => {
@@ -74,10 +74,13 @@ export default function CreateGroup() {
 
     document.body.addEventListener(events.open_create_group, handler)
 
+    // set avatar on mount
+    refreshAvatar()
+
     return () => {
       document.body.removeEventListener(events.open_create_group, handler)
     }
-  }, [])
+  }, [refreshAvatar])
 
   return (
     <Modal
