@@ -143,7 +143,10 @@ export class Contact implements ChatInterface {
     await ContactService.sendMessage(user_id, this.chatroom_id, data)
   }
 
-  private checkIfMessageAlreadyPresent(messages: IMessage[], message: IMessage): boolean {
+  private checkIfMessageAlreadyPresent(
+    messages: IMessage[],
+    message: IMessage
+  ): boolean {
     const found = messages.find((m) => m.id === message.id)
     return !!found
   }
@@ -156,19 +159,19 @@ export class Contact implements ChatInterface {
       return
     }
 
-    messages.forEach(m => {
-
-      if (this.checkIfMessageAlreadyPresent(new_messages, m))
-        return
+    messages.forEach((m) => {
+      if (this.checkIfMessageAlreadyPresent(new_messages, m)) return
 
       if (new_messages[0].time.toDate() > m.time.toDate())
         new_messages = [m].concat(new_messages)
-
-      else if (new_messages[new_messages.length - 1].time.toDate() < m.time.toDate())
+      else if (
+        new_messages[new_messages.length - 1].time.toDate() < m.time.toDate()
+      )
         new_messages = new_messages.concat(m)
-
       else {
-        const index = new_messages.findIndex(item => item.time.toDate() < m.time.toDate())
+        const index = new_messages.findIndex(
+          (item) => item.time.toDate() < m.time.toDate()
+        )
         new_messages = [
           ...new_messages.slice(0, index + 1),
           m,

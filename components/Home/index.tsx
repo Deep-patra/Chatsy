@@ -21,7 +21,7 @@ export default function Home() {
 
   // listen for invite
   useListenInvites()
- 
+
   // Register service worker and enable code syntax hightlighting
   useRegisterSW()
 

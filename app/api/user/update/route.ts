@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/utils/logger'
 import { processImage } from '@/utils/image_utils'
 import { storeFile, deleteFile } from '@/utils/storage'
-import { db } from '@/utils/firebase_admin_app'
+import { auth, db } from '@/utils/firebase_admin_app'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 
 const deletePreviousPhoto = async (uuid: string) => {
   await Promise.allSettled([
@@ -11,19 +12,16 @@ const deletePreviousPhoto = async (uuid: string) => {
   ])
 }
 
+
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = formdata.get('user_id')
     const name = formdata.get('name')
     const description = formdata.get('description')
     const photo = formdata.get('photo')
-
-    if (!user_id) throw new Error('User ID is not present in the body.')
-
-    const userRef = db.collection('users').doc(String(user_id))
-    const userDoc = await userRef.get()
 
     const obj = {} as any
 
@@ -33,8 +31,8 @@ export const POST = async (req: NextRequest) => {
 
     if (photo && typeof photo !== 'string') {
       // cleanup previous files
-      if (userDoc.get('photo') && typeof userDoc.get('photo') == 'object') {
-        const { uuid } = userDoc.get('photo')
+      if (user.get('photo') && typeof user.get('photo') == 'object') {
+        const { uuid } = user.get('photo')
 
         // delete previous files
         if (uuid) await deletePreviousPhoto(uuid)
@@ -61,11 +59,11 @@ export const POST = async (req: NextRequest) => {
       }
     } else if (typeof photo === 'string') obj.photo = photo
 
-    await db.collection('users').doc(String(user_id)).update(obj)
+    await user.ref.update(obj)
 
-    logger.info({ update: { user_id, changes: [...Object.keys(obj)] } })
+    logger.info({ update: { user_id: user.id, changes: [...Object.keys(obj)] } })
 
-    const updatedDoc = await userRef.get()
+    const updatedDoc = await user.ref.get()
 
     return new NextResponse(
       JSON.stringify({

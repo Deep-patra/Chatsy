@@ -1,26 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = String(formdata.get('from'))
     const receiver_id = String(formdata.get('to'))
 
-    if (!user_id || !receiver_id)
-      throw new Error('User Id or Receiver Id is not present')
+    if (!receiver_id)
+      throw new Error('receiver Id is not present')
 
-    const user = await db.collection('users').doc(user_id).get()
     const receiver = await db.collection('users').doc(receiver_id).get()
 
-    if (!user.exists || !receiver.exists)
-      throw new Error("One of the user doesn't exists.")
+    if (!receiver.exists)
+      throw new Error(`user with id ${receiver_id} doesn't exists.`)
 
     const invite_doc_ref = await db.collection('invites').add({
-      from: user_id,
+      from: user.id,
       to: receiver_id,
       time: FieldValue.serverTimestamp(),
     })

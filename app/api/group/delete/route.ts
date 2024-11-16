@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 
 export async function POST(req: NextRequest) {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = formdata.get('user_id')
     const group_id = formdata.get('group_id')
 
-    if (!user_id || !group_id)
-      throw new Error("Request doen't have the required parameters")
+    if (!group_id)
+      throw new Error("group id is not present")
 
     const group_ref = db.collection('groups').doc(String(group_id))
     const group_doc = await group_ref.get()
@@ -19,17 +21,11 @@ export async function POST(req: NextRequest) {
     if (!group_doc.exists)
       throw new Error(`Group with the group id ${group_id} doesn't exists`)
 
-    const user_ref = db.collection('users').doc(String(user_id))
-    const user_doc = await user_ref.get()
-
-    if (!user_doc.exists)
-      throw new Error(`User with the id ${user_id} doesn't exists`)
-
     const members = group_doc.get('members')
 
     // if the user is the admin of the group
     // delete the group and remove group from every member
-    if (user_id == group_doc.get('admin')) {
+    if (user.id == group_doc.get('admin')) {
       const batch = db.batch()
 
       const members_refs: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData>[] =
@@ -57,10 +53,10 @@ export async function POST(req: NextRequest) {
     const batch = db.batch()
 
     batch.update(group_ref, {
-      members: FieldValue.arrayRemove(user_ref.id),
+      members: FieldValue.arrayRemove(user.id),
     })
 
-    batch.update(user_ref, {
+    batch.update(user.ref, {
       groups: FieldValue.arrayRemove(group_ref.id),
     })
 

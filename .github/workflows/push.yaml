@@ -1,13 +1,31 @@
-name: Clean the code on Push
+name: Run tests
 on: [push]
-jobs:
-  install-and-format-code:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+jobs: 
+  Run-tests:
+    runs-on: ubunut-latest
 
-      - run: npm install
-      - run: npm run fmt
+    strategy: 
+      matrix: 
+        node-version: ['18.x']
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with: 
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Installing Node Dependencies
+        run: npm ci
+
+      - name: Setup up firebase
+        run: npm i firebase-tools -g
+        
+      - name: setup emulators
+        run: firebase setup:emulators
+
+      - name: run test
+        run: firebase emulators:exec --token ${{secrets.FIREBASE_TOKEN}} \"npm run test:unit\"
+
+

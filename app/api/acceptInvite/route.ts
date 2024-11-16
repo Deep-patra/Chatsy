@@ -1,34 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 
 export const POST = async (req: NextRequest) => {
   try {
+    
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
     const invite_id = String(formdata.get('invite_id'))
-    const user_id = String(formdata.get('user_id'))
-
     if (!invite_id) throw new Error('Invite ID is not present!')
 
     const invite_doc_ref = db.collection('invites').doc(invite_id)
     const invite_doc = await invite_doc_ref.get()
 
-    if (user_id != invite_doc.get('to'))
+    if (user.id != invite_doc.get('to'))
       throw new Error("User ID doesn't match.")
 
-    const to_id = user_id
+    const to_id = user.id
     const from_id = invite_doc.get('from')
 
-    const toRef = db.collection('users').doc(user_id)
+    const toRef = user.ref
     const fromRef = db.collection('users').doc(from_id)
 
-    const user1Doc = await toRef.get()
+    const user1Doc = user
     const user2Doc = await fromRef.get()
 
-    if (user1Doc && !user1Doc.exists && user2Doc && !user2Doc.exists)
-      throw new Error("One of the User doesn't exists")
+    if (!user2Doc.exists)
+      throw new Error("User doesn't exists")
 
     // create a chatroom
     const chatRoom_doc = await db.collection('chatrooms').add({
@@ -65,6 +67,7 @@ export const POST = async (req: NextRequest) => {
     })
 
     return new NextResponse(JSON.stringify({ result: 'ok' }))
+
   } catch (error: any) {
     logger.error(error)
     return new NextResponse(JSON.stringify({ error: error.message }), {

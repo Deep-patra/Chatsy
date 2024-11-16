@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = formdata.get('user_id')
     const receiver_id = formdata.get('receiver_id')
     const group_id = formdata.get('group_id')
 
-    if (!user_id || !receiver_id || !group_id)
+    if (!receiver_id || !group_id)
       throw new Error('Invalid request ! Required Parameters are not present.')
 
     const group_ref = db.collection('groups').doc(String(group_id))
@@ -21,16 +23,16 @@ export const POST = async (req: NextRequest) => {
 
     const data = group_doc.data()
 
-    if (data && data.admin !== String(user_id))
+    if (data && data.admin !== user.id)
       throw new Error('Only Group admin can send invites')
 
     if (String(receiver_id) in data?.members)
       throw new Error(`User with the id ${receiver_id} already in members list`)
 
     const invite_ref = await db.collection('groupInvites').add({
-      from: formdata.get('user_id'),
-      group_id: formdata.get('group_id'),
-      to: formdata.get('receiver_id'),
+      from: user.id,
+      group_id: group_id,
+      to: receiver_id,
       time: FieldValue.serverTimestamp(),
     })
 

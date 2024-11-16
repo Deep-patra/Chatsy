@@ -7,12 +7,10 @@ import log from '@/components/utils/log'
 import UserContext from '@/context/user.context'
 
 export const useOnAuthStateChanges = () => {
-
   const { user, setUser } = useContext(UserContext)
   const router = useRouter()
 
   useEffect(() => {
-
     const app = getApp()
     const auth = getAuth(app)
 
@@ -20,7 +18,6 @@ export const useOnAuthStateChanges = () => {
       auth,
       // on success
       async (auth_user) => {
-
         // if context user is not present
         // and auth user is also not present
         // redirect to '/login' page
@@ -29,13 +26,13 @@ export const useOnAuthStateChanges = () => {
           return
         }
 
-        if (!auth_user)
-          return
+        if (!auth_user) return
 
-        log("Received user in onAuthStateChanged", auth_user)
+        log('Received user in onAuthStateChanged', auth_user)
 
-        const doc = await User.getUserWithUID(auth_user.uid)
-              .catch(console.error)
+        const doc = await User.getUserWithUID(auth_user.uid).catch(
+          console.error
+        )
 
         // if the user document doesn't exists
         // redirect to "/login"

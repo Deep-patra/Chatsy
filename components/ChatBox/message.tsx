@@ -67,9 +67,7 @@ export default function Message({ user, activeChat, message }: IMessageProps) {
     [changeHeight]
   )
 
-  if (!author)
-    return <></>
-
+  if (!author) return <></>
 
   return (
     <div

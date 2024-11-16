@@ -2,34 +2,36 @@ import crypto from 'node:crypto'
 import { NextRequest, NextResponse } from 'next/server'
 import { processImage } from '@/utils/image_utils'
 import { storeFile } from '@/utils/storage'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = formdata.get('user_id')
     const group_id = formdata.get('group_id')
     const name = formdata.get('name')
     const description = formdata.get('description')
     const photo = formdata.get('photo')
 
-    if (!user_id || !group_id)
-      throw new Error('User ID or Group ID is not present!')
+    if (!group_id)
+      throw new Error(`group id ${group_id} is not present!`)
 
     // check if the user is the admin of the group
     const groupRef = db.collection('groups').doc(String('group_id'))
     const groupDoc = await groupRef.get()
 
-    if (groupDoc.get('admin') !== String(user_id))
+    if (groupDoc.get('admin') !== user.id)
       throw new Error('User is not the admin of the group.')
 
     const obj = {} as any
 
-    if (name) obj.name = String(formdata.has('name'))
+    if (name) obj.name = String(name)
 
-    if (description) obj.description = String(formdata.has('description'))
+    if (description) obj.description = String(description)
 
     if (photo) {
       if (typeof photo === 'string') obj.photo = photo

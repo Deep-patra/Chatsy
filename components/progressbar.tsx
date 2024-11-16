@@ -5,7 +5,7 @@ interface IProgressBarProps {
 }
 
 export default function ProgressBar(props: IProgressBarProps) {
-  if (!props.show) return <></> 
+  if (!props.show) return <></>
 
   return (
     <div className="h-1 w-screen absolute top-0 left-0 bg-transparent">

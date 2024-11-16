@@ -18,6 +18,7 @@ import { User } from '@/services/user'
 import UserContext from '@/context/user.context'
 import { dispatchSnackbarEvent } from '../utils/dispatchEvent'
 import log from '@/components/utils/log'
+import { createSession } from '@/components/utils/createSession'
 
 export default function SignUp() {
   const { setUser } = useContext(UserContext)
@@ -59,7 +60,7 @@ export default function SignUp() {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (credential) => {
         log('CREDENTIAL from EMAIL and PASSWORD', credential)
-      
+
         const { user } = credential
 
         // redirect if the user document exsits
@@ -68,6 +69,9 @@ export default function SignUp() {
         const doc = await createUser(user)
 
         if (!doc) return
+
+        // create session
+        await createSession(user)
 
         // set the user and redirect to the "/getDetails" page
         setUser(doc)
@@ -97,6 +101,9 @@ export default function SignUp() {
         const doc = await createUser(user)
 
         if (!doc) return
+
+        // create session
+        await createSession(user)
 
         // set the user and redirect to the "/getDetails" page
         setUser(doc)

@@ -2,19 +2,21 @@ import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { processImage } from '@/utils/image_utils'
 import { storeFile } from '@/utils/storage'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = formdata.get('user_id')
     const group_id = formdata.get('group_id')
     const text = formdata.get('text')
     const image = formdata.get('images')
 
-    if (!user_id || !group_id)
+    if (!group_id)
       throw new Error('User ID or Group ID is not present')
 
     if (!text && !image)
@@ -45,7 +47,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const messageRef = await db.collection('groupMessages').add({
-      author: user_id,
+      author: user.id,
       group_id: group_id,
       time: FieldValue.serverTimestamp(),
       ...obj,

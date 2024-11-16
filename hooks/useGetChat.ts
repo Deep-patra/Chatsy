@@ -15,52 +15,48 @@ export const useGetChat = (): IChatContext => {
 
   useEffect(() => {
     const activeChatChanges = (activeChat: ChatInterface | null) => {
-      
       if (activeChat) {
-        const unsub = activeChat.listenForChanges(async (snapshot: DocumentSnapshot<DocumentData>) => {
+        const unsub = activeChat.listenForChanges(
+          async (snapshot: DocumentSnapshot<DocumentData>) => {
+            log('snapshot in activeChatChanges => ', snapshot)
 
-          log("snapshot in activeChatChanges => ", snapshot)
+            if (activeChat instanceof Contact) {
+              const new_chat = new Contact(snapshot.id, {
+                name: snapshot.get('name'),
+                chatroom_id: activeChat.chatroom_id,
+                description: snapshot.get('description'),
+                created: snapshot.get('created'),
+                photo: snapshot.get('photo'),
+              })
 
-          if (activeChat instanceof Contact) {
+              new_chat.messages = activeChat.messages
+              new_chat.chatroom = activeChat.chatroom
 
-            const new_chat = new Contact(snapshot.id, {
-              name: snapshot.get('name'),
-              chatroom_id: activeChat.chatroom_id,
-              description: snapshot.get('description'),
-              created: snapshot.get('created'),
-              photo: snapshot.get('photo')
-            })
+              changeActiveChat(new_chat)
+            } else if (activeChat instanceof Group) {
+              const new_chat = new Group(snapshot.id, {
+                name: snapshot.get('name'),
+                photo: snapshot.get('photo'),
+                description: snapshot.get('description'),
+                memberIds: snapshot.get('members'),
+                admin: snapshot.get('admin'),
+                created: snapshot.get('created'),
+              })
 
-            new_chat.messages = activeChat.messages
-            new_chat.chatroom = activeChat.chatroom
+              await new_chat.fetchMembersData()
 
-            changeActiveChat(new_chat)
+              new_chat.messages = activeChat.messages
 
-          } else if (activeChat instanceof Group) {
-            
-            const new_chat = new Group(snapshot.id, {
-              name: snapshot.get('name'),
-              photo: snapshot.get('photo'),
-              description: snapshot.get('description'),
-              memberIds: snapshot.get('members'),
-              admin: snapshot.get('admin'),
-              created: snapshot.get('created')
-            })
-
-            await new_chat.fetchMembersData()
-
-            new_chat.messages = activeChat.messages
-
-            changeActiveChat(new_chat)
-
+              changeActiveChat(new_chat)
+            }
           }
-        })
+        )
 
         return unsub
       }
 
       return () => {}
-    } 
+    }
 
     return activeChatChanges(chat)
   }, [chat ? chat.id : null])
