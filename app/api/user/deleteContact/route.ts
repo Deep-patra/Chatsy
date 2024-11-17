@@ -17,7 +17,6 @@ const updateContacts = (
 
 export const POST = async (req: NextRequest) => {
   try {
-  
     const user = await getUserFromSession(req)
 
     const formdata = await req.formData()

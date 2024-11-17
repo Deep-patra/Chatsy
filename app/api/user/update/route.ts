@@ -12,7 +12,6 @@ const deletePreviousPhoto = async (uuid: string) => {
   ])
 }
 
-
 export const POST = async (req: NextRequest) => {
   try {
     const user = await getUserFromSession(req)
@@ -61,7 +60,9 @@ export const POST = async (req: NextRequest) => {
 
     await user.ref.update(obj)
 
-    logger.info({ update: { user_id: user.id, changes: [...Object.keys(obj)] } })
+    logger.info({
+      update: { user_id: user.id, changes: [...Object.keys(obj)] },
+    })
 
     const updatedDoc = await user.ref.get()
 

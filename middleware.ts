@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   //
   // if (request.nextUrl.pathname.startsWith('/getDetails') || request.nextUrl.pathname.startsWith('/home')) {
-  //   
+  //
   //   const session = request.cookies.get('session')
   //
   //   if (!session)

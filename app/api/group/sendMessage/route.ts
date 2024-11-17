@@ -16,8 +16,7 @@ export const POST = async (req: NextRequest) => {
     const text = formdata.get('text')
     const image = formdata.get('images')
 
-    if (!group_id)
-      throw new Error('User ID or Group ID is not present')
+    if (!group_id) throw new Error('User ID or Group ID is not present')
 
     if (!text && !image)
       throw new Error("Message doesn't have a text or a image")

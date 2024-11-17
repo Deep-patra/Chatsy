@@ -17,9 +17,7 @@ export const POST = async (req: NextRequest) => {
       throw new Error('Required parameters are not present in the request body')
 
     // check if the user is the admin of the group
-    const groupRef = db
-      .collection('groups')
-      .doc(String(group_id))
+    const groupRef = db.collection('groups').doc(String(group_id))
     const groupDoc = await groupRef.get()
 
     if (groupDoc.get('admin') !== user.ref.id)
@@ -30,7 +28,7 @@ export const POST = async (req: NextRequest) => {
         members: FieldValue.arrayRemove(String(member_id)),
       })
 
-     t.update(user.ref, {
+      t.update(user.ref, {
         groups: FieldValue.arrayRemove(String(group_id)),
       })
     })

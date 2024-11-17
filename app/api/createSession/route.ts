@@ -8,29 +8,32 @@ export const POST = async (req: NextRequest) => {
 
     const { token } = json
 
-    if (!token)
-      throw new Error("Token is not present")
+    if (!token) throw new Error('Token is not present')
 
     // expiration time to 1 hour
     const expiresIn = 1000 * 60 * 60
 
-    const verify = await auth.verifyIdToken(token, true)
-      .catch(console.error)
+    const verify = await auth.verifyIdToken(token, true).catch(console.error)
 
-    if (!verify)
-      throw new Error("token is not verified")
+    if (!verify) throw new Error('token is not verified')
 
     const session = await auth.createSessionCookie(token, { expiresIn })
 
-    const res = new NextResponse(JSON.stringify({ result: "ok" }))
-    res.cookies.set("session", session, { maxAge: expiresIn, secure: true, httpOnly: true })
+    const res = new NextResponse(JSON.stringify({ result: 'ok' }))
+    res.cookies.set('session', session, {
+      maxAge: expiresIn,
+      secure: true,
+      httpOnly: true,
+    })
 
     logger.info({ session })
 
     return res
-
-  } catch(error: any) {
+  } catch (error: any) {
     logger.error(error)
-    return new NextResponse(JSON.stringify({ error: error.message || "Invalid Request" }), { status: 400 })
+    return new NextResponse(
+      JSON.stringify({ error: error.message || 'Invalid Request' }),
+      { status: 400 }
+    )
   }
 }

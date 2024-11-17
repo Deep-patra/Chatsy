@@ -6,7 +6,6 @@ import { logger } from '@/utils/logger'
 
 export const POST = async (req: NextRequest) => {
   try {
-    
     const user = await getUserFromSession(req)
 
     const formdata = await req.formData()
@@ -29,8 +28,7 @@ export const POST = async (req: NextRequest) => {
     const user1Doc = user
     const user2Doc = await fromRef.get()
 
-    if (!user2Doc.exists)
-      throw new Error("User doesn't exists")
+    if (!user2Doc.exists) throw new Error("User doesn't exists")
 
     // create a chatroom
     const chatRoom_doc = await db.collection('chatrooms').add({
@@ -67,7 +65,6 @@ export const POST = async (req: NextRequest) => {
     })
 
     return new NextResponse(JSON.stringify({ result: 'ok' }))
-
   } catch (error: any) {
     logger.error(error)
     return new NextResponse(JSON.stringify({ error: error.message }), {

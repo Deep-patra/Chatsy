@@ -12,20 +12,17 @@ import { append } from '@/tests/utils/formdata'
 import { deleteAllDocs } from '@/tests/utils/deleteAllDocs'
 import { createDemoUser } from '@/tests/utils/createDemoUser'
 
-
 // mock
 jest.mock('@/utils/getUserFromSession.ts', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
-
 
 describe('POST /api/sendInvite', () => {
   let user1Ref: DocumentReference<DocumentData> | null = null
   let user2Ref: DocumentReference<DocumentData> | null = null
-
 
   // Create two Demo Users
   beforeAll(async () => {
@@ -58,7 +55,9 @@ describe('POST /api/sendInvite', () => {
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
 
@@ -83,7 +82,9 @@ describe('POST /api/sendInvite', () => {
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
 
@@ -92,5 +93,4 @@ describe('POST /api/sendInvite', () => {
     expect(res.status).toBe(400)
     expect(json.error).toBeDefined()
   })
-
 })

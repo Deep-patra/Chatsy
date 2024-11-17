@@ -22,10 +22,9 @@ import {
 jest.mock('@/utils/getUserFromSession.ts', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
-
 
 describe('POST /api/sendMessage', () => {
   let user1Ref: DocumentReference<DocumentData> | null = null
@@ -66,7 +65,6 @@ describe('POST /api/sendMessage', () => {
     await deleteAllDocs('messages')
   })
 
-
   // Clean up every thing after all tests
   afterAll(async () => {
     await deleteAllDocs('users')
@@ -90,7 +88,9 @@ describe('POST /api/sendMessage', () => {
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
 
@@ -136,8 +136,10 @@ describe('POST /api/sendMessage', () => {
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
-    
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
+
     const res = await POST(req)
 
     const json = await res.json()
@@ -164,18 +166,20 @@ describe('POST /api/sendMessage', () => {
     }
   })
 
-  test("Should return an Error when the request body is empty", async () => {
+  test('Should return an Error when the request body is empty', async () => {
     const f = new FormData()
 
     const req = new NextRequest(
       new URL('/api/sendMessage', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
 

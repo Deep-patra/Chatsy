@@ -12,15 +12,13 @@ import { append } from '@/tests/utils/formdata'
 import { deleteAllDocs } from '@/tests/utils/deleteAllDocs'
 import { createDemoUser } from '@/tests/utils/createDemoUser'
 
-
 // mock
 jest.mock('@/utils/getUserFromSession.ts', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
-
 
 describe('POST /api/user/acceptInvite', () => {
   let user1Ref: DocumentReference<DocumentData> | null = null
@@ -28,7 +26,7 @@ describe('POST /api/user/acceptInvite', () => {
 
   let inviteRef: DocumentReference<DocumentData> | null = null
 
-  // Create both Users and invite document 
+  // Create both Users and invite document
   beforeAll(async () => {
     user1Ref = await createDemoUser({
       name: 'Harry',
@@ -45,7 +43,6 @@ describe('POST /api/user/acceptInvite', () => {
       time: FieldValue.serverTimestamp(),
     })
   }, 10000)
-
 
   // delete all documents after all the tests
   afterAll(async () => {
@@ -68,7 +65,9 @@ describe('POST /api/user/acceptInvite', () => {
     )
 
     // mock the user session
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
 
@@ -89,8 +88,7 @@ describe('POST /api/user/acceptInvite', () => {
     }
   })
 
-
-  test('Should return an Error when user doesn\'t match', async () => {
+  test("Should return an Error when user doesn't match", async () => {
     const f = new FormData()
     append(f, { invite_id: inviteRef!.id })
 
@@ -99,11 +97,13 @@ describe('POST /api/user/acceptInvite', () => {
       new URL('/api/acceptInvite', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
 
@@ -122,11 +122,13 @@ describe('POST /api/user/acceptInvite', () => {
       new URL('/api/acceptInvite', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
 

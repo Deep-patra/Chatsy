@@ -9,15 +9,18 @@ import { FieldValue } from 'firebase-admin/firestore'
 jest.mock('@/utils/getUserFromSession', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
 
 describe('POST /api/group/removeMember', () => {
-  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
-  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
+  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
+  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
-  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
+  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
   beforeAll(async () => {
     user1Ref = await createDemoUser({ name: 'josh', groups: [] })
@@ -27,7 +30,7 @@ describe('POST /api/group/removeMember', () => {
       name: 'Demo User',
       description: 'This is a demo user.',
       admin: user1Ref!.id,
-      members: [user1Ref!.id, user2Ref!.id]
+      members: [user1Ref!.id, user2Ref!.id],
     })
 
     await user1Ref.update({ groups: FieldValue.arrayUnion(groupRef!.id) })
@@ -38,17 +41,19 @@ describe('POST /api/group/removeMember', () => {
     await deleteAllDocs('users', 'groups', 'groupInvites')
   }, 10000)
 
-  test("Should return a response with the status 200", async () => {
+  test('Should return a response with the status 200', async () => {
     const f = new FormData()
 
     append(f, { group_id: groupRef!.id, member_id: user2Ref!.id })
 
     const req = new NextRequest(
-      new URL("/api/group/removeMember", 'http://localhost:5000'),
+      new URL('/api/group/removeMember', 'http://localhost:5000'),
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -63,17 +68,19 @@ describe('POST /api/group/removeMember', () => {
     expect(data!.members.includes(user2Ref!.id)).toBe(false)
   })
 
-  test("Should return an error when the user is not admin", async () => {
+  test('Should return an error when the user is not admin', async () => {
     const f = new FormData()
 
     append(f, { group_id: groupRef!.id, member_id: user2Ref!.id })
 
     const req = new NextRequest(
-      new URL("/api/group/removeMember", 'http://localhost:5000'),
+      new URL('/api/group/removeMember', 'http://localhost:5000'),
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -88,11 +95,13 @@ describe('POST /api/group/removeMember', () => {
     append(f, { group_id: crypto.randomUUID(), member_id: user2Ref!.id })
 
     const req = new NextRequest(
-      new URL("/api/group/removeMember", 'http://localhost:5000'),
+      new URL('/api/group/removeMember', 'http://localhost:5000'),
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()

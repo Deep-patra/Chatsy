@@ -12,8 +12,7 @@ export async function POST(req: NextRequest) {
 
     const group_id = formdata.get('group_id')
 
-    if (!group_id)
-      throw new Error("group id is not present")
+    if (!group_id) throw new Error('group id is not present')
 
     const group_ref = db.collection('groups').doc(String(group_id))
     const group_doc = await group_ref.get()

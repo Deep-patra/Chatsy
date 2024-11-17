@@ -5,33 +5,40 @@ import type { DocumentReference, DocumentData } from 'firebase/firestore'
 import { db } from '@/utils/firebase_admin_app'
 import { getUserFromSession } from '@/utils/getUserFromSession'
 import { POST } from '@/app/api/group/sendInvite/route'
-import { createDemoUser, clearStorage, deleteAllDocs, append } from '@/tests/utils'
+import {
+  createDemoUser,
+  clearStorage,
+  deleteAllDocs,
+  append,
+} from '@/tests/utils'
 import { FieldValue } from 'firebase-admin/firestore'
 
 // mock
 jest.mock('@/utils/getUserFromSession', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
 
-
 describe('POST /api/group/sendInvite', () => {
-  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
-  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
+  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
+  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
-  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
+  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
   beforeAll(async () => {
-    user1Ref = await createDemoUser({ name: "Robin" })
+    user1Ref = await createDemoUser({ name: 'Robin' })
     user2Ref = await createDemoUser({ name: 'Harry' })
 
     groupRef = await db.collection('groups').add({
-      name: "Demo Group",
+      name: 'Demo Group',
       admin: user1Ref!.id,
       members: [user1Ref!.id],
-      created: FieldValue.serverTimestamp()
+      created: FieldValue.serverTimestamp(),
     })
   }, 10000)
 
@@ -39,8 +46,7 @@ describe('POST /api/group/sendInvite', () => {
     await deleteAllDocs('users', 'groups', 'groupInvites')
   }, 10000)
 
-
-  test("Should return an Invite object with response status 200", async () => {
+  test('Should return an Invite object with response status 200', async () => {
     const f = new FormData()
 
     append(f, { group_id: groupRef!.id, receiver_id: user2Ref!.id })
@@ -49,11 +55,13 @@ describe('POST /api/group/sendInvite', () => {
       new URL('/api/group/sendInvite', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -63,9 +71,9 @@ describe('POST /api/group/sendInvite', () => {
     expect(json.to).toBe(user2Ref!.id)
     expect(json.from).toBe(user1Ref!.id)
     expect(json.group_id).toBe(groupRef!.id)
-   })
+  })
 
-  test("Should return an error when the user is not the admin", async () => {
+  test('Should return an error when the user is not the admin', async () => {
     const f = new FormData()
 
     append(f, { group_id: groupRef!.id, receiver_id: user2Ref!.id })
@@ -74,11 +82,13 @@ describe('POST /api/group/sendInvite', () => {
       new URL('/api/group/sendInvite', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -96,11 +106,13 @@ describe('POST /api/group/sendInvite', () => {
       new URL('/api/group/sendInvite', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -118,11 +130,13 @@ describe('POST /api/group/sendInvite', () => {
       new URL('/api/group/sendInvite', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -140,11 +154,13 @@ describe('POST /api/group/sendInvite', () => {
       new URL('/api/group/sendInvite', 'http://localhost:5000'),
       {
         method: 'POST',
-        body: f
+        body: f,
       }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()

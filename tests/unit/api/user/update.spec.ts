@@ -12,12 +12,11 @@ import { db } from '@/utils/firebase_admin_app'
 jest.mock('@/utils/getUserFromSession.ts', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
 
-
-// Dummy User 
+// Dummy User
 const user = {
   name: 'deep patra',
   description: 'Yo Yo!',
@@ -32,7 +31,7 @@ const updated_data = {
 let userRef: DocumentReference<DocumentData> | null = null
 
 /**
- * Create a new user in the firestore database 
+ * Create a new user in the firestore database
  * before all the tests
  * */
 beforeAll(async () => {
@@ -42,7 +41,6 @@ beforeAll(async () => {
     description: user.description,
   })
 }, 10000)
-
 
 /**
  * Delete the user after all the tests
@@ -67,7 +65,9 @@ it('POST /api/user/update: Update the document with name and description and sho
     }
   )
 
-  ;( getUserFromSession as jest.Mock).mockImplementation((req: NextRequest) => Promise.resolve(userRef!.get()))
+  ;(getUserFromSession as jest.Mock).mockImplementation((req: NextRequest) =>
+    Promise.resolve(userRef!.get())
+  )
 
   const response = await POST(request).catch((error) => {
     fail(error)

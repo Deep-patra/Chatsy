@@ -17,8 +17,7 @@ export const POST = async (req: NextRequest) => {
     const description = formdata.get('description')
     const photo = formdata.get('photo')
 
-    if (!group_id)
-      throw new Error(`group id ${group_id} is not present!`)
+    if (!group_id) throw new Error(`group id ${group_id} is not present!`)
 
     // check if the user is the admin of the group
     const groupRef = db.collection('groups').doc(String('group_id'))

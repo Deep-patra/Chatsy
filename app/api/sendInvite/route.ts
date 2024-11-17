@@ -12,8 +12,7 @@ export const POST = async (req: NextRequest) => {
 
     const receiver_id = String(formdata.get('to'))
 
-    if (!receiver_id)
-      throw new Error('receiver Id is not present')
+    if (!receiver_id) throw new Error('receiver Id is not present')
 
     const receiver = await db.collection('users').doc(receiver_id).get()
 

@@ -8,19 +8,20 @@ import { getUserFromSession } from '@/utils/getUserFromSession'
 jest.mock('@/utils/getUserFromSession', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
 
 describe('POST /api/group/cancelInvite', () => {
+  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
+  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
-  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
-  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
-
-  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
+  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
   beforeAll(async () => {
-    
     user1Ref = await createDemoUser({ name: 'josh' })
     user2Ref = await createDemoUser({ name: 'tony' })
 
@@ -28,7 +29,7 @@ describe('POST /api/group/cancelInvite', () => {
       name: 'Demo User',
       description: 'This is a demo user.',
       admin: user1Ref!.id,
-      members: [user1Ref!.id]
+      members: [user1Ref!.id],
     })
   }, 10000)
 
@@ -36,23 +37,24 @@ describe('POST /api/group/cancelInvite', () => {
     await deleteAllDocs('users', 'groups', 'groupInvites')
   }, 10000)
 
-
-  test("Should return a response with the status 200", async () => {
-    const inviteRef = await db.collection("groupInvites").add({
+  test('Should return a response with the status 200', async () => {
+    const inviteRef = await db.collection('groupInvites').add({
       to: user2Ref!.id,
       from: user1Ref!.id,
-      group_id: groupRef!.id
+      group_id: groupRef!.id,
     })
 
     const f = new FormData()
     append(f, { invite_id: inviteRef!.id })
 
     const req = new NextRequest(
-      new URL("/api/group/cancelInvite", 'http://localhost:5000'),
+      new URL('/api/group/cancelInvite', 'http://localhost:5000'),
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -66,11 +68,13 @@ describe('POST /api/group/cancelInvite', () => {
     append(f, { invite_id: crypto.randomUUID() })
 
     const req = new NextRequest(
-      new URL("/api/group/cancelInvite", 'http://localhost:5000'),
+      new URL('/api/group/cancelInvite', 'http://localhost:5000'),
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -80,21 +84,23 @@ describe('POST /api/group/cancelInvite', () => {
   })
 
   test("Should return an error object, when the group doesn't exists", async () => {
-    const inviteRef = await db.collection("groupInvites").add({
+    const inviteRef = await db.collection('groupInvites').add({
       to: user2Ref!.id,
       from: user1Ref!.id,
-      group_id: crypto.randomUUID() 
+      group_id: crypto.randomUUID(),
     })
 
     const f = new FormData()
     append(f, { invite_id: inviteRef!.id })
 
     const req = new NextRequest(
-      new URL("/api/group/cancelInvite", 'http://localhost:5000'),
+      new URL('/api/group/cancelInvite', 'http://localhost:5000'),
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user1Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()

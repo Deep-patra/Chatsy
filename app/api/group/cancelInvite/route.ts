@@ -24,13 +24,11 @@ export const POST = async (req: NextRequest) => {
 
     const invite_id = formdata.get('invite_id')
 
-    if (!invite_id)
-      throw new Error('invite id is not present in the request')
+    if (!invite_id) throw new Error('invite id is not present in the request')
 
     const inviteDoc = await getDoc('groupInvites', String(invite_id))
 
-    if (!inviteDoc) 
-      throw new Error("Invite doesn't exsits")
+    if (!inviteDoc) throw new Error("Invite doesn't exsits")
 
     const groupDoc = await getDoc('groups', inviteDoc.get('group_id'))
 

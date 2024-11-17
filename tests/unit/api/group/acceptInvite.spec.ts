@@ -8,16 +8,18 @@ import { getUserFromSession } from '@/utils/getUserFromSession'
 jest.mock('@/utils/getUserFromSession', () => {
   return {
     __esModule: true,
-    getUserFromSession: jest.fn()
+    getUserFromSession: jest.fn(),
   }
 })
 
 describe('POST /api/group/acceptInvite', () => {
+  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
+  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
-  let user1Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
-  let user2Ref: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
-
-  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null = null
+  let groupRef: FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | null =
+    null
 
   beforeAll(async () => {
     user1Ref = await createDemoUser({ name: 'josh' })
@@ -27,7 +29,7 @@ describe('POST /api/group/acceptInvite', () => {
       name: 'Demo User',
       description: 'This is a demo user.',
       admin: user1Ref!.id,
-      members: [user1Ref!.id]
+      members: [user1Ref!.id],
     })
   }, 10000)
 
@@ -35,7 +37,7 @@ describe('POST /api/group/acceptInvite', () => {
     await deleteAllDocs('users', 'groups', 'groupInvites')
   }, 10000)
 
-  test("Should return a response of status 200", async () => {
+  test('Should return a response of status 200', async () => {
     const inviteRef = await db.collection('groupInvites').add({
       to: user2Ref!.id,
       from: user1Ref!.id,
@@ -50,7 +52,9 @@ describe('POST /api/group/acceptInvite', () => {
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -60,10 +64,9 @@ describe('POST /api/group/acceptInvite', () => {
 
     const group = await groupRef!.get()
     expect(group.get('members').includes(user2Ref!.id)).toBe(true)
-
   })
 
-  test("Should return an error if invite id is invalid", async () => {
+  test('Should return an error if invite id is invalid', async () => {
     const f = new FormData()
     append(f, { invite_id: crypto.randomUUID() })
 
@@ -72,7 +75,9 @@ describe('POST /api/group/acceptInvite', () => {
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()
@@ -81,13 +86,13 @@ describe('POST /api/group/acceptInvite', () => {
     expect(json.error).toBeDefined()
   })
 
-  test("Should return an error object when the group does not exists", async () => {
+  test('Should return an error object when the group does not exists', async () => {
     const inviteRef = await db.collection('groupInvites').add({
       to: user2Ref!.id,
       from: user1Ref!.id,
       group_id: crypto.randomUUID(),
     })
-    
+
     const f = new FormData()
 
     append(f, { invite_id: inviteRef!.id })
@@ -97,7 +102,9 @@ describe('POST /api/group/acceptInvite', () => {
       { method: 'POST', body: f }
     )
 
-    ;(getUserFromSession as jest.Mock).mockImplementation(() => Promise.resolve(user2Ref!.get()))
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user2Ref!.get())
+    )
 
     const res = await POST(req)
     const json = await res.json()

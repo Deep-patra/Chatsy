@@ -12,8 +12,7 @@ export const POST = async (req: NextRequest) => {
 
     const invite_id = formdata.get('invite_id')
 
-    if (!invite_id)
-      throw new Error("invite id is not present in the request")
+    if (!invite_id) throw new Error('invite id is not present in the request')
 
     const inviteRef = db.collection('groupInvites').doc(String(invite_id))
     const inviteDoc = await inviteRef.get()

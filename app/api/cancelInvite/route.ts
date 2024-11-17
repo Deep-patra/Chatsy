@@ -5,14 +5,12 @@ import { db } from '@/utils/firebase_admin_app'
 
 export const POST = async (req: NextRequest) => {
   try {
-
     const user = await getUserFromSession(req)
 
     const formdata = await req.formData()
     const invite_id = formdata.get('invite_id')
 
-    if (!invite_id)
-      throw new Error('User Id or Invite Id is not present')
+    if (!invite_id) throw new Error('User Id or Invite Id is not present')
 
     const invite_ref = db.collection('invites').doc(String(invite_id))
     const invite_doc = await invite_ref.get()

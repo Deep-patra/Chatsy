@@ -10,7 +10,7 @@ import { logger } from '@/utils/logger'
 export const POST = async (req: NextRequest) => {
   try {
     const user = await getUserFromSession(req)
-  
+
     const formdata = await req.formData()
 
     const name = formdata.get('name')
@@ -22,7 +22,6 @@ export const POST = async (req: NextRequest) => {
 
     const obj = {} as any
     obj.name = name
-
 
     if (description) obj.description = String(description)
 
@@ -64,7 +63,6 @@ export const POST = async (req: NextRequest) => {
     logger.info({ create: { group: { id: _doc.id, ..._doc.data() } } })
 
     return new NextResponse(JSON.stringify({ id: _doc.id, ..._doc.data() }))
-
   } catch (e: any) {
     logger.error(e)
     return new NextResponse(

@@ -8,7 +8,6 @@ import { processImage } from '@/utils/image_utils'
 
 export const POST = async (req: NextRequest) => {
   try {
-  
     const user = await getUserFromSession(req)
 
     const formdata = await req.formData()
@@ -16,8 +15,7 @@ export const POST = async (req: NextRequest) => {
     const text = formdata.get('text')
     const image = formdata.get('image')
 
-    if (!chatroom_id)
-      throw new Error('ChatRoom ID is not present')
+    if (!chatroom_id) throw new Error('ChatRoom ID is not present')
 
     if (!text && !image)
       throw new Error('message is empty. It should have a text or and image.')
