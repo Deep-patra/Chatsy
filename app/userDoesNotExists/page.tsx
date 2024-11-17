@@ -7,7 +7,7 @@ export default function Page() {
         <ImConfused2 className="w-10 h-10 text-white1" />
 
         <span className="text-sm text-white2">
-          <p>User with the entered credentials doesn't exists</p>
+          <p>User with the entered credentials doesn&apos;t exists</p>
           <span className="flex flex-row items-center justify-center gap-1 | w-full">
             <p>Try</p>
             <a

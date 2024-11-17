@@ -13,7 +13,7 @@ const Loading = () => {
   )
 }
 
-const Page: NextPage = ({ params, searchParams }) => {
+const Page: NextPage = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Home />
