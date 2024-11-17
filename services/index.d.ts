@@ -1,4 +1,4 @@
-import { Unsubscribe } from "firebase/auth"
+import { Unsubscribe } from 'firebase/auth'
 
 export interface IPhoto {
   uuid: string
@@ -54,6 +54,10 @@ export interface ChatInterface {
     data: { text?: string; image?: File }
   ) => Promise<void>
 
-  listenForChanges: (cb: (snaphost: DocumentSnapshot<DocumentData>) => void) => Unsubscribe
-  listenForMessages: (cb: (snapshot: QuerySnapshot<DocumentData>) => void) => Unsubscribe
+  listenForChanges: (
+    cb: (snaphost: DocumentSnapshot<DocumentData>) => void
+  ) => Unsubscribe
+  listenForMessages: (
+    cb: (snapshot: QuerySnapshot<DocumentData>) => void
+  ) => Unsubscribe
 }

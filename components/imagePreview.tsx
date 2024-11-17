@@ -82,7 +82,7 @@ export default function ImagePreview() {
           {source && (
             <>
               {/** loading **/}
-              {loading && (<Loading/>)}
+              {loading && <Loading />}
 
               {/** image **/}
               <Image
