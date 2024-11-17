@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { logger } from '@/utils/logger'
 import { db } from '@/utils/firebase_admin_app'
 
@@ -16,15 +17,16 @@ const updateContacts = (
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = formdata.get('user_id')
     const contact_id = formdata.get('contact_id')
 
-    if (!user_id || !contact_id)
-      throw new Error('Required parameters are not present in the request body')
+    if (!contact_id)
+      throw new Error('contact id is not present in the request body')
 
-    const userRef = db.collection('users').doc(String(user_id))
+    const userRef = user.ref
     const contactRef = db.collection('users').doc(String(contact_id))
 
     // delete entries from both user and the contact

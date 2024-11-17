@@ -1,22 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
 
-    const user_id = formdata.get('user_id')
     const invite_id = formdata.get('invite_id')
 
-    if (!user_id || !invite_id)
-      throw new Error("Request doesn't have required parameters")
+    if (!invite_id) throw new Error('invite id is not present in the request')
 
     const inviteRef = db.collection('groupInvites').doc(String(invite_id))
     const inviteDoc = await inviteRef.get()
 
-    if (inviteDoc.get('to') !== String(user_id))
+    if (inviteDoc.get('to') !== user.id)
       throw new Error("Requested user doesn't match.")
 
     const groupRef = db

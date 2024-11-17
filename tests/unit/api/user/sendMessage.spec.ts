@@ -1,3 +1,5 @@
+/** @jest-environment node */
+
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { NextRequest, NextResponse } from 'next/server'
@@ -6,6 +8,7 @@ import {
   type DocumentReference,
   type DocumentData,
 } from 'firebase-admin/firestore'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { POST } from '@/app/api/sendMessage/route'
 import { db } from '@/utils/firebase_admin_app'
 import {
@@ -14,6 +17,14 @@ import {
   deleteAllDocs,
   clearStorage,
 } from '@/tests/utils'
+
+// mock
+jest.mock('@/utils/getUserFromSession.ts', () => {
+  return {
+    __esModule: true,
+    getUserFromSession: jest.fn(),
+  }
+})
 
 describe('POST /api/sendMessage', () => {
   let user1Ref: DocumentReference<DocumentData> | null = null
@@ -54,6 +65,7 @@ describe('POST /api/sendMessage', () => {
     await deleteAllDocs('messages')
   })
 
+  // Clean up every thing after all tests
   afterAll(async () => {
     await deleteAllDocs('users')
     await deleteAllDocs('chatrooms')
@@ -64,7 +76,6 @@ describe('POST /api/sendMessage', () => {
   test('Should create a message document', async () => {
     const f = new FormData()
     append(f, {
-      user_id: user1Ref?.id,
       chatroom_id: chatroom?.id,
       text: 'Hello!',
     })
@@ -75,6 +86,10 @@ describe('POST /api/sendMessage', () => {
         method: 'POST',
         body: f,
       }
+    )
+
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
     )
 
     const res = await POST(req)
@@ -93,9 +108,9 @@ describe('POST /api/sendMessage', () => {
     for (const doc of docs) {
       const data = doc.data()
 
-      expect(data?.author_id).toBe(user1Ref?.id)
+      expect(data?.author).toBe(user1Ref?.id)
       expect(data.chatroom_id).toBe(chatroom?.id)
-      expect(data?.images.length).toBe(0)
+      expect(data?.images).toBeUndefined()
       expect(data?.text).toBe('Hello!')
       expect(data?.time).toBeDefined()
     }
@@ -108,7 +123,6 @@ describe('POST /api/sendMessage', () => {
     const png = new File([file], 'user.png', { type: 'image/png' })
 
     append(f, {
-      user_id: user1Ref?.id,
       chatroom_id: chatroom?.id,
       text: 'Hello!',
       image: png,
@@ -122,6 +136,10 @@ describe('POST /api/sendMessage', () => {
       }
     )
 
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
+
     const res = await POST(req)
 
     const json = await res.json()
@@ -138,14 +156,36 @@ describe('POST /api/sendMessage', () => {
     for (const doc of docs) {
       const data = doc.data()
 
-      expect(data?.author_id).toBe(user1Ref?.id)
+      expect(data?.author).toBe(user1Ref?.id)
       expect(data.chatroom_id).toBe(chatroom?.id)
-      expect(data?.images.length).toBe(0)
       expect(data?.text).toBe('Hello!')
-      expect(data?.image).toBeDefined()
-      expect(data?.image.thumbnail_url).toBeDefined()
-      expect(data?.image.original_url).toBeDefined()
+      expect(data?.images).toBeDefined()
+      expect(data?.images.thumbnail_url).toBeDefined()
+      expect(data?.images.original_url).toBeDefined()
       expect(data?.time).toBeDefined()
     }
+  })
+
+  test('Should return an Error when the request body is empty', async () => {
+    const f = new FormData()
+
+    const req = new NextRequest(
+      new URL('/api/sendMessage', 'http://localhost:5000'),
+      {
+        method: 'POST',
+        body: f,
+      }
+    )
+
+    ;(getUserFromSession as jest.Mock).mockImplementation(() =>
+      Promise.resolve(user1Ref!.get())
+    )
+
+    const res = await POST(req)
+
+    const json = await res.json()
+
+    expect(res.status).toBe(400)
+    expect(json.error).toBeDefined()
   })
 })

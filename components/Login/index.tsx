@@ -17,6 +17,7 @@ import DontHaveAccount from './dontHaveAccount'
 import { User } from '@/services/user'
 import UserContext from '@/context/user.context'
 import log from '@/components/utils/log'
+import { createSession } from '@/components/utils/createSession'
 
 export default function Login() {
   const { setUser } = useContext(UserContext)
@@ -49,6 +50,9 @@ export default function Login() {
               router.push('/userDoesNotExsits')
               return
             }
+
+            // create a session
+            await createSession(user)
 
             setUser(doc)
 
@@ -87,6 +91,8 @@ export default function Login() {
           router.push('userDoesNotExists')
           return
         }
+
+        await createSession(user)
 
         setUser(doc)
 

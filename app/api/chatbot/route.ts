@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { logger } from '@/utils/logger'
 
 enum ChatBotEnum {
@@ -9,6 +10,8 @@ enum ChatBotEnum {
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
     const prompt = String(formdata.get('prompt'))
 

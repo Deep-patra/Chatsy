@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { FieldValue } from 'firebase-admin/firestore'
 import { storeFile } from '@/utils/storage'
+import { getUserFromSession } from '@/utils/getUserFromSession'
 import { db } from '@/utils/firebase_admin_app'
 import { logger } from '@/utils/logger'
 import { processImage } from '@/utils/image_utils'
 
 export const POST = async (req: NextRequest) => {
   try {
+    const user = await getUserFromSession(req)
+
     const formdata = await req.formData()
-    const user_id = formdata.get('user_id')
     const chatroom_id = formdata.get('chatroom_id')
     const text = formdata.get('text')
     const image = formdata.get('image')
 
-    if (!user_id || !chatroom_id)
-      throw new Error('User ID or ChatRoom ID is not present')
+    if (!chatroom_id) throw new Error('ChatRoom ID is not present')
 
     if (!text && !image)
       throw new Error('message is empty. It should have a text or and image.')
@@ -41,7 +42,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     await db.collection('messages').add({
-      author: user_id,
+      author: user.id,
       chatroom_id,
       time: FieldValue.serverTimestamp(),
       text: text ?? '',
@@ -50,7 +51,7 @@ export const POST = async (req: NextRequest) => {
 
     logger.info({
       message: {
-        author_id: user_id,
+        author_id: user.id,
         chatroom_id,
         ...obj,
       },
