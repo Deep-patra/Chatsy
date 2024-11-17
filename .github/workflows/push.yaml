@@ -2,7 +2,7 @@ name: Run tests
 on: [push]
 jobs:
   Run-tests:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
