@@ -63,6 +63,11 @@ input:focus {
   border: none;
 }
 
+.dark-background-image {
+  background: url("/dark-background-1258x720.jpg");
+  background-size: 100% 100%;
+}
+
 .hidden {
   display: none;
 }
@@ -128,6 +133,10 @@ input:focus {
 }
 
 @media screen and (max-width: 600px) {
+  .dark-background-image {
+    background: url("/dark-background-720x412.jpg");
+    background-size: 100% 100%;
+  }
 }
 
 /** Animations **/

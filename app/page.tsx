@@ -3,11 +3,11 @@ import styles from './page.module.css'
 
 export default function Home() {
   return (
-    <main className="row-start-2 row-end-3 p-2 w-full h-full flex flex-col items-center justify-center">
+    <main className="dark-background-image row-start-2 row-end-3 p-2 w-full h-full flex flex-col items-center justify-center | rounded-md">
       <div className="flex flex-col items-center gap-5">
-        <h1 className="text-4xl text-brightGreen">Chatsy</h1>
+        <h1 className="text-5xl font-mono text-brightGreen">Chatsy</h1>
         <span className="text-white3 text-sm text-center">
-          A Simple, Reliable, and Secure messaging application.
+          A Simple, Secure, and Reliable messaging application.
         </span>
 
         <div className="flex flex-col gap-5">
