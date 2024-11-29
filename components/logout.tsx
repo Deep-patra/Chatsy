@@ -1,9 +1,10 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useContext, useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { getAuth } from 'firebase/auth'
 import { getApp } from '@/firebase'
 import { events } from './utils/events'
+import UserContext from '@/context/user.context'
 import Modal from './Modal'
 
 export default function Logout() {
@@ -11,9 +12,17 @@ export default function Logout() {
 
   const router = useRouter()
 
+  const { setUser } = useContext(UserContext)
+
   const handleConfirmLogout = useCallback(() => {
+
     // Signout from the firebase
     getAuth(getApp()).signOut()
+
+    // change the user to null
+    setUser(null)
+
+    // route to the index page
     router.push('/')
   }, [])
 
