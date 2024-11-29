@@ -5,7 +5,7 @@ import { type IUserContext } from '@/context/user.context'
 export const useGetUser = (): IUserContext => {
   const [_user, changeUser] = useState<User | null>(null)
 
-  const setUser = (user: User) => {
+  const setUser = (user: User | null) => {
     changeUser(user)
   }
 

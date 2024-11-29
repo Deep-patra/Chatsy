@@ -15,7 +15,6 @@ export default function Logout() {
   const { setUser } = useContext(UserContext)
 
   const handleConfirmLogout = useCallback(() => {
-
     // Signout from the firebase
     getAuth(getApp()).signOut()
 
